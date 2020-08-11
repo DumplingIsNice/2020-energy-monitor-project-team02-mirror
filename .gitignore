@@ -39,3 +39,15 @@ Project\ Logs
 *.map
 *.srec
 *.atsuo
+
+# Ignore Common IDE Files
+# CLion
+.idea
+cmake-build-*/
+CMakeLists.txt
+# VIM YouCompleteMe Plugin
+.ycm_extra_conf.py
+# Visual Studio Code
+.vscode
+.history
+*.code-workspace
