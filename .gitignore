@@ -40,6 +40,12 @@ Project\ Logs
 *.srec
 *.atsuo
 
+# Ignore Executable formats / Compiler Output
+*.ELF
+*.elf
+*.obj/
+
+
 # Ignore Common IDE Files
 # CLion
 .idea

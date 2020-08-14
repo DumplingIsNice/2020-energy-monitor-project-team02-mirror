@@ -7,24 +7,24 @@ CC=avr-gcc
 AS=avr-as
 LD=avr-ld
 
-# Output Binary Name (FirmWare.ELF) 
+# Output Binary Name (FirmWare.ELF)
 BIN=FW.ELF
 
 # List of Object Files To Link (One per .c Source File)
 OBJs=obj/main.o
 
-# Extra Debugging Flags that are used for debugging builds 
+# Extra Debugging Flags
 CFLAGS_DEBUG=-g -O0 -Wall -Wextra
 
 # Compiler and Linker Flags
 CFLAGS=-std=c89 -pedantic-errors -mmcu=atmega328p $(CFLAGS_DEBUG)
-LDFLAGS=#-mmcu=atmega328p
+LDFLAGS=
 
 
-# Default is debug build
+# Default target is to simply build the FirmWare ELF
 all:$(BIN)
 
-# Target for .ELF output binary 
+# Target for .ELF output binary
 $(BIN):$(OBJs)
 	@printf "\t- Linking Object FIles Into Executable $@\n"
 	@$(CC) -o $@ $(OBJs) $(LDFLAGS);
