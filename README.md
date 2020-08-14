@@ -9,6 +9,4 @@
 
 # Test Push
 * Ankush
-
-# Test Push
 * Krithik
