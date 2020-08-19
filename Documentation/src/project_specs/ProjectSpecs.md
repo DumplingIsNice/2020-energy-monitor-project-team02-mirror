@@ -46,3 +46,6 @@ communicate information with a laptop/PC.
 circuitry needed to interface directly with the UART port of the microcontroller
 - A 4-digit seven-segment LCD display module which contains a 74HC595 shift-register and the logic
 circuitry required to interface with digital IO pins of the microcontroller.
+
+## Bluetooth Module UART Specs:
+![](BlueTooth.png)

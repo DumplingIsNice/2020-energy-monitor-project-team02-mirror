@@ -17,7 +17,7 @@ OBJs=obj/main.o
 CFLAGS_DEBUG=-g -O0 -Wall -Wextra
 
 # Compiler and Linker Flags
-CFLAGS=-std=c89 -pedantic-errors -mmcu=atmega328p $(CFLAGS_DEBUG)
+CFLAGS=-mmcu=atmega328p $(CFLAGS_DEBUG)
 LDFLAGS=
 
 
