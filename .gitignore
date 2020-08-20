@@ -26,6 +26,7 @@ Project\ Logs
 
 ## Ignore Proteus files
 *.pdsbak
+*.workspace
 
 ## Ignore Atmel Studio files
 .vs/
