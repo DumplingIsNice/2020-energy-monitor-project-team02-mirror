@@ -11,7 +11,7 @@ LD=avr-ld
 BIN=FW.ELF
 
 # List of Object Files To Link (One per .c Source File)
-OBJs=obj/main.o
+OBJs=obj/main.o obj/uart.o obj/common.o
 
 # Extra Debugging Flags
 CFLAGS_DEBUG=-g -O0 -Wall -Wextra
@@ -30,8 +30,16 @@ $(BIN):$(OBJs)
 	@$(CC) -o $@ $(OBJs) $(LDFLAGS);
 
 # One build target per object file / C source file (.c file NOT .h files)
-obj/main.o:main.c
+obj/main.o:main.c common.h
 	@printf "\t- Compiling $< into $@\n"
+	@$(CC) -c $(CFLAGS) -o $@ $<
+
+obj/common.o:common.c common.h
+	@printf "\t - Compiling $< into $@\n"
+	@$(CC) -c $(CFLAGS) -o $@ $<
+
+obj/uart.o:uart.c common.h
+	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
 # Clean Target
