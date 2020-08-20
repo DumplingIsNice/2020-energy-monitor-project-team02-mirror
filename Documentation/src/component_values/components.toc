@@ -2,4 +2,5 @@
 \contentsline {section}{\numberline {2}Voltage \& Current Sensors}{4}{section.2}%
 \contentsline {section}{\numberline {3}Measurement Conditioning}{6}{section.3}%
 \contentsline {section}{\numberline {4}Filters}{8}{section.4}%
-\contentsline {section}{\numberline {5}The E-12 Series:}{9}{section.5}%
+\contentsline {section}{\numberline {5}Zero Crossing Detection}{8}{section.5}%
+\contentsline {section}{\numberline {6}The E-12 Series:}{9}{section.6}%

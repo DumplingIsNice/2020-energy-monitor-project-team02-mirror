@@ -201,14 +201,49 @@ applied by the Operational Amplifier to the input signal $V_{VS}$.
 
 \medskip
 
-\textbf{The value of $R_{1a}, R_{1b}$ and $R_2$ is: $R_{1a} = 10\ \si{\kilo\ohm}, R_{1b} = 47\ \si{\kilo\ohm}$ and $R_2 = 47\ \si{\kilo\ohm}$}.
 
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[scale=1.5]
+	\draw (0, 4) to[short, o-*] (2, 4)
+		% Open Circuit Terminals
+		(0, 8) to[short, o-*] (2, 8)
+		(0.2, 8) to[open, v=$V_{VS}$] (0.2, 4) 
+
+		(6, 6) node[op amp, yscale=-1] (opamp) {}
+		(opamp.+) node[left]{$V^+$}
+		(opamp.-) node[left]{$V^-$}
+		(opamp.out) node[above]{$V_{OUT}$}
+		
+		% Non-Inverting Terminal
+		(2, 8) to[R=$R_{1a}$] (4, 8)
+		(4, 8) to[R=$R_2$] (4, 6)
+		(3.8, 6) to[short] (4.2, 6)
+		(4, 6) node[below]{$2.1\ \si{\volt}$}
+		(4, 8) to[short] (4, 8 -| opamp.+)
+		to[short] (opamp.+)
+		
+		% Inverting Terminal
+		(2, 4) to[R=$R_{1b}$] (4, 4)
+		to[short] (4, 4 -| opamp.-)
+		to[short] (opamp.-)
+		(4, 4) to[R=$R_2$] (8, 4)
+
+		
+		% Negative Feedback
+		to[short] (8, 4 |- opamp.out)
+		to[short] (opamp.out)	
+		;
+	\end{circuitikz}
+	\caption{Voltage Signal Conditioning Circuit}
+\end{figure}
+\vspace{5mm}
+\textbf{The value of $R_{1a}, R_{1b}$ and $R_2$ is: $R_{1a} = 10\ \si{\kilo\ohm}, R_{1b} = 47\ \si{\kilo\ohm}$ and $R_2 = 47\ \si{\kilo\ohm}$}.
 
 \clearpage
 
 \section{Filters}
 
-\vspace{5mm}
 
 \begin{circuitikz}[scale=1.5]
  \draw (0, 4) to[short, o-*] (2, 4)
@@ -233,6 +268,28 @@ The Resistor and Capacitor create a filter that has a breakpoint frequency of $1
 
 \textbf{The value of $R_f$ and $C_f$ is: $R_f = 33\ \si{\kilo\ohm}$ and $C_f = 4.8\ \si{\nano\farad}$}.
 
+\vspace{7mm}
+
+\section{Zero Crossing Detection}
+\vspace{5mm}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}[scale=1.5]
+	\draw (6, 6) node[op amp] (opamp) {}
+		(opamp.+) node[left]{$V_{VO}$}
+		(opamp.-) node[left]{$2.1\ \si{\volt}$}
+		(opamp.out) node[above]{$V_{ZERO}$}
+		
+		;
+	\end{circuitikz}
+	\caption{Voltage Signal Conditioning Circuit}
+\end{figure}
+\vspace{7mm}
+
+$2.1\ \si{\volt}$ is a voltage source, $V_{VO}$ is the
+conditioned voltage signal.
+\medskip
 
 \clearpage
 
