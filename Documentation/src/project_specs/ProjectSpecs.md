@@ -49,3 +49,6 @@ circuitry required to interface with digital IO pins of the microcontroller.
 
 ## Bluetooth Module UART Specs:
 ![](BlueTooth.png)
+
+## UART Communication Specifications:
+![](UARTCommunication.png)
