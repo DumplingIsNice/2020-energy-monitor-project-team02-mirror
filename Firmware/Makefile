@@ -18,7 +18,7 @@ CFLAGS_DEBUG=-g -O0 -Wall -Wextra
 
 # Compiler and Linker Flags
 CFLAGS=-mmcu=atmega328p $(CFLAGS_DEBUG)
-LDFLAGS=
+LDFLAGS=-lm
 
 
 # Default target is to simply build the FirmWare ELF
@@ -26,7 +26,7 @@ all:$(BIN)
 
 # Target for .ELF output binary
 $(BIN):$(OBJs)
-	@printf "\t- Linking Object FIles Into Executable $@\n"
+	@printf "\t- Linking Object Files Into Executable $@\n"
 	@$(CC) -o $@ $(OBJs) $(LDFLAGS);
 
 # One build target per object file / C source file (.c file NOT .h files)

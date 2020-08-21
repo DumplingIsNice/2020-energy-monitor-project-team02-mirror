@@ -40,6 +40,7 @@ Project\ Logs
 *.map
 *.srec
 *.atsuo
+*xml
 
 # Ignore Executable formats / Compiler Output
 *.ELF
