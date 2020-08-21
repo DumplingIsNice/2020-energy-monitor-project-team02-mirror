@@ -30,15 +30,15 @@ $(BIN):$(OBJs)
 	@$(CC) -o $@ $(OBJs) $(LDFLAGS);
 
 # One build target per object file / C source file (.c file NOT .h files)
-obj/main.o:main.c common.h
+obj/main.o:main.c uart.h common.h
 	@printf "\t- Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
-obj/common.o:common.c common.h
+obj/common.o:common.c
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
-obj/uart.o:uart.c common.h
+obj/uart.o:uart.c
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
