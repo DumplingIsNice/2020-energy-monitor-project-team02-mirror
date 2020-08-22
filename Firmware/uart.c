@@ -7,6 +7,7 @@
 * Functions to do with communicating over the UART protocol
 */
 
+#include <util/delay.h> // Needed to use _delay_ms()
 #include "common.h"
 
 #define SPACE 0x20
