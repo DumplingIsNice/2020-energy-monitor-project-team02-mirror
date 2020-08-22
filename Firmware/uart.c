@@ -46,3 +46,9 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize) {
 void ascii_convert(uint16_t *number){ // Converts a unsigned number digit to ascii format. Author: Hao Lin (22/08/2020)
 	*number += 48;
 }
+
+void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint16_t *hundreds){ // Extracts digits of a number below 1000. Author: Hao Lin (22/08/2020)
+	*ones = number%10;
+	*tens = (number%100 - *ones)/10;
+	*hundreds = (number - *tens*10 - *ones)/100;
+}

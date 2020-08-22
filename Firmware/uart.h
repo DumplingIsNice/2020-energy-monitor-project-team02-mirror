@@ -21,5 +21,6 @@ void usart_init(uint32_t ubrr); // Initializes USART registers by specification 
 void usart_transmit(uint16_t data); // Defining function to transmit 1 character at a time. Author: Krithik Lekinwala (22/08/2020)
 void usart_transmitRaw(uint8_t rawData[], size_t arraySize); // Defining function to transmit single raw bytes one at a time. Author: Krithik Lekinwala (22/08/2020)
 void ascii_convert(uint16_t *number); // Converts a unsigned number digit to ascii format. Author: Hao Lin (22/08/2020)
+void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint16_t *hundreds); // Extracts digits of a number below 1000. Author: Hao Lin (22/08/2020)
 
 #endif /* UART_H */
