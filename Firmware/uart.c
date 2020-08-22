@@ -9,6 +9,10 @@
 
 #include "common.h"
 
+#define SPACE 0x20
+#define COMMA 0x2C
+#define ZERO 0x30
+
 void usart_init(uint32_t ubrr){ // UART init function. Author: Hao Lin (21/08/2020)
 
 	UDR0 = 0b00000000;
@@ -43,12 +47,51 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize) {
 	// UDR0 = data; // Writing data to register
 }
 
-void ascii_convert(uint16_t *number){ // Converts a unsigned number digit to ascii format. Author: Hao Lin (22/08/2020)
+void static ascii_convert(uint16_t *number){ // Converts a unsigned number digit to ascii format. Author: Hao Lin (22/08/2020)
 	*number += 48;
 }
 
-void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint16_t *hundreds){ // Extracts digits of a number below 1000. Author: Hao Lin (22/08/2020)
+void static extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint16_t *hundreds){ // Extracts digits of a number below 1000. Author: Hao Lin (22/08/2020)
 	*ones = number%10;
 	*tens = (number%100 - *ones)/10;
 	*hundreds = (number - *tens*10 - *ones)/100;
+}
+
+// Print out an array of POSITIVE integers.
+// Inputs will be array of type int, and length of the array.
+// NOTE: the function should convert the numbers to ASCII before sending them over UART.
+// Author: Hao Lin (22/08/20)
+void print_array_intergers(uint16_t intArray[], uint16_t arrayLength){
+	
+	uint16_t number = 0;
+	uint16_t ones = 0, tens = 0, hundreds = 0, i = 0;
+	
+	while (1){
+		
+		number = intArray[i];
+		
+		extract_digits(number, &ones, &tens, &hundreds);
+		
+		ascii_convert(&ones);
+		ascii_convert(&hundreds);
+		ascii_convert(&tens);
+		
+		if (hundreds != ZERO){
+			usart_transmit(hundreds);
+		}
+		
+		if (tens != ZERO){
+			usart_transmit(tens);
+		}
+		
+		usart_transmit(ones);
+		
+		i++;
+		
+		if (i >= arrayLength){
+			break;
+		}
+		usart_transmit(COMMA);
+		usart_transmit(SPACE);
+	}
 }
