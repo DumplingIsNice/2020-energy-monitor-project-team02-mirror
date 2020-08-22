@@ -11,7 +11,7 @@ LD=avr-ld
 BIN=FW.ELF
 
 # List of Object Files To Link (One per .c Source File)
-OBJs=obj/main.o obj/uart.o obj/common.o
+OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o
 
 # Extra Debugging Flags
 CFLAGS_DEBUG=-g -O0 -Wall -Wextra
@@ -38,7 +38,11 @@ obj/common.o:common.c
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
-obj/uart.o:uart.c
+obj/uart.o:uart.c common.h
+	@printf "\t - Compiling $< into $@\n"
+	@$(CC) -c $(CFLAGS) -o $@ $<
+
+obj/adc.o:adc.c common.h
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
