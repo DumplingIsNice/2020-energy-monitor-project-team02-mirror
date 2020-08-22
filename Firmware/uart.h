@@ -16,5 +16,7 @@
 #define UBRR 4 // Prescaler value for initializing baud rate.
 
 void usart_init(uint32_t ubrr); // Initializes USART registers by specification and ubrr value. Author: Hao Lin (21/08/2020)
+void usart_transmit(uint8_t data); // Defining function to transmit 1 character at a time. Author: Krithik Lekinwala (22/08/2020)
+void usart_transmitRaw(uint8_t rawData); // Defining function to transmit single raw bytes one at a time. Author: Krithik Lekinwala (22/08/2020)
 
 #endif /* UART_H */
