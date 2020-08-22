@@ -52,3 +52,6 @@ circuitry required to interface with digital IO pins of the microcontroller.
 
 ## UART Communication Specifications:
 ![](UARTCommunication.png)
+
+# ADC Register Configuration:
+![](ADCConfiguration.png)
