@@ -9,6 +9,7 @@
 
 #include "common.h"
 
+
 void usart_init(uint32_t ubrr){ // UART init function. Author: Hao Lin (21/08/2020)
 
 	UDR0 = 0b00000000;
@@ -30,13 +31,14 @@ void usart_transmit(uint8_t data) { // UART character transmit function. Author:
 	
 }
 
-void usart_transmitRaw(uint8_t rawData[]); {
+void usart_transmitRaw(uint8_t rawData[], size_t arraySize) {
 	while ((UCSR0A & (1<<UDRE0)) == 0) { // Continuously checking to see if UDRE0 bit is 0
 		// If it is not 0, wait until it is so it starts writing the data to the register
 		
 	}
-	size_t totalBytes = sizeof(rawData)/sizeof(rawData[0]); // Returns size of the array input
-	for (int i = 0; i < totalBytes; i++ ) {
+	
+	//size_t totalBytes = sizeof(rawData)/sizeof(rawData[0]); // Returns size of the array input
+	for (int i = 0; i < arraySize; i++ ) {
 		UDR0 = rawData[i];
 	}
 	// UDR0 = data; // Writing data to register
