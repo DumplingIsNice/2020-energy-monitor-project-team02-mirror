@@ -9,7 +9,6 @@
 
 #include "common.h"
 
-
 void usart_init(uint32_t ubrr){ // UART init function. Author: Hao Lin (21/08/2020)
 
 	UDR0 = 0b00000000;
@@ -44,5 +43,6 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize) {
 	// UDR0 = data; // Writing data to register
 }
 
-
-
+void ascii_convert(uint16_t *number){ // Converts a unsigned number digit to ascii format. Author: Hao Lin (22/08/2020)
+	*number += 48;
+}
