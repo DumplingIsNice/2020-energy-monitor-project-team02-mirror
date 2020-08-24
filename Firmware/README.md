@@ -7,6 +7,7 @@
 - **common.c:** Functions that are common to all modules (i.e. debug printing etc.)
 - **uart.c:** Functions to do with communicating over the UART protocol.
 - **adc.c:** Functions to do with Analogue-to-Digital Conversion 
+- **test.c:** Functions to test the various functions of the Firmware
 
 # TODO:
 > See the Trello card [Embedded Program: Development & Simulation](https://trello.com/b/7f8trbUE/electeng-209-team-2) for current and past (completed) tasks etc.

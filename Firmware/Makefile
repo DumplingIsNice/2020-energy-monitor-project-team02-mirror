@@ -14,7 +14,8 @@ BIN=FW.ELF
 OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o
 
 # Extra Debugging Flags
-CFLAGS_DEBUG=-g -O0 -Wall -Wextra
+# Note that Proteus expects the .elf to have debugging symbols in the dwarf verison 2 format (hence -gdwarf-2)
+CFLAGS_DEBUG=-g3 -gdwarf-2 -Og -Wall -Wextra
 
 # Compiler and Linker Flags
 CFLAGS=-mmcu=atmega328p $(CFLAGS_DEBUG)

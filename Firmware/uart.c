@@ -73,7 +73,7 @@ static void extractHundredths(float data) {
 void usart_init(uint32_t ubrr)
 { // UART init function. Author: Hao Lin (21/08/2020)
 
-	UDR0 = 0b00000000;
+	/*UDR0 = 0b00000000;*/
 	UCSR0A = 0b00000000;
 
 	UCSR0B |= (1 << TXEN0) & ~(1 << UCSZ02); // Set TXEN0 bit to 1 (enable transmit) and UCSZ02 bit to 0 (8 data bits)
@@ -90,7 +90,7 @@ void usart_transmit(uint8_t data)
 
 	}
 	UDR0 = data; // Writing data to register
-
+	_delay_ms(0.5);
 }
 
 void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
