@@ -10,6 +10,8 @@
 #ifndef UART_H
 #define UART_H
 
+#include <stdint.h>
+
 // Macros
 
 #define UART_BPS 9600UL // Baud rate / Bits Per Second value the UART module is configured to (_9600 BPS_)
