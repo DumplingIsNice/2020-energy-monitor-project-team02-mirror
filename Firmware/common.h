@@ -10,6 +10,7 @@
 #include <avr/io.h> //Needed for using the macros for register addresses
 #include <stdint.h> // Needed to use size_t and other various types
 #include <stdlib.h> // 
+#include <math.h>
 
 /* Macros to set/clear/toggle bits in a port */
 #define SET_PORT(port, bit_n) (port |= (1 << bit_n))
