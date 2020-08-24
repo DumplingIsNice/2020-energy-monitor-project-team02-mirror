@@ -28,4 +28,25 @@
 #define __S2(x) __S1(x)
 #define _SRC_LOC __FILE__ ":" __S2(__LINE__)
 
+/*
+ * Round the floating point number n to the number of decimal places specified.
+ * Note that decimalPlace = 0 means round to nearest int.
+ *
+ * Also note inaccuracies due to floating point representation
+ * 	e.g. fround(123.67) = 123.69999 not 123.7 as expected.
+ */
+float fround(float n, int decimalPlace);
+
+/*
+ * fstr is a format string like printf, except it only supports the following
+ * specifiers:
+ * 	- %f to print a float - supports %.1.f and %.2f and %.3f
+ * 	- %d to print an int
+ * 	- %u to print an unsigned int
+ *	- %x to print an unsigned int in hex
+ * 	- %hhd to print a byte
+ * 	- %hhx to print a byte in hex
+ */
+void print(char fstr[], ...);
+
 #endif /* COMMON_H */

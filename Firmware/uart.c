@@ -8,7 +8,6 @@
 */
 
 #include "common.h"
-#include <math.h>
 #include <util/delay.h> // Needed to use _delay_ms()
 
 #define SPACE 0x20
@@ -25,6 +24,49 @@ static void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint
 	*ones = number % 10;
 	*tens = (number % 100 - *ones) / 10;
 	*hundreds = (number - *tens * 10 - *ones) / 100;
+}
+
+
+// Function to extract tenths place (1st digit after decimal place)
+static void extractTenths(float data, uint16_t *tenths) {
+	uint16_t ones = 0, tens = 0, hundreds = 0;
+	extract_digits(data, &ones, &tens, &hundreds);
+
+	if (data < 10) {
+		 *tenths = (int) ((data - ones) * 10);
+	}
+
+	else if (data > 10 && data < 100) {
+		 *tenths = (int) ((data - (tens*10) - ones) * 10);
+	}
+
+	else if (data > 100 && data < 1000) {
+		 *tenths = (int) ((data - (hundreds*100) - (tens*10) - ones) * 10);
+	}
+
+}
+
+// Function to extract hundredths place (2nd digit after decimal place)
+static void extractHundredths(float data) {
+	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0;
+	extract_digits(data, &ones, &tens, &hundreds);
+	extractTenths(data, &tenths);
+
+	if (data < 10) {
+		data = (data - ones) * 100;
+		data = (int) (data - (tenths));
+	}
+
+	else if (data > 10 && data < 100) {
+		data = ((data - (tens*10) - ones) * 100);
+		data = (int) (data - (tenths));
+	}
+
+	else if (data > 100 && data < 1000) {
+		data = (data - (hundreds*100) - (tens*10) - ones) * 100;
+		data = (int) (data - (tenths));
+	}
+
 }
 
 
@@ -59,7 +101,7 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
 	}
 
 	//size_t totalBytes = sizeof(rawData)/sizeof(rawData[0]); // Returns size of the array input
-	for (int i = 0; i < arraySize; i++) {
+	for (size_t i = 0; i < arraySize; i++) {
 		UDR0 = rawData[i];
 	}
 	// UDR0 = data; // Writing data to register
@@ -72,7 +114,7 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
 void print_array_intergers(uint16_t intArray[], uint16_t arrayLength)
 {
 
-	uint16_t number = 0;
+	uint16_t number;
 	uint16_t ones = 0, tens = 0, hundreds = 0, i = 0;
 
 	while (1) {
@@ -102,47 +144,6 @@ void print_array_intergers(uint16_t intArray[], uint16_t arrayLength)
 		}
 		usart_transmit(COMMA);
 		usart_transmit(SPACE);
-	}
-	
-}
-// Function to extract tenths place (1st digit after decimal place)
-static void extractTenths(float data, uint16_t *tenths) {
-	uint16_t ones = 0, tens = 0, hundreds = 0;
-	extract_digits(data, &ones, &tens, &hundreds);
-	
-	if (data < 10) {
-		 *tenths = (int) ((data - ones) * 10);
-	}
-	
-	else if (data > 10 && data < 100) {
-		 *tenths = (int) ((data - (tens*10) - ones) * 10);
-	}
-	
-	else if (data > 100 && data < 1000) {
-		 *tenths = (int) ((data - (hundreds*100) - (tens*10) - ones) * 10);
-	}
-	
-}
-
-// Function to extract hundredths place (2nd digit after decimal place)
-static void extractHundredths(float data) {
-	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0;
-	extract_digits(data, &ones, &tens, &hundreds);
-	extractTenths(data, &tenths);
-	
-	if (data < 10) {
-		data = (data - ones) * 100;
-		data = (int) (data - (tenths));
-	}
-	
-	else if (data > 10 && data < 100) {
-		data = ((data - (tens*10) - ones) * 100);
-		data = (int) (data - (tenths));
-	}
-
-	else if (data > 100 && data < 1000) {
-		data = (data - (hundreds*100) - (tens*10) - ones) * 100;
-		data = (int) (data - (tenths));
 	}
 	
 }
