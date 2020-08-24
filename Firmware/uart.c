@@ -8,6 +8,7 @@
 */
 
 #include "common.h"
+#include <math.h>
 #include <util/delay.h> // Needed to use _delay_ms()
 
 #define SPACE 0x20
