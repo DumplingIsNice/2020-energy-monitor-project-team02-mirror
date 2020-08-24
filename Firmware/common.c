@@ -1,3 +1,8 @@
+
+/*
+ * Return the number of characters that would be needed to represent the integer
+ * `num` as a string (returned length does NOT include null-terminator) .
+ */
 static short num_length(int num)
 {
 	short length = 0;
