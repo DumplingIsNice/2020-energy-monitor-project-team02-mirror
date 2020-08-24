@@ -8,6 +8,7 @@
 */
 
 #include "common.h"
+#include <math.h>
 #include <util/delay.h> // Needed to use _delay_ms()
 
 #define SPACE 0x20
@@ -102,4 +103,46 @@ void print_array_intergers(uint16_t intArray[], uint16_t arrayLength)
 		usart_transmit(COMMA);
 		usart_transmit(SPACE);
 	}
+	
+}
+// Function to extract tenths place (1st digit after decimal place)
+static void extractTenths(float data, uint16_t *tenths) {
+	uint16_t ones = 0, tens = 0, hundreds = 0;
+	extract_digits(data, &ones, &tens, &hundreds);
+	
+	if (data < 10) {
+		 *tenths = (int) ((data - ones) * 10);
+	}
+	
+	else if (data > 10 && data < 100) {
+		 *tenths = (int) ((data - (tens*10) - ones) * 10);
+	}
+	
+	else if (data > 100 && data < 1000) {
+		 *tenths = (int) ((data - (hundreds*100) - (tens*10) - ones) * 10);
+	}
+	
+}
+
+// Function to extract hundredths place (2nd digit after decimal place)
+static void extractHundredths(float data) {
+	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0;
+	extract_digits(data, &ones, &tens, &hundreds);
+	extractTenths(data, &tenths);
+	
+	if (data < 10) {
+		data = (data - ones) * 100;
+		data = (int) (data - (tenths));
+	}
+	
+	else if (data > 10 && data < 100) {
+		data = ((data - (tens*10) - ones) * 100);
+		data = (int) (data - (tenths));
+	}
+
+	else if (data > 100 && data < 1000) {
+		data = (data - (hundreds*100) - (tens*10) - ones) * 100;
+		data = (int) (data - (tenths));
+	}
+	
 }
