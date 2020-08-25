@@ -26,7 +26,6 @@ static void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint
 	*hundreds = (number - *tens * 10 - *ones) / 100;
 }
 
-
 // Function to extract tenths place (1st digit after decimal place)
 static void extractTenths(float data, uint16_t *tenths) {
 	uint16_t ones = 0, tens = 0, hundreds = 0;
@@ -43,7 +42,6 @@ static void extractTenths(float data, uint16_t *tenths) {
 	else if (data > 100 && data < 1000) {
 		 *tenths = (int) ((data - (hundreds*100) - (tens*10) - ones) * 10);
 	}
-
 }
 
 // Function to extract hundredths place (2nd digit after decimal place)
@@ -69,8 +67,7 @@ static void extractHundredths(float data) {
 
 }
 
-
-void usart_init(uint32_t ubrr)
+void usart_init(uint16_t ubrr)
 { // UART init function. Author: Hao Lin (21/08/2020)
 
 	/*UDR0 = 0b00000000;*/
@@ -90,7 +87,6 @@ void usart_transmit(uint8_t data)
 
 	}
 	UDR0 = data; // Writing data to register
-	_delay_ms(0.5);
 }
 
 void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
@@ -105,6 +101,11 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
 		UDR0 = rawData[i];
 	}
 	// UDR0 = data; // Writing data to register
+}
+
+void print_integer(uint16_t x)
+{
+
 }
 
 // Print out an array of POSITIVE integers.

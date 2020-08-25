@@ -5,11 +5,14 @@
 static void test_uart()
 {
 	int i = 0;
-	char *s1 = "--- BEGIN TESTING ---\r\n";
+
 	usart_init(UBRR);
-	usart_transmit('T');
-	for (i = 0; s1[i] != '\0'; ++i)
-		usart_transmit(s1[i]);
+
+	for (i = 0; "--- BEGIN TESTING ---\r\n"[i] != '\0'; ++i)
+		usart_transmit("--- BEGIN TESTING ---\r\n"[i]);
+
+	for (i = 0; "\tTESTING UART---\r\n"[i] != '\0'; ++i)
+		usart_transmit("  TESTING UART---\r\n"[i]);
 }
 /* Testing for common.c */
 static void test_common()
@@ -23,9 +26,9 @@ static void test_adc()
 void test_function()
 {
 	test_uart();
-/*
+
 	test_common();
 	test_adc();
-*/
-	/*print("--- TESTING COMPLETE ---\n");*/
+
+	print("--- TESTING COMPLETE ---\n");
 }

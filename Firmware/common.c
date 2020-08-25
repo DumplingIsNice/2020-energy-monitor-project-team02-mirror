@@ -84,7 +84,7 @@ void print(char fstr[], ...)
 			}
 			break ;
 		default:
-			usart_transmit(i);
+			usart_transmit(fstr[i]);
 			break ;
 		}
 	}

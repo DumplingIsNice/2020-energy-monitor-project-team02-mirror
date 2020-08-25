@@ -5,7 +5,6 @@
 #include "adc.h"
 
 #define ENABLE_TESTING
-
 int main()
 {
 #ifdef ENABLE_TESTING
@@ -14,7 +13,6 @@ int main()
 #endif /* ENABLE_TESTING */
 
 	while (1) {
-
 	}
 
 	return 0;

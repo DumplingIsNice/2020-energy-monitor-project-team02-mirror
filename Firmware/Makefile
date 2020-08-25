@@ -19,7 +19,11 @@ CFLAGS_DEBUG=-g3 -gdwarf-2 -Og -Wall -Wextra
 
 # Compiler and Linker Flags
 CFLAGS=-mmcu=atmega328p $(CFLAGS_DEBUG)
-LDFLAGS=-lm
+LDFLAGS=-mmcu=atmega328p
+
+# Default Compiler/Linker Flags Used by Atmel Studio 7 On Windows.
+#CFLAGS=-x c -funsigned-char -funsigned-bitfields -DDEBUG  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -c -std=gnu99 -gdwarf-2
+#LDFLAGS=-Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega328p
 
 
 # Default target is to simply build the FirmWare ELF
