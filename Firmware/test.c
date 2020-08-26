@@ -58,6 +58,12 @@ static void test_uart()
 	print_float(84.83);
 	usart_transmit(' ');
 	print_float(0.00);
+	usart_transmit(' ');
+	print_float(06.04);
+	usart_transmit(' ');
+	print_float(4.80);
+	usart_transmit(' ');
+	print_float(0.08);
 
 }
 /* Testing for common.c */
