@@ -89,7 +89,7 @@ void usart_transmit(uint8_t data)
 	UDR0 = data; // Writing data to register
 }
 
-void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
+void usart_transmit_raw(uint8_t rawData[], size_t arraySize)
 {
 
 	//size_t totalBytes = sizeof(rawData)/sizeof(rawData[0]); // Returns size of the array input
@@ -99,8 +99,14 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
 	// UDR0 = data; // Writing data to register
 }
 
+void usart_string(char s[])
+{
+	int i;
+	for (i = 0; s[i] != '\0'; ++i) ;
+	usart_transmit_raw((unsigned char *) s, i);
+}
 
-void printFloat(float data) {
+void print_float(float data) {
 	
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
 	
