@@ -15,7 +15,7 @@ void terminal_print(float Vrms, uint16_t Ipeak, float P){
 
 	print("RMS Voltage is: %f \n", RMSVoltage);
 	print("Peak Current is: %d \n", PeakCurrent);
-	print("Power is: %f \n\n", Power);
+	print("Power is: %f \n\r", Power);
 }
 
 int main()
