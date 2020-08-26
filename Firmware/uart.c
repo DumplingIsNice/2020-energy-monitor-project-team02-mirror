@@ -152,7 +152,7 @@ void print_integer(uint16_t x)
 		usart_transmit(hundreds);
 	}
 	
-	if (tens > ZERO){
+	if (tens > ZERO & hundreds > ZERO){
 		usart_transmit(tens);
 	}
 	
