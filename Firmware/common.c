@@ -41,6 +41,7 @@ float fround(float n, int decimalPlace)
 /*
  * fstr is a format string like printf, except it only supports the following
  * specifiers:
+ * 	- %s to print a string
  * 	- %f to print a float
  * 	- %u or %d to print an unsigned int
  *	- %x to print an unsigned int in hex
@@ -49,10 +50,12 @@ float fround(float n, int decimalPlace)
  */
 void print(char fstr[], ...)
 {
-	size_t i;
-	int d;
 	unsigned int u;
 	float f;
+	char *s;
+
+
+	size_t i;
 	va_list vaargs;
 
 	va_start(vaargs, fstr);
@@ -64,10 +67,14 @@ void print(char fstr[], ...)
 			case '%':
 				usart_transmit('%');
 				break ;
+			case 's':
+				s = va_arg(vaargs, char *);
+				usart_print_string(s);
+				break ;
 			case 'd':
 			case 'u':
-				d = va_arg(vaargs, int);
-				print_integer(d);
+				u = va_arg(vaargs, int);
+				usart_print_integer(u);
 				break ;
 			case 'x':
 				u = va_arg(vaargs, unsigned);
@@ -75,7 +82,7 @@ void print(char fstr[], ...)
 				break ;
 			case 'f':
 				f = va_arg(vaargs, double);
-				print_float(f);
+				usart_print_float(f);
 				break ;
 			}
 			break ;
