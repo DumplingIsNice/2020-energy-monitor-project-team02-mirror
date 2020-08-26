@@ -110,7 +110,6 @@ void usart_print_string(char s[])
 #define PRINT_3SIGFIG_FLOAT
 
 void usart_print_float(float data) {
-
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
 
 	extractTenths(data, &tenths);
@@ -125,10 +124,11 @@ void usart_print_float(float data) {
 	ascii_convert(&hundredths);
 
 
-	if (hundreds != ZERO) {
+	/*if (hundreds != ZERO) {
 		usart_transmit(hundreds);
 	}
-
+	
+	
 	if (tens != ZERO) {
 		usart_transmit(tens);
 	}
@@ -143,7 +143,21 @@ void usart_print_float(float data) {
 	if (hundredths != '0') {
 		usart_transmit(hundredths);
 	}
-
+	*/
+	
+	if (tens == ZERO) {
+		usart_transmit(ones);
+		usart_transmit('.'); // Transmitting decimal point
+		usart_transmit(tenths);
+		usart_transmit(hundredths);
+	}
+	
+	else {
+		usart_transmit(tens);
+		usart_transmit(ones);
+		usart_transmit('.'); // Transmitting decimal point
+		usart_transmit(tenths);
+	}
 
 }
 
@@ -182,7 +196,7 @@ void usart_print_float(float data) {
 	if (hundredths != '0') {
 		usart_transmit(hundredths);
 	}
-
+	
 	
 } 
 #endif /*  PRINT_3SIGFIG_FLOAT */
