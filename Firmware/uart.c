@@ -99,14 +99,14 @@ void usart_transmit_raw(uint8_t rawData[], size_t arraySize)
 	// UDR0 = data; // Writing data to register
 }
 
-void usart_string(char s[])
+void usart_print_string(char s[])
 {
 	int i;
 	for (i = 0; s[i] != '\0'; ++i) ;
 	usart_transmit_raw((unsigned char *) s, i);
 }
 
-void print_float(float data) {
+void usart_print_float(float data) {
 	
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
 	
@@ -139,7 +139,7 @@ void print_float(float data) {
 
 
 //Transmits a single positive integer with no other formatting
-void print_integer(uint16_t x)
+void usart_print_integer(uint16_t x)
 {
 	uint16_t ones = 0, tens = 0, hundreds = 0;
 	extract_digits(x, &ones, &tens, &hundreds);
@@ -163,17 +163,17 @@ void print_integer(uint16_t x)
 // Inputs will be array of type int, and length of the array.
 // NOTE: the function should convert the numbers to ASCII before sending them over UART.
 // Author: Hao Lin (22/08/20)
-void print_array_intergers(uint16_t intArray[], uint16_t arrayLength)
+void usart_print_array_intergers(uint16_t intArray[], uint16_t arrayLength)
 {
 
 	uint16_t number;
-	uint16_t ones = 0, tens = 0, hundreds = 0, i = 0;
+	uint16_t i = 0;
 
 	while (1) {
 
 		number = intArray[i];
 
-		print_integer(number);
+		usart_print_integer(number);
 
 		i++;
 
