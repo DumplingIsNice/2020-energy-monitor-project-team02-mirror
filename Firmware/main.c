@@ -3,18 +3,31 @@
 #include "common.h"
 #include "uart.h"
 #include "adc.h"
+#include <util/delay.h>
 
-#define ENABLE_TESTING
+//#define ENABLE_TESTING
+#define RMSVoltage 14.5
+#define PeakCurrent 125
+#define Power 1.60
+
+
+void terminal_print(float Vrms, uint16_t Ipeak, float P){
+
+	print("RMS Voltage is: %f \n", RMSVoltage);
+	print("Peak Current is: %d \n", PeakCurrent);
+	print("Power is: %f \n\n", Power);
+}
+
 int main()
 {
 #ifdef ENABLE_TESTING
 	extern void test_function();
 	test_function();
 #endif /* ENABLE_TESTING */
-
+	usart_init(UBRR);
 	while (1) {
-		//terminal_print;
-		//_delay_ms(1000);
+		terminal_print(RMSVoltage, PeakCurrent, Power);
+		_delay_ms(1000);
 	}
 
 	return 0;
@@ -22,12 +35,5 @@ int main()
 
 
 
-void terminal_print(float rmsV, uint16_t current, float power){
 
-	print("RMS Voltage is: %d \n", rmsV);
-	
-	print("Peak Current is: %d \n", current);
-	
-	print("Power is: %d \n", power);
-}
 
