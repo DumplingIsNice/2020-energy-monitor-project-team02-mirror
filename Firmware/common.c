@@ -41,7 +41,7 @@ float fround(float n, int decimalPlace)
 /*
  * fstr is a format string like printf, except it only supports the following
  * specifiers:
- * 	- %f to print a float - supports %.1.f and %.2f and %.3f
+ * 	- %f to print a float
  * 	- %d to print an int
  * 	- %u to print an unsigned int
  *	- %x to print an unsigned int in hex
@@ -67,7 +67,7 @@ void print(char fstr[], ...)
 				break ;
 			case 'd':
 				d = va_arg(vaargs, int);
-				/* TODO: when uart function to send single int is created, call it here */
+				print_integer(d);
 				break ;
 			case 'u':
 				u = va_arg(vaargs, unsigned);

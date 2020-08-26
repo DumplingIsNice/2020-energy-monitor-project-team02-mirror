@@ -89,7 +89,7 @@ void usart_transmit(uint8_t data)
 	UDR0 = data; // Writing data to register
 }
 
-void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
+void usart_transmit_raw(uint8_t rawData[], size_t arraySize)
 {
 	while ((UCSR0A & (1 << UDRE0)) == 0) { // Continuously checking to see if UDRE0 bit is 0
 		// If it is not 0, wait until it is so it starts writing the data to the register
@@ -101,6 +101,13 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
 		UDR0 = rawData[i];
 	}
 	// UDR0 = data; // Writing data to register
+}
+
+void usart_string(char s[])
+{
+	int i;
+	for (i = 0; s[i] != '\0'; ++i) ;
+	usart_transmit_raw(s, i);
 }
 
 void print_integer(uint16_t x)
