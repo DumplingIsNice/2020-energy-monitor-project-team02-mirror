@@ -52,17 +52,17 @@ static void extractHundredths(float data, uint16_t *hundredths) {
 
 	if (data < 10) {
 		data = (data - ones) * 100;
-		*hundredths = (int) (data - (tenths));
+		*hundredths = (int) (data - (tenths*10));
 	}
 
 	else if (data > 10 && data < 100) {
 		data = ((data - (tens*10) - ones) * 100);
-		*hundredths = (int) (data - (tenths));
+		*hundredths = (int) (data - (tenths*10));
 	}
 
 	else if (data > 100 && data < 1000) {
 		data = (data - (hundreds*100) - (tens*10) - ones) * 100;
-		*hundredths = (int) (data - (tenths));
+		*hundredths = (int) (data - (tenths*10));
 	}
 
 }
@@ -129,11 +129,18 @@ void print_float(float data) {
 	if (tens != ZERO) {
 		usart_transmit(tens);
 	}
-
+	
 	usart_transmit(ones);
-	usart_transmit(46); // Transmitting decimal point
-	usart_transmit(tenths);
-	usart_transmit(hundredths);
+
+	if (tenths != '0' || hundredths != '0') {
+		usart_transmit('.'); // Transmitting decimal point
+		usart_transmit(tenths);
+	}
+	
+	if (hundredths != '0') {
+		usart_transmit(hundredths);
+	}
+
 	
 } 
 
