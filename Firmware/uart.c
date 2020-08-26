@@ -103,10 +103,10 @@ void usart_string(char s[])
 {
 	int i;
 	for (i = 0; s[i] != '\0'; ++i) ;
-	usart_transmit_raw(s, i);
+	usart_transmit_raw((unsigned char *) s, i);
 }
 
-void printFloat(float data) {
+void print_float(float data) {
 	
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
 	

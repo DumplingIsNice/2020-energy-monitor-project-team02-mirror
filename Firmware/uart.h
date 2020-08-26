@@ -39,6 +39,7 @@ void usart_transmit_raw(uint8_t rawData[], size_t arraySize); // Defining functi
 void usart_string(char s[]);
 
 /* Sending Numbers */
+void print_float(float data);
 void print_integer(uint16_t x);
 void print_array_intergers(uint16_t intArray[], uint16_t arrayLength); // Print out an array of POSITIVE integers. Inputs will be array of type int, and length of the array. Author: Hao Lin (22/08/2020)
 #endif /* UART_H */
