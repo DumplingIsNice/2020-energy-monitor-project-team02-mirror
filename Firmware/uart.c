@@ -45,24 +45,24 @@ static void extractTenths(float data, uint16_t *tenths) {
 }
 
 // Function to extract hundredths place (2nd digit after decimal place)
-static void extractHundredths(float data) {
+static void extractHundredths(float data, uint16_t *hundredths) {
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0;
 	extract_digits(data, &ones, &tens, &hundreds);
 	extractTenths(data, &tenths);
 
 	if (data < 10) {
 		data = (data - ones) * 100;
-		data = (int) (data - (tenths));
+		*hundredths = (int) (data - (tenths));
 	}
 
 	else if (data > 10 && data < 100) {
 		data = ((data - (tens*10) - ones) * 100);
-		data = (int) (data - (tenths));
+		*hundredths = (int) (data - (tenths));
 	}
 
 	else if (data > 100 && data < 1000) {
 		data = (data - (hundreds*100) - (tens*10) - ones) * 100;
-		data = (int) (data - (tenths));
+		*hundredths = (int) (data - (tenths));
 	}
 
 }
@@ -91,17 +91,46 @@ void usart_transmit(uint8_t data)
 
 void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
 {
-	while ((UCSR0A & (1 << UDRE0)) == 0) { // Continuously checking to see if UDRE0 bit is 0
-		// If it is not 0, wait until it is so it starts writing the data to the register
-
-	}
 
 	//size_t totalBytes = sizeof(rawData)/sizeof(rawData[0]); // Returns size of the array input
 	for (size_t i = 0; i < arraySize; i++) {
-		UDR0 = rawData[i];
+		usart_transmit(rawData[i]);
 	}
 	// UDR0 = data; // Writing data to register
 }
+
+
+void printFloat(float data) {
+	
+	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
+	
+	extractTenths(data, &tenths);
+	extractHundredths(data, &hundredths);
+	
+	extract_digits(data, &ones, &tens, &hundreds);
+	
+	ascii_convert(&ones);
+	ascii_convert(&tens);
+	ascii_convert(&hundreds);
+	ascii_convert(&tenths);
+	ascii_convert(&hundredths);
+	
+
+	if (hundreds != ZERO) {
+		usart_transmit(hundreds);
+	}
+
+	if (tens != ZERO) {
+		usart_transmit(tens);
+	}
+
+	usart_transmit(ones);
+	usart_transmit(46); // Transmitting decimal point
+	usart_transmit(tenths);
+	usart_transmit(hundredths);
+	
+} 
+
 
 void print_integer(uint16_t x)
 {
