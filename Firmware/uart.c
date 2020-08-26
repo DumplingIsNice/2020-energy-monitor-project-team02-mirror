@@ -103,9 +103,25 @@ void usart_transmitRaw(uint8_t rawData[], size_t arraySize)
 	// UDR0 = data; // Writing data to register
 }
 
+//Transmits a single positive integer with no other formatting
 void print_integer(uint16_t x)
 {
-
+	uint16_t ones = 0, tens = 0, hundreds = 0;
+	extract_digits(x, &ones, &tens, &hundreds);
+	
+	ascii_convert(&ones);
+	ascii_convert(&tens);
+	ascii_convert(&hundreds);
+	
+	if (hundreds > ZERO){
+		usart_transmit(hundreds);
+	}
+	
+	if (tens > ZERO){
+		usart_transmit(tens);
+	}
+	
+	usart_transmit(ones);
 }
 
 // Print out an array of POSITIVE integers.
