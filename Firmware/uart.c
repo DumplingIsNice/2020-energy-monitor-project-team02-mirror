@@ -138,21 +138,7 @@ void print_array_intergers(uint16_t intArray[], uint16_t arrayLength)
 
 		number = intArray[i];
 
-		extract_digits(number, &ones, &tens, &hundreds);
-
-		ascii_convert(&ones);
-		ascii_convert(&hundreds);
-		ascii_convert(&tens);
-
-		if (hundreds != ZERO) {
-			usart_transmit(hundreds);
-		}
-
-		if (tens != ZERO) {
-			usart_transmit(tens);
-		}
-
-		usart_transmit(ones);
+		print_integer(number);
 
 		i++;
 
