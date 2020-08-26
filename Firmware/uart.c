@@ -106,6 +106,48 @@ void usart_print_string(char s[])
 	usart_transmit_raw((unsigned char *) s, i);
 }
 
+
+#define PRINT_3SIGFIG_FLOAT
+
+void usart_print_float(float data) {
+
+	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
+
+	extractTenths(data, &tenths);
+	extractHundredths(data, &hundredths);
+
+	extract_digits(data, &ones, &tens, &hundreds);
+
+	ascii_convert(&ones);
+	ascii_convert(&tens);
+	ascii_convert(&hundreds);
+	ascii_convert(&tenths);
+	ascii_convert(&hundredths);
+
+
+	if (hundreds != ZERO) {
+		usart_transmit(hundreds);
+	}
+
+	if (tens != ZERO) {
+		usart_transmit(tens);
+	}
+
+	usart_transmit(ones);
+
+	if (tenths != '0' || hundredths != '0') {
+		usart_transmit('.'); // Transmitting decimal point
+		usart_transmit(tenths);
+	}
+
+	if (hundredths != '0') {
+		usart_transmit(hundredths);
+	}
+
+
+}
+
+#ifndef PRINT_3SIGFIG_FLOAT
 void usart_print_float(float data) {
 	
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
@@ -143,7 +185,7 @@ void usart_print_float(float data) {
 
 	
 } 
-
+#endif /*  PRINT_3SIGFIG_FLOAT */
 
 //Transmits a single positive integer with no other formatting
 void usart_print_integer(uint16_t x)

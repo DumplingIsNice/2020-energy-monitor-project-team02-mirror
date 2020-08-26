@@ -74,7 +74,7 @@ static void test_uart()
 static void test_common()
 {
 	print("\r\n--- TESTING COMMON ---\r\n");
-	print("This is a test to: %s. Int: %d, Int: %u, Float: %f\n", "print a formated string", 10, 50, 10.23);
+	print("This is a test to: %s. Int: %d, Int: %u, Float: %f\n", "print a formatted string", 10, 50, 10.23);
 }
 /* Testing for adc.c */
 static void test_adc()

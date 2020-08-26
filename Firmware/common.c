@@ -54,7 +54,6 @@ void print(char fstr[], ...)
 	float f;
 	char *s;
 
-
 	size_t i;
 	va_list vaargs;
 
