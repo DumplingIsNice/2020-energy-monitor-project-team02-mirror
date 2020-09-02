@@ -55,3 +55,6 @@ circuitry required to interface with digital IO pins of the microcontroller.
 
 # ADC Register Configuration:
 ![](ADCConfig.png)
+
+# PCB Design Considerations:
+![](PCBDesign.png)
