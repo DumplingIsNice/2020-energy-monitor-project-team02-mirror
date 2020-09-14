@@ -59,3 +59,8 @@ CMakeLists.txt
 .vscode
 .history
 *.code-workspace
+
+# Remark Presentation Ignores
+.DS_Store
+*.LOG
+__Previews/
