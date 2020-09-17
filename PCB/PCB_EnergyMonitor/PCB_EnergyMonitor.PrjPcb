@@ -71,10 +71,6 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BHPHLYQI
 
-[GeneratedDocument1]
-DocumentPath=Project Outputs for PCB_EnergyMonitor\Design Rule Check - PCB_EnergyMonitor.html
-DItemRevisionGUID=
-
 [Configuration1]
 Name=Sources
 ParameterCount=0
