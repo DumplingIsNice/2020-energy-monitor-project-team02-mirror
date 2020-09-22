@@ -11,7 +11,7 @@ LD=avr-ld
 BIN=FW.ELF
 
 # List of Object Files To Link (One per .c Source File)
-OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o
+OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o obj/dsp.o
 
 # Extra Debugging Flags
 # Note that Proteus expects the .elf to have debugging symbols in the dwarf verison 2 format (hence -gdwarf-2)
@@ -54,6 +54,11 @@ obj/adc.o:adc.c common.h
 obj/test.o:test.c common.h uart.h adc.h
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
+
+obj/dsp.o:dsp.c common.h adc.h
+	@printf "\t - Compiling $< into $@\n"
+	@$(CC) -c $(CFLAGS) -o $@ $<
+
 
 # Clean Target
 .PHONY: clean
