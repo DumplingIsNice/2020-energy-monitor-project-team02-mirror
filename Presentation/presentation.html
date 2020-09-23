@@ -214,28 +214,18 @@ name: S2
 
 # Analog Design Considerations
 
-- Checkout https://remarkjs.com/#1 for more information
-- .center .left and .right tags can be used to allign the immage
- - top, middle and bottom can also be used
-
+- Used more accurate version of peak detector. Read values when timer interrupt is triggered.
+- Optimisied  Resistors to allow a bigger range for ADC voltage input.
+Before (range is ~ 1.3V <--> 2.9V)
 .center[<img src="img/ADCInputBefore.png" height="300">]
 
 ---
 name: S3
 
-# Software Design Considerations
+# Analog Design Considerations
+After (Expanded range to ~ 0.9V <--> 3.3V)
+.center[<img src="img/ADCInputAfter.png" height="300">]
 
-.left-column[
-- Use .left-column and .right-column 
- - Sub bullet point
-- Bullet point 2
- - Sub bullet point
-- Bullet point 3
-]
-
-.right-column[
-.right[<img src="img/intro/UoAEng.png" width="300px">]
-]
 
 ---
 
