@@ -223,7 +223,7 @@ Before (range is ~ 1.3V <--> 2.9V)
 name: S3
 
 # Analog Design Considerations
-After (Expanded range to ~ 0.9V <--> 3.3V)
+After (roughly 50% increase in representing the ADC voltage levels)
 .center[<img src="img/ADCInputAfter.png" height="300">]
 
 
@@ -288,9 +288,9 @@ The custom print function combines our modular transmit and calculation function
 
 The standard library `printf()` is just under a $Kilobyte$ in size.
 
-Our custom `print()` function features the same synax as `printf()` but only consumes $280 \ bytes$ - thats over $70\%$ reduction in size.
+Our custom `print()` function features the same syntax as `printf()` but only consumes $280 \ bytes$ - thats over $70\%$ reduction in size.
 
-This means our custom print function is 72% smaller then the built-in printf, and it still features all the convient syntax we need.
+This means our custom print function is 72% smaller than the built-in printf, while still retaining all the convenient syntax we need.
 
 ![](img/print_func_size_reduc.png)
 
@@ -328,8 +328,11 @@ name: S8
 # Breadboard Prototype 
 - Breadboarding includes a comprehensive peak detector utilising voltage followers and offsets. Helps to sample the analog signal at the right time for the peak values.
 
-<img src="img/Breadboard.jpg" width="45%" style="text-align: right" />
+<img src="img/Breadboard.jpg" width="50%" style="text-align: right" />
 <img src = "img/peakDetector.png" width="45%" />
+.zoom175[
+.right[<img src = "img/peakDetectorSchem.png" width="35%" />]
+]
 
 ---
 name: S9
