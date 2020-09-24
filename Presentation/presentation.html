@@ -250,32 +250,53 @@ name: S4
 
 # Software Design Considerations
 
-- Used a custom print function which utilized our modular transmit functions. Automatically converts to 3 signfiicant figures before transmitting.
-```c
-#define RMSVoltage 14.5
-#define PeakCurrent 125
-#define Power 1.60
-int main()
-{
-    print("RMS Voltage is: %f \n", RMSVoltage);
-    print("Peak Current is: %d \n", PeakCurrent);
-    print("Power is: %f \n\r", Power);
-}
-```
-.left[<img src="img/virtualTerminal.png" height="100">]
+Our key focus was to procure <b>modular</b> and <b>efficient</b> code.
+
+.center[![](img/Firmware_Modular.png)]
+
 
 ---
 name: S5
 
 # Software Design Considerations
 
-If using ordinary method, we'd have to transmit each character separately and call multiple different functions to do this.
-The custom print function combines our modular transmit and calculation functions to achieve a nearly seamless piece of code to transmit anything to the microcontroller
+Our custom `print()` function, which is built on top of our modular UART functions that automaticlly convert to 3 signfiicant figures before transmitting.
 
-Our key focus was to procure <b>modular</b> and <b>efficient</b> code.
+```c
+#define rmsvoltage 14.5
+#define peakcurrent 125
+#define power 1.60
+int main()
+{
+	print("rms voltage is: %f", rmsvoltage);
+	print("peak current is: %d", peakcurrent);
+	print("power is: %f", power);
+}
+```
+.left[<img src="img/virtualTerminal.png" height="100">]
+
 
 ---
+
 name: S6
+
+# Software Design Considerations
+
+Ordinarily we would have to transmit each character separately and call multiple different functions for transmitting numbers.
+The custom print function combines our modular transmit and calculation functions to achieve seamless, clean looking snippets of code to transmit anything from the microcontroller.
+
+
+The standard library `printf()` is just under a $Kilobyte$ in size.
+
+Our custom `print()` function features the same synax as `printf()` but only consumes $280 \ bytes$ - thats over $70\%$ reduction in size.
+
+This means our custom print function is 72% smaller then the built-in printf, and it still features all the convient syntax we need.
+
+![](img/print_func_size_reduc.png)
+
+
+---
+name: S7
 
 # PCB Layout
 
@@ -302,26 +323,23 @@ When placed `\(100 mm\)` apart the primary and pick-up coils of an IPT system ea
 ]
 
 ---
-name: S7
+name: S8
 
 # Breadboard Prototype 
 - Breadboarding includes a comprehensive peak detector utilising voltage followers and offsets. Helps to sample the analog signal at the right time for the peak values.
 
-.zoom175[
-.right[<img src="img/Breadboard.jpg" width="500px">]
-]
-
-.left[<img src = "img/peakDetector.png" width="500px">]
+<img src="img/Breadboard.jpg" width="45%" style="text-align: right" />
+<img src = "img/peakDetector.png" width="45%" />
 
 ---
-name: S8
+name: S9
 
 # Jumping to a Slide
 
 You can read [here](#S3) for more infromation
 
 ---
-name: S9
+name: S10
 
 # C Code Example
 
