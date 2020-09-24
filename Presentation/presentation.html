@@ -250,37 +250,29 @@ name: S4
 
 # Software Design Considerations
 
-- Adding an in-line equation
- - `\(L_{pt}\)` and `\(L_{st}\)` are in-line
-- Adding an equation 
-\\[M = k\sqrt{L\_{pt}L\_{st}}\\]
-- Another in-line equation `\(n = \frac{N_{pt}}{N_{st}} = \sqrt{\frac{L_{pt}}{L_{st}}}\)`
-- Note the use of \ for subscripts which differs from Latex
+- Used a custom print function which utilized our modular transmit functions. Automatically converts to 3 signfiicant figures before transmitting.
+```c
+#define RMSVoltage 14.5
+#define PeakCurrent 125
+#define Power 1.60
+int main()
+{
+    print("RMS Voltage is: %f \n", RMSVoltage);
+    print("Peak Current is: %d \n", PeakCurrent);
+    print("Power is: %f \n\r", Power);
+}
+```
+.left[<img src="img/virtualTerminal.png" height="100">]
 
 ---
 name: S5
 
-# PCB Schematic
+# Software Design Considerations
 
-- Press 'P' to view the notes in the presenter mode
-- Although a T equivalent transformer model can be used to model the coils, the coupled inductor model is widely used when analysing an IPT system in the phasor-domain
-- In the coupled inductor model, `\(L_{pt}\)` and `\(L_{st}\)` represent the self-inductances of primary and pick-up coils
-- `\(V_{sr}\)` represents voltage induced across `\(L_{st}\)` due to current `\(I_{pt}\angle 0\)` flowing through `\(L_{pt}\)` and is given by
-\\[V\_{sr} = \omega MI\_{pt}e^{j\pi/2}\\]
-- Similarly, `\(V_{pr}\)` represents voltage induced across `\(L_{pt}\)` due to `\(I_{st}\angle\theta\)` and is given by
-\\[V\_{pr} = \omega MI\_{st}e^{j(\theta+\pi/2)}\\]
+If using ordinary method, we'd have to transmit each character separately and call multiple different functions to do this.
+The custom print function combines our modular transmit and calculation functions to achieve a nearly seamless piece of code to transmit anything to the microcontroller
 
-???
-
-If the current through primary coil is `\(I_{pt} \sin (\omega t)\)` then,
-\\[\phi\_{m} \propto I\_{pt} \sin (\omega t) \\]
-The voltage induced on the pick-up coil is therefore,
-\\[v\_{sr} \propto \frac{\mathrm{d} \phi\_{m} }{\mathrm{d} t} \\]
-\\[v\_{sr} \propto \omega I\_{pt} \cos (\omega t) \\]
-Since `\(M\)` represent the coupling between the two coils,
-\\[v\_{sr} = \omega M I\_{pt} \cos (\omega t) \\]
-In the phasor-domain,
-\\[V\_{sr} = \omega M I\_{pt} e^{j\pi/2} \\]
+Our key focus was to procure <b>modular</b> and <b>efficient</b> code.
 
 ---
 name: S6
