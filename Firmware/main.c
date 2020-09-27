@@ -4,7 +4,7 @@
 #include "uart.h"
 #include "adc.h"
 #include <util/delay.h>
-
+#include <avr/interrupt.h>
 //#define ENABLE_TESTING
 #define RMSVoltage 14.5
 #define PeakCurrent 125
