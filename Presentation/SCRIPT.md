@@ -14,7 +14,7 @@
 
 # Slide 1: Analog (2)
 
-- 50% increase???
+- We had developed a peak detector. This arises from the limitation of sampling and the quantified representation of the signal. The signal from this circuit will help us perform power calculations in our microcontroller.
 
 # Slide 3: Digital (1)
 
@@ -27,14 +27,14 @@
 # Slide 5: Digital (3) (1:30-1:40)
 
 - We decided that the printf() function is a unnecessary intensive/costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. So, we implemented our own print function.
-- Ordinarily we would have to transmit each character separately and call multiple functions for transmitting numbers. The custom print function combines our modular transmit and calculation functions to achieve seamless, clean looking snippets of code to transmit anything from the microcontroller.
 - This reduced print function also saves valuable memory for the processing of the signal data. Using up 280 bytes, about 70% reduction in size.
 - The use of modular, intuitive function implementations is helpful in our collaboration in the project for others to be updated on the development of the firmware.
   
 # Slide 6: PCB (1)
 
-- Fast switching diodes?
-- Choices in ceramic and electrolyte capacitor 
+- Polarized electrolyte capacitors were chosen to be used for the generation of the common 5V DC power supply. 
+- Meanwhile ceramic capacitors were used for the many signal conditioning circuits in AC applications.
+- The PCB follows a recommended design, but in particular we added a extra current sinking resistor at the output of the regulation circuit for the ensured operation of the regulator package.
 
 # Slide 7: Breadboard Prototype (20-30s)
 
@@ -44,4 +44,7 @@
 # Slide 8: End
 
 - Thank you for your time in reviewing our design with us. Any questions.
+
+# Archive
+- Ordinarily we would have to transmit each character separately and call multiple functions for transmitting numbers. The custom print function combines our modular transmit and calculation functions to achieve seamless, clean looking snippets of code to transmit anything from the microcontroller.
 
