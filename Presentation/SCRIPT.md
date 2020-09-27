@@ -1,22 +1,47 @@
 # Presentation Notes
 
-# Slide 1: Introduction
+# Slide 0: Introduction (10-12s)
 
-# Slide 2: Analog 
-- Designed resistors in a way that the maximum gain was achieved in order to increase the overall voltage levels we could represent with the micro controller. More accurate.
-- Insert image of waveform with updated resistor values.
-- Before: Peak to peak between 1.3V <--> 2.9V. The maximum range (VOH and VOL) we can have is 0.7V <--> 3.3V.
-- After: Reached much closer to the range of the op amp as input to the ADC. The range is now 0.9V <--> 3.3V
+- A honor to have you at our presentation. My name is _____. And we will walk you through the highlights of our design.
+- You may have known this, but to reiterate: in our design course we are developing a home energy monitor.
+
+# Slide 1: Analog (1) (50-60s)
+- We designed the signal processing circuit in such a way that we maximized the gain of our captured signals. 
+- We found the opportunity to optimize this in order to increase the voltage levels captured by the microcontroller. So that the ADC conversion of the signal will be more representative over the 5V reference.
+- The maximum range of input voltages of our LM324 OpAmps before saturation is (VOH and VOL) 0.7V <--> 3.3V.
+- First implementation: The maximum peak to peak of the signal is between 1.3V <--> 2.9V. We believe we could optimise this.
+- Optimized: Reached much closer to the range of the op amp as input to the ADC. The maximum peak to peak of the signal is now 0.9V <--> 3.3V
+
+# Slide 1: Analog (2)
+
+- 50% increase???
 
 # Slide 3: Digital (1)
 
+- We developed modular code, each dictating the functions for a peripheral of the microcontroller.
+
 # Slide 4: Digital (2)
 
-# Slide 5: PCB (1)
+- To highlight, we chose to implement a custom print function for the purpose of transmitting data over UART. 
 
-# Slide 6: PCB (2)
+# Slide 5: Digital (3) (1:30-1:40)
 
-# Slide 7: Questions
+- We decided that the printf() function is a unnecessary intensive/costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. So, we implemented our own print function.
+- Ordinarily we would have to transmit each character separately and call multiple functions for transmitting numbers. The custom print function combines our modular transmit and calculation functions to achieve seamless, clean looking snippets of code to transmit anything from the microcontroller.
+- This reduced print function also saves valuable memory for the processing of the signal data. Using up 280 bytes, about 70% reduction in size.
+- The use of modular, intuitive function implementations is helpful in our collaboration in the project for others to be updated on the development of the firmware.
+  
+# Slide 6: PCB (1)
+
+- Fast switching diodes?
+- Choices in ceramic and electrolyte capacitor 
+
+# Slide 7: Breadboard Prototype (20-30s)
+
+- To meet the deadlines for this design project, the peak detector was unable to be added to the PCB layout before send off to manufacture due to technical issues.
+- However, that did not stop us from developing and testing a peak detector on our bread board. Yet, due to the limitations of the COVID situation, we are unable to test our circuit in reality before this presentation.
 
 # Slide 8: End
+
+- Thank you for your time in reviewing our design with us. Any questions.
 
