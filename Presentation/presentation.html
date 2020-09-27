@@ -138,7 +138,16 @@
       }
 
       .zoom175:hover {
-        transform: scale(1.75) translateY(-20%) translateX(-20%); 
+        transform: scale(1.75) translateY(-20%) /* translateX(-20%);  */
+        /* (Note: if the zoom is too large, it will go outside of the viewport) */
+      }
+
+      .zoom400 {
+        transition: transform .2s; /* Animation */
+      }
+
+      .zoom400:hover {
+        transform: scale(4) translateY(-50%) /* translateX(-20%);  */
         /* (Note: if the zoom is too large, it will go outside of the viewport) */
       }
 
@@ -205,19 +214,19 @@ name: template_slide
 ---
 name: S2
 
-# Analog Design Considerations
+# Analog Design Considerations: Signal Amplification
 
-- Used more accurate version of peak detector. Read values when timer interrupt is triggered.
-- Optimisied  Resistors to allow a bigger range for ADC voltage input.
-Before (range is ~ 1.3V <--> 2.9V)
-.center[<img src="img/ADCInputBefore.png" height="300">]
+.center[<img src="img/ADCInput.png" width="100%">]
 
 ---
 name: S3
 
-# Analog Design Considerations
-After (roughly 50% increase in representing the ADC voltage levels)
-.center[<img src="img/ADCInputAfter.png" height="300">]
+# Analog Design Considerations: Peak Dectector
+
+.center[<img src = "img/peakDetector.png" width="80%" />]
+.zoom400[
+	.center[<img src = "img/peakDetectorSchem.png" width="20%" />]
+]
 
 
 ---
@@ -275,39 +284,19 @@ name: S7
 
 # PCB Layout
 
-.questions[
-The image below should expand when mouse over it. There are two zoom classes defined above.
-
-When placed `\(100 mm\)` apart the primary and pick-up coils of an IPT system each measures `\(18.73 \mu H\)`. `\(k\)` between the two coils is measured as 10%. The primary uses LCL compensation and is energised using a `\(50 V_{rms}\)` sinusoidal voltage source, `\(V_{pi}\)`, that has a frequency of `\(85 \mathit{kHz}\)`. 
-]
-
-.left-column[
-- Show that `\(C_{pi}\)` has to be `\(374.4 nF\)` to ensure `\(I_{pt}=10A_{rms}\)`
-- Show that `\(C_{pt}\)` has to be `\(374.4 nF\)` 
-- Develop a simulation model in LTSpice 
- - `\(L_{pi}\)` can be added a `\(50 m \Omega\)` ESR to help reach SS faster
-- With the aid of this model show that 
- - `\(P_{o} \approx 50W\)`
-]
-
-.up-column[
 .zoom175[
-.center[<img src="img/netw/PCBLayout3D.png" width="300px">]
-.left[<img src="img/netw/PCBLayout2D.png" width="300px">]
+.right[<img src="img/netw/PCBLayout3D.png" width="300px">]
 ]
+.zoom175[
+.left[<img src="img/netw/PCBLayout2D.png" width="300px">]
 ]
 
 ---
 name: S8
 
 # Breadboard Prototype 
-- Breadboarding includes a comprehensive peak detector utilising voltage followers and offsets. Helps to sample the analog signal at the right time for the peak values.
 
-<img src="img/Breadboard.jpg" width="50%" style="text-align: right" />
-<img src = "img/peakDetector.png" width="45%" />
-.zoom175[
-.right[<img src = "img/peakDetectorSchem.png" width="35%" />]
-]
+.center[<img src="img/Breadboard.jpg" width="100%" />]
 
 ---
 
