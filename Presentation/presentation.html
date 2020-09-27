@@ -266,13 +266,9 @@ name: S6
 
 # Software Design Considerations
 
-Ordinarily we would have to transmit each character separately and call multiple different functions for transmitting numbers.
-The custom print function combines our modular transmit and calculation functions to achieve seamless, clean looking snippets of code to transmit anything from the microcontroller.
-
-
 The standard library `printf()` is just under a $Kilobyte$ in size.
 
-Our custom `print()` function features the same syntax as `printf()` but only consumes $280 \ bytes$ - thats over $70\%$ reduction in size.
+Our custom `print()` function only consumes $280 \ bytes$ - thats over $70\%$ reduction in size.
 
 This means our custom print function is 72% smaller than the built-in printf, while still retaining all the convenient syntax we need.
 
@@ -283,14 +279,10 @@ This means our custom print function is 72% smaller than the built-in printf, wh
 name: S7
 
 # PCB Layout
-
-.zoom175[
-.right[<img src="img/netw/PCBLayout3D.png" width="300px">]
+.center[
+	<img src="img/netw/PCBLayout3D.png" width="35%">
+	<img src="img/netw/PCBLayout2D.png" width="35%">
 ]
-.zoom175[
-.left[<img src="img/netw/PCBLayout2D.png" width="300px">]
-]
-
 ---
 name: S8
 
@@ -329,8 +321,6 @@ count: false
     <script src="https://kit.fontawesome.com/a405eedf54.js" crossorigin="anonymous"></script>
     <script src="remark/mark.min.js" type="text/javascript">
     </script>
-    <link rel="stylesheet" href="remark/remark.search.css">
-    <script src="remark/remark.search.js" type="text/javascript"></script>
 
     <script type="text/javascript">
 
