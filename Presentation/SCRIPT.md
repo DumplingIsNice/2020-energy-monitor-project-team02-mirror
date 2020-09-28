@@ -38,8 +38,7 @@
 
 # Slide 7: Breadboard Prototype (20-30s)
 
-- To meet the deadlines for this design project, the peak detector was unable to be added to the PCB layout before send off to manufacture due to technical issues.
-- However, that did not stop us from developing and testing a peak detector on our bread board. Yet, due to the limitations of the COVID situation, we are unable to test our circuit in reality before this presentation.
+- We have developed a breadboard prototype of our analogue circuitry and is looking forward to testing it in reality when the laboratory space opens up.
 
 # Slide 8: End
 
