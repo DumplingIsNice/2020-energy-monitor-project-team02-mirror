@@ -6,14 +6,6 @@
 - You may have known this, but to reiterate: in our design course we are developing a home energy monitor that could measure the voltage and current across a load. The signals will be read by a microcontroller which will calculate the original signal and the power consumed by it.
 - What we hope to learn from this project
 
-# Slide ?: Project management 
-
-Using git/Trello/Slack - Branching? Pull requests? Issues?
-How to work around lockdown, remote development.
-Using pytho to generate project file.
-
-Mention Smart Energy Challenge?
-
 # Slide 1: Analog (1) (50-60s)
 
 add voltage axis
@@ -25,11 +17,11 @@ add voltage axis
 - Our optimization allowed us to reach much closer to the range of the op amp as input to the ADC. The maximum peak to peak of the signal is now 0.9V <--> 3.3V
 - This will increase the accuracy of the captured signal.
 
-# Slide 1: Analog (2)
+# Slide 2: Analog (2)
 
-Place th images side by side instead.
+Place the images side by side instead.
 
-- We had developed a peak detector. The signal from this circuit will help us perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
+- We had developed a peak detector that triggers on waveform peaks. The signal from this circuit will help us identify peaks perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
 
 # Slide 3: Digital (1)
 
@@ -38,8 +30,6 @@ Include a tree diagram.
 - We developed modular code, each dictating the functions for a peripheral of the microcontroller.
 
 # Slide 4: Digital (2)
-
-Fix "siginfiicant" typo.
 
 - To highlight, we chose to implement a custom print function for the purpose of transmitting data over UART. 
 
@@ -58,6 +48,15 @@ Add some arrows/lines pointing to highlights.
 - Polarized electrolyte capacitors were chosen to be used for the generation of the common 5V DC power supply. 
 - Meanwhile ceramic capacitors were used for the many signal conditioning circuits in AC applications.
 - The PCB follows a recommended design, but in particular we added a extra current sinking resistor at the output of the regulation circuit for the ensured operation of the regulator package.
+
+# Slide 7: Project management 
+
+- We used gitHub for documentation, version control (rollbacks) and collaboration remotely. This is especially necessary over lock-down. 
+- Using python to read the makefile to generate project file.
+- We used Slack for communication and zoom for virtual meet up over the lock-down period.
+- We used Trello for project management. This is critical in our collaboration as it controlled delegation of tasks.
+- We also chose to do Smart Energy Challenge.
+- Initial plan is to local host a python programme to receive information from our energy monitor through its bluetooth module.
 
 # Slide 8: End
 

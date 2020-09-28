@@ -64,3 +64,4 @@ CMakeLists.txt
 .DS_Store
 *.LOG
 __Previews/
+*.psd
