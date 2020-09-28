@@ -11,8 +11,8 @@
 #define Power 1.60
 
 
-void terminal_print(float Vrms, uint16_t Ipeak, float P){
-
+void terminal_print(float Vrms, uint16_t Ipeak, float P)
+{
 	print("RMS Voltage is: %f \n", Vrms);
 	print("Peak Current is: %d \n", Ipeak);
 	print("Power is: %f \n\r", P);
@@ -32,8 +32,4 @@ int main()
 
 	return 0;
 }
-
-
-
-
 

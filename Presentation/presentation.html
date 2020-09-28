@@ -266,14 +266,22 @@ name: S6
 
 # Software Design Considerations
 
-The standard library `printf()` is just under a $Kilobyte$ in size.
+* The standard library `printf()` is just under a $Kilobyte$ in size
 
-Our custom `print()` function only consumes $280 \ bytes$ - thats over $70\%$ reduction in size.
+* Our custom `print()` function only consumes $244 \ bytes$
+	* thats over $70\%$ reduction in size
 
-This means our custom print function is 72% smaller than the built-in printf, while still retaining all the convenient syntax we need.
+* Our custom print function retains all the convenient `printf()` syntax
 
-![](img/print_func_size_reduc.png)
-
+.code[
+```
+[Firmware/]$ nm --print-size -t d FW.ELF | grep -w 'print\|printf\|vfprintf'
+00003694 00000244 T print
+00005880 00000040 T printf
+00005920 00000934 T vfprintf
+[Firmware/]$ 
+```
+]
 
 ---
 name: S7
