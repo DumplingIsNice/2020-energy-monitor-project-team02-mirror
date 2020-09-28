@@ -215,8 +215,10 @@ name: template_slide
 name: S2
 
 # Analog Design Considerations: Signal Amplification
+- 50% range increase for ADC Voltage input
+      - From 1.3V <--> 2.9V to 0.9V <--> 3.3V
 
-.center[<img src="img/ADCInput.png" width="100%">]
+.center[<img src="img/ADCInput.png" width="75%">]
 
 ---
 name: S3
@@ -231,13 +233,12 @@ name: S3
 ]
 
 
-
 ---
 name: S4
 
 # Software Design Considerations
 
-Our key focus was to procure <b>modular</b> and <b>efficient</b> code.
+- Our key focus was to procure <b>modular</b> and <b>efficient</b> code
 
 .center[<img src = "img/DependencyGraph.png" width="70%" />]
 
