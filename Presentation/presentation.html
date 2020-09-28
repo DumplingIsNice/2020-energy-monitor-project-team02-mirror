@@ -151,6 +151,14 @@
         /* (Note: if the zoom is too large, it will go outside of the viewport) */
       }
 
+     .zoom120 {
+	transition: transform .2s;
+     }
+
+     .zoom120:hover {
+	transform: scale(1.2);
+     }
+
       .color-grey{
         color: #919191;
       }
@@ -223,8 +231,8 @@ name: template_slide
 name: S2
 
 # Analog Design Considerations: Signal Amplification
-- 50% range increase for ADC Voltage input
-      - From 1.3V <--> 2.9V to 0.9V <--> 3.3V
+- $50\%$ range increase for ADC Voltage input
+      - From $1.3\ V \leftrightarrow 2.9\ V$ to $0.9\ V \leftrightarrow 3.3\ V$
 
 .center[<img src="img/ADCInput.png" width="75%">]
 
@@ -312,11 +320,32 @@ name: S8
 # Project Management
 
 - Workflow planning and task management using Slack and Trello
-- Effective use of Git, rolling back when encountering issues with latest commit.
-- Python script reads makefile to generate Atmel project
+
 .center[
-<img src="img/Trello.png" width="50%">
+<img src='img/Trello.png' width='60%' /> &nbsp; &nbsp; &nbsp; &nbsp;
+<img src='img/Trello2.png' width="30%" />
 ]
+---
+
+name: S9
+
+# Project Management
+
+- Effective use of Git, rolling back when encountering issues with latest commit
+- Python script reads makefile to generate Atmel Studio Project so we are not limited to Atmel IDE
+
+<pre>
+<code style="text-align: center">
++--------------+        +---------------+          +---------------+
+|              |        |               |          |               |
+|   Makefile   +-------->  genAtmel.py  +---------->  AtmelStudio  |
+|              |        |               |          | Project Files |
++--------------+        +---------------+          +---------------+
+</code>
+</pre>
+.
+<img src='img/graph.png' width='100%' />
+.center[** Git Commit Graph **]
 ---
 
 class: title-slide
