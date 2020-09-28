@@ -9,8 +9,8 @@
 - We designed the signal processing circuit in such a way that we maximized the gain of our captured signals. 
 - We found the opportunity to optimize this in order to increase the voltage levels captured by the microcontroller. So that the ADC conversion of the signal will be more representative over the 5V reference.
 - The maximum range of input voltages of our LM324 OpAmps before saturation is (VOH and VOL) 0.7V <--> 3.3V.
-- First implementation: The maximum peak to peak of the signal is between 1.3V <--> 2.9V. We believe we could optimise this.
-- Optimized: Reached much closer to the range of the op amp as input to the ADC. The maximum peak to peak of the signal is now 0.9V <--> 3.3V
+- In our first implementation, the maximum peak to peak of the signal is between 1.3V <--> 2.9V. We believe we could optimise this.
+- Our optimization allowed us to reach much closer to the range of the op amp as input to the ADC. The maximum peak to peak of the signal is now 0.9V <--> 3.3V
 
 # Slide 1: Analog (2)
 
@@ -26,9 +26,9 @@
 
 # Slide 5: Digital (3) (1:30-1:40)
 
-- We decided that the printf() function is a unnecessary intensive/costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. So, we implemented our own print function.
-- This reduced print function also saves valuable memory for the processing of the signal data. Using up 280 bytes, about 70% reduction in size.
-- The use of modular, intuitive function implementations is helpful in our collaboration in the project for others to be updated on the development of the firmware.
+- We decided that the printf() function is an unnecessary intensive and costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. This is why we implmented a custom print function.
+- This reduced print() function also saves valuable memory for the processing our signal data. Using only up to 280 bytes, this function reduces the size of transmitted data by about 70%.
+- The use of modular, intuitive function implementations are helpful in collaborating with others for our project and allows for understanding of our firmware.
   
 # Slide 6: PCB (1)
 
@@ -43,7 +43,7 @@
 
 # Slide 8: End
 
-- Thank you for your time in reviewing our design with us. Any questions.
+- On behalf of my team and I, we thank you for your time in reviewing our design with us. Any questions?
 
 # Archive
 - Ordinarily we would have to transmit each character separately and call multiple functions for transmitting numbers. The custom print function combines our modular transmit and calculation functions to achieve seamless, clean looking snippets of code to transmit anything from the microcontroller.
