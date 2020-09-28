@@ -8,8 +8,6 @@
 
 # Slide 1: Analog (1) (50-60s)
 
-add voltage axis
-
 - We designed the signal processing circuit in such a way that we maximized the gain of our captured signals. 
 - We found the opportunity to optimize this in order to increase the voltage levels captured by the microcontroller. So that the ADC conversion of the signal will be more representative over the 5V reference.
 - The maximum range of input voltages of our LM324 OpAmps before saturation is (VOH and VOL) 0.7V <--> 3.3V.
@@ -19,13 +17,9 @@ add voltage axis
 
 # Slide 2: Analog (2)
 
-Place the images side by side instead.
-
 - We had developed a peak detector that triggers on waveform peaks. The signal from this circuit will help us identify peaks perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
 
 # Slide 3: Digital (1)
-
-Include a tree diagram.
 
 - We developed modular code, each dictating the functions for a peripheral of the microcontroller.
 
