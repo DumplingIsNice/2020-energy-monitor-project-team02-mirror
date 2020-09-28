@@ -51,12 +51,12 @@ Add some arrows/lines pointing to highlights.
 
 # Slide 7: Project management 
 
-- We used gitHub for documentation, version control (rollbacks) and collaboration remotely. This is especially necessary over lock-down. 
+- We used gitHub for documentation, version control (rollbacks) and remote collaboration. This is especially necessary over lock-down. 
 - Using python to read the makefile to generate project file.
-- We used Slack for communication and zoom for virtual meet up over the lock-down period.
-- We used Trello for project management. This is critical in our collaboration as it controlled delegation of tasks.
+- Slack and Zoom were used for virtual meetings and communication over the lock-down period.
+- We used Trello for workflow planning, especially important for collaborations and task delegation.
 - We also chose to do Smart Energy Challenge.
-- Initial plan is to local host a python programme to receive information from our energy monitor through its bluetooth module.
+- Our initial plan is to local host a python programme to receive information from our energy monitor through its Bluetooth module.
 
 # Slide 8: End
 
