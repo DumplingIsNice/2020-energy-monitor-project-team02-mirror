@@ -17,7 +17,7 @@
 
 # Slide 2: Analog (2)
 
-- We had developed a peak detector that triggers on waveform peaks. The signal from this circuit will help us identify peaks perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
+- We had developed a peak detector that triggers on waveform peaks. The signal from this circuit will help us identify peaks and perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
 
 # Slide 3: Digital (1)
 
@@ -29,15 +29,11 @@
 
 # Slide 5: Digital (3) (1:30-1:40)
 
-Also support driving the LED display using the library.
-
 - We decided that the printf() function is an unnecessary intensive and costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. This is why we implemented a custom print function.
 - This reduced print() function also saves valuable memory for the processing our signal data. Using only up to 280 bytes, this function reduces the size of transmitted data by about 70%.
 - The use of modular, intuitive function implementations are helpful in collaborating with others for our project and allows for understanding of our firmware.
   
 # Slide 6: PCB (1)
-
-Add some arrows/lines pointing to highlights.
 
 - Polarized electrolyte capacitors were chosen to be used for the generation of the common 5V DC power supply. 
 - Meanwhile ceramic capacitors were used for the many signal conditioning circuits in AC applications.
