@@ -1,10 +1,19 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-// Macros for important values.
+/* Macros for important values. */
 
-#define F_CPU 800000UL //Defining system clock frequency
+/* #define HARDWARE_BUILD */
 
+/* Defining system clock frequency
+ * Note that we use a different clock frequency when building for 
+ * Proteus (Simulation) and actual hardware ATmega328p
+ */
+#ifndef HARDWARE_BUILD
+#define F_CPU 800000UL /* 800 KHz */
+#else
+#define F_CPU 16000000UL /* 16 MHz */
+#endif /* HARDWARE_BUILD */
 
 // Libraries to include.
 

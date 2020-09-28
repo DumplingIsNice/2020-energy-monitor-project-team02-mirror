@@ -15,7 +15,7 @@
 // Macros
 
 #define UART_BPS 9600UL // Baud rate / Bits Per Second value the UART module is configured to (_9600 BPS_)
-#define UBRR 4 // Prescaler value for initializing baud rate.
+#define UBRR ((F_CPU / (UART_BPS * 16)) - 1) // Prescaler value for initializing baud rate.
 
 /* Connivance macros for printing some control characters */
 
