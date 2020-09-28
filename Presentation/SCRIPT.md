@@ -2,9 +2,9 @@
 
 # Slide 0: Introduction (10-12s)
 
-- A honor to have you at our presentation. My name is _____. And we will walk you through the highlights of our design.
+- It is an honor to have you at our presentation. My name is _____, and I'm here with ____ ____ and _____, and we will walk you through the highlights of our design.
 - You may have known this, but to reiterate: in our design course we are developing a home energy monitor that could measure the voltage and current across a load. The signals will be read by a microcontroller which will calculate the original signal and the power consumed by it.
-- What we hope to learn from this project
+- We hope to learn good firmware and hardware developing practices, workflow management, and practical knowledge to help us in the wider industry.
 
 # Slide 1: Analog (1) (50-60s)
 
