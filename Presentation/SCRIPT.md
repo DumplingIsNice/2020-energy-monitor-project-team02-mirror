@@ -1,13 +1,13 @@
 # Presentation Notes
 
-# Slide 0: Introduction (10-12s)
+# Slide 0: Introduction (42s)
 Hao
 
 - It is an honor to have you at our presentation. My name is _____, and I'm here with ____ ____ and _____, and we will walk you through the highlights of our design.
 - You may have known this, but to reiterate: in our design course we are developing a home energy monitor that could measure the voltage and current across a load. The signals will be read by a microcontroller which will calculate the original signal and the power consumed by it.
 - We hope to learn good firmware and hardware developing practices, workflow management, and practical knowledge to help us in the wider industry.
 
-# Slide 1: Analog (1) (50-60s)
+# Slide 1: Analog (1) (1m 55s)
 Hao
 
 - We designed the signal processing circuit in such a way that we maximized the gain of our captured signals. 
@@ -17,8 +17,8 @@ Hao
 - Our optimization allowed us to reach much closer to the range of the op amp as input to the ADC. The maximum peak to peak of the signal is now 0.9V <--> 3.3V
 - This will increase the accuracy of the captured signal.
 
-# Slide 2: Analog (2)
-Krithik
+# Slide 2: Analog (2) (2m 15s)
+Hao
 
 - We had developed a peak detector that triggers on waveform peaks. The signal from this circuit will help us identify peaks perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
 
@@ -32,14 +32,14 @@ Krithik
 
 - To highlight, we chose to implement a custom print function for the purpose of transmitting data over UART. 
 
-# Slide 5: Digital (3) (1:30-1:40)
+# Slide 5: Digital (3) (3m 20)
 Krithik
 
 - We decided that the printf() function is an unnecessary intensive and costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. This is why we implemented a custom print function.
-- This reduced print() function also saves valuable memory for the processing our signal data. Using only up to 280 bytes, this function reduces the size of transmitted data by about 70%.
+- This reduced print() function also saves valuable memory for the processing of our signal data. Using only up to 244 bytes, this function reduces the size of transmitted data by about 70%.
 - The use of modular, intuitive function implementations are helpful in collaborating with others for our project and allows for understanding of our firmware.
   
-# Slide 6: PCB (1)
+# Slide 6: PCB (1) (3m 57s)
 Hao
 
 - Polarized electrolyte capacitors were chosen to be used for the generation of the common 5V DC power supply. 
@@ -56,7 +56,7 @@ Krithik
 - We also chose to do Smart Energy Challenge.
 - Our initial plan is to local host a python programme to receive information from our energy monitor through its Bluetooth module.
 
-# Slide 8: End
+# Slide 8: End (4m 43s)
 Krithik
 
 - On behalf of my team and I, we thank you for your time in reviewing our design with us. Any questions?
