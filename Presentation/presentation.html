@@ -222,11 +222,14 @@ name: S2
 name: S3
 
 # Analog Design Considerations: Peak Dectector
+- A peak detector samples the peak voltage when an interrupt is triggered
 
-.center[<img src = "img/peakDetector.png" width="80%" />]
-.zoom400[
-	.center[<img src = "img/peakDetectorSchem.png" width="20%" />]
+
+.center[
+<img src = "img/peakDetectorSchem.png" width="49%" /> &nbsp;
+<img src = "img/peakDetector.png" width="49%" />
 ]
+
 
 
 ---
@@ -244,7 +247,7 @@ name: S5
 
 # Software Design Considerations
 
-Our custom `print()` function, which is built on top of our modular UART functions that automaticlly convert to 3 signfiicant figures before transmitting.
+Our custom `print()` function, which is built on top of our modular UART functions that automaticlly convert to 3 significant figures before transmitting.
 
 .codes[
 ```c
@@ -269,10 +272,10 @@ name: S6
 
 # Software Design Considerations
 
-- Standard library `printf()` is just under a $Kilobyte$ in size.
-- Custom `print()` function only consumes $280 \ bytes$ 
-- Over $70\%$ reduction in size.
-- Retains all the convenient syntax we need.
+- Standard library `printf()` is just under a $Kilobyte$ in size
+- Custom `print()` function only consumes $280 \ bytes$
+- Over $70\%$ reduction in size
+- Retains all the convenient syntax we need
 
 .center[![](img/print_func_size_reduc.png)]
 
@@ -288,10 +291,14 @@ name: S7
 ---
 name: S8
 
-# Breadboard Prototype 
+# Project Management
 
-.center[<img src="img/Breadboard.jpg" width="100%" />]
-
+- Workflow planning and task management using Slack and Trello
+- Effective use of Git, rolling back when encountering issues with latest commit.
+- Python script reads makefile to generate Atmel project
+.center[
+<img src="img/Trello.png" width="50%">
+]
 ---
 
 class: title-slide
