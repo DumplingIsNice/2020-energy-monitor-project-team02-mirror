@@ -216,6 +216,8 @@ name: template_slide
 - Home energy monitor to read voltage, current and power consumption
 - Export data to a 7-segment display and mobile webpage using Bluetooth
 
+.center[<img src="img/Xmini.jpg" width="35%">]
+
 
 ---
 name: S2
@@ -289,7 +291,7 @@ name: S6
 .code[
 ```
 [Firmware/]$ nm --print-size -t d FW.ELF | grep -w 'print\|printf\|vfprintf'
-00003694 00000244 T print
+00003694 00000244 T print // 244 bytes 
 00005880 00000040 T printf
 00005920 00000934 T vfprintf
 [Firmware/]$ 
