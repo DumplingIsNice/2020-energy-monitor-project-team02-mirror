@@ -277,8 +277,20 @@ name: S6
 - Over $70\%$ reduction in size
 - Retains all the convenient syntax we need
 
-.center[![](img/print_func_size_reduc.png)]
+* Our custom `print()` function only consumes $244 \ bytes$
+	* thats over $70\%$ reduction in size
 
+* Our custom print function retains all the convenient `printf()` syntax
+
+.code[
+```
+[Firmware/]$ nm --print-size -t d FW.ELF | grep -w 'print\|printf\|vfprintf'
+00003694 00000244 T print
+00005880 00000040 T printf
+00005920 00000934 T vfprintf
+[Firmware/]$ 
+```
+]
 
 ---
 name: S7
