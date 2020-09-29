@@ -46,6 +46,7 @@ Krithik
 - We decided that the printf() function is an unnecessarily intensive and costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. This is why we implemented a custom print function.
 - This reduced print() function also saves valuable memory for the processing of our signal data. Using only up to 244 bytes, this function reduces the size of transmitted data by over 70%.
 - The use of modular, intuitive function implementations are helpful in collaborating with others for our project and allows for understanding of our firmware.
+- We have also modified our function to transmit up to 3 significant figures.
   
 # Slide 7: PCB (1) (3m 57s)
 Hao
