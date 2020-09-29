@@ -11,7 +11,7 @@ Hao
 Hao
 
 - We designed the signal processing circuit in such a way that we maximized the gain of our captured signals. 
-- We found the opportunity to optimize this in order to increase the voltage levels captured by the microcontroller. So that the ADC conversion of the signal will be more representative over the 5V reference.
+- We found the opportunity to optimize our resistors in the differential amplifier to increase the voltage levels captured by the microcontroller. This is so that the ADC conversion of the signal will be more representative over the 5V reference.
 - The maximum range of input voltages of our LM324 OpAmps before saturation is (VOH and VOL) 0.7V <--> 3.3V.
 - In our first implementation, the maximum peak to peak of the signal is between 1.3V <--> 2.9V. We believe we could optimise this.
 - Our optimization allowed us to reach much closer to the range of the op amp as input to the ADC. The maximum peak to peak of the signal is now 0.9V <--> 3.3V
