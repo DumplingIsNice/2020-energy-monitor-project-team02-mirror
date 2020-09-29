@@ -50,9 +50,11 @@ Krithik
 # Slide 7: PCB (1) (3m 57s)
 Hao
 
-- When designing our PCB implementation of the hardware in Altium, we had to be aware of real considerations such as component choice.
-- Polarized electrolytic capacitors were chosen to be suitable as a part the generation of the common 5V DC power supply. 
-- Meanwhile ceramic capacitors were chosen to be suitable for the many AC signal conditioning circuits.
+- We designed our PCB implementation of the hardware in Altium.
+- Bluetooth module with a divider that makes sure the transmitted signal from the microcontroller is compatible with the bluetooth module's input specifications.
+- 5V power supply with the regulation package, all connected on the second layer below. The offset voltage are derived from here. A LED to indicate power.
+- Sensor for the load voltages using a divider and current through a shunt resistor. Zenor didoes used to ensure that the captured voltages will not be higher than expected. 
+- Differential amplifiers used to offset and provide gain to the captured voltages. Before feeding to the microcontroller, a first order RC filter removes high frequency noise.
 - The PCB layout follows a recommended design, but in particular we added a extra current sinking resistor at the output of the regulation circuit for the ensured operation of the regulator package.
 
 # Slide 8: Trello/Slack management 
