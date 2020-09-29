@@ -20,7 +20,7 @@ Hao
 # Slide 2: Analog (2) (2m 15s)
 Hao
 
-- We had developed a peak detector that triggers on waveform peaks. The signal from this circuit will help us identify peaks and perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
+- We developed a peak detector that samples a voltage when an interrupt is triggered. The signal from this circuit will help us identify peaks and perform power calculations in our microcontroller. This arises from the limitation of sampling and the quantified representation of the signal. 
 
 # Slide 3: Digital (1)
 Krithik
@@ -35,7 +35,7 @@ Krithik
 # Slide 5: Digital (3) (3m 20)
 Krithik
 
-- We decided that the printf() function is an unnecessary intensive and costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. This is why we implemented a custom print function.
+- We decided that the printf() function is an unnecessarily intensive and costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. This is why we implemented a custom print function.
 - This reduced print() function also saves valuable memory for the processing of our signal data. Using only up to 244 bytes, this function reduces the size of transmitted data by over 70%.
 - The use of modular, intuitive function implementations are helpful in collaborating with others for our project and allows for understanding of our firmware.
   
