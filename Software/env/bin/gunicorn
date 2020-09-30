@@ -1,0 +1,10 @@
+#!/bin/sh
+'''exec' "/usr/ankush/Documents/School/University of Auckland Year 2/ELECTENG209/ee209-2020-project-team02/Software/env/bin/python" "$0" "$@"
+' '''
+# -*- coding: utf-8 -*-
+import re
+import sys
+from gunicorn.app.wsgiapp import run
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(run())
