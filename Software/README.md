@@ -2,7 +2,12 @@
 
 # Software for Smart Energy Monitor
 
-- Only use this folder if you wish to participate in the smart energy challenge
-  - This will for example contain your Python code  
+## Info:
+
+- Web server built using Python as backend
+- Using Flask for web framework
+- Using Gunicorn for web server
+- Using Heroku as Hosting Server
+	- Heroku account is registered under Ankush
 
 
