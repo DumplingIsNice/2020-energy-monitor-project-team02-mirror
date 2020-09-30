@@ -32,8 +32,7 @@ Hao
 # Slide 4: Digital (1)
 Krithik
 
-- For our firmware:
-- We developed modular code, each dictating the functions for a peripheral of the microcontroller.
+- For our firmware, we developed modular code, each dictating the functions for a peripheral of the microcontroller.
 
 # Slide 5: Digital (2)
 Krithik
@@ -46,7 +45,7 @@ Krithik
 - We decided that the printf() function is an unnecessarily intensive and costly function for the purpose of our project. There are many functions of printf() we do not use such as hexadecimal comparability. This is why we implemented a custom print function.
 - This reduced print() function also saves valuable memory for the processing of our signal data. Using only up to 244 bytes, this function reduces the size of transmitted data by over 70%.
 - The use of modular, intuitive function implementations are helpful in collaborating with others for our project and allows for understanding of our firmware.
-- We have also modified our function to transmit up to 3 significant figures.
+- Our function was also modified to round and transmit to 3 significant figures.
   
 # Slide 7: PCB (1) (3m 57s)
 Hao
@@ -62,14 +61,14 @@ Hao
 Krithik
 
 - Slack and Zoom were used for virtual meetings and communication over the lock-down period.
-- We used Trello for workflow planning, especially important for collaborations and task delegation.
+- We used Trello for workflow planning and was especially important for collaborations and task delegations.
 
 # Slide 9: Project management 
 
-- We used gitHub for documentation, version control (rollbacks) and remote collaboration. This is especially necessary over lock-down. 
-- Using python to read the makefile to generate project file.
-- We also chose to do Smart Energy Challenge.
-- Our initial plan is to local host a python programme to receive information from our energy monitor through its Bluetooth module.
+- We used gitHub for documentation, version control by using rollbacks and remote collaboration. This is especially necessary over lock-down. 
+- To generate the project file for Atmel Studio, we used Python to read the makefile.
+- We also chose to do the Smart Energy Challenge.
+- Our initial plan for the challenge is to local host a python programme to receive information from our energy monitor through Bluetooth.
 
 # Slide 10: End (4m 43s)
 Krithik
