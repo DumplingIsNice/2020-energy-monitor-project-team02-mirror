@@ -65,3 +65,7 @@ CMakeLists.txt
 *.LOG
 __Previews/
 *.psd
+
+# Python Cache Files
+__pycache__/
+
