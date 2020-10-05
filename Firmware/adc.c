@@ -32,6 +32,6 @@ uint16_t adc_read(uint8_t channel) {
 
 // Convert a single adcCount input and return voltage
 float adc_convert(uint16_t adcCount) {
-	float voltage = (5*adcCount)/(float)1024;
-	return voltage;
+	float instantVoltage = (5*adcCount)/(float)1024;
+	return instantVoltage;
 }

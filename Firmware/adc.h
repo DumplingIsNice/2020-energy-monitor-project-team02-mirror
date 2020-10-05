@@ -22,4 +22,5 @@ uint16_t adc_read(uint8_t channel);
 /* CONVERSIONS */
 float adc_convert(uint16_t value);
 
+
 #endif
