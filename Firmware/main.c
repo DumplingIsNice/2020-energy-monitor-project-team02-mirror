@@ -10,14 +10,6 @@
 #define PeakCurrent 125
 #define Power 1.60
 
-
-void terminal_print(float Vrms, uint16_t Ipeak, float P)
-{
-	print("RMS Voltage is: %f \n", Vrms);
-	print("Peak Current is: %d \n", Ipeak);
-	print("Power is: %f \n\r", P);
-}
-
 int main()
 {
 #ifdef ENABLE_TESTING
@@ -26,7 +18,6 @@ int main()
 #endif /* ENABLE_TESTING */
 	usart_init(UBRR);
 	while (1) {
-		terminal_print(RMSVoltage, PeakCurrent, Power);
 		_delay_ms(1000);
 	}
 
