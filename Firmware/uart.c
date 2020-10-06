@@ -10,6 +10,8 @@
 #include "common.h"
 #include <util/delay.h> // Needed to use _delay_ms()
 
+#define UART_BPS 9600UL // Baud rate / Bits Per Second value the UART module is configured to (_9600 BPS_)
+#define UBRR ((F_CPU / (UART_BPS * 16)) - 1) // Prescaler value for initializing baud rate.
 
 //	Defines of common ASCII transmission characters in HEX
 #define SPACE 0x20
@@ -92,14 +94,14 @@ static void extractHundredths(float data, uint16_t *hundredths)
 *	Finally, we calculate the ubbr value and set it in the Baud Rate register (UBRR0). Baud Rate = 9600 and frequency of 800kHz
 *	EQUATION: UBRR0 = ((F_CPU / (16*baud)) - 1);
 */
-void usart_init(uint16_t ubrr) 
+void usart_init()
 {
 
 	UCSR0A = 0b00000000;
 
 	UCSR0B |= (1 << TXEN0) & ~(1 << UCSZ02);
 	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); 
-	UBRR0 = ubrr;
+	UBRR0 = UBRR;
 
 }
 

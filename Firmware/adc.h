@@ -16,10 +16,7 @@
 
 /* MISC */
 void adc_init();
-uint16_t adc_read(uint8_t channel);
-
-
-/* CONVERSIONS */
+uint16_t adc_read();
 float adc_convert(uint16_t value);
 
 

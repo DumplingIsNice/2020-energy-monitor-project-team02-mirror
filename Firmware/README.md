@@ -6,7 +6,7 @@
 - **main.c:** The main function, entry point of code
 - **common.c:** Functions that are common to all modules (i.e. debug printing etc.)
 - **uart.c:** Functions to do with communicating over the UART protocol.
-- **adc.c:** Functions to do with Analogue-to-Digital Conversion 
+- **adc.c:** Functions to do with Analogue-to-Digital Conversion
 - **dsp.c:** Functions to do with Digital-Singal-Processing Conversion 
 - **test.c:** Functions to test the various functions of the Firmware
 

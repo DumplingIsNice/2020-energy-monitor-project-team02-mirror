@@ -11,7 +11,7 @@ LD=avr-ld
 BIN=FW.ELF
 
 # List of Object Files To Link (One per .c Source File)
-OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o obj/dsp.o obj/display.o
+OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o obj/dsp.o obj/display.o obj/timer0.o
 
 # Extra Debugging Flags
 # Note that Proteus expects the .elf to have debugging symbols in the dwarf verison 2 format (hence -gdwarf-2)
@@ -35,11 +35,11 @@ $(BIN):$(OBJs)
 	@$(CC) -o $@ $(OBJs) $(LDFLAGS);
 
 # One build target per object file / C source file (.c file NOT .h files)
-obj/main.o:main.c uart.h common.h adc.h dsp.h
+obj/main.o:main.c uart.h common.h adc.h dsp.h timer0.h
 	@printf "\t- Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
-obj/common.o:common.c
+obj/common.o:common.c common.h
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
@@ -60,6 +60,10 @@ obj/dsp.o:dsp.c common.h adc.h
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
 obj/display.o:display.c common.h
+	@printf "\t - Compiling $< into $@\n"
+	@$(CC) -c $(CFLAGS) -o $@ $<
+
+obj/timer0.o:timer0.c common.h
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 

@@ -12,11 +12,6 @@
 
 #include <stdint.h>
 
-// Macros
-
-#define UART_BPS 9600UL // Baud rate / Bits Per Second value the UART module is configured to (_9600 BPS_)
-#define UBRR ((F_CPU / (UART_BPS * 16)) - 1) // Prescaler value for initializing baud rate.
-
 /* Connivance macros for printing some control characters */
 
 #define WIN32_NEWLINE
@@ -31,7 +26,7 @@
 // Functions
 
 /* MISC */
-void usart_init(uint16_t ubrr); // Initializes USART registers by specification and ubrr value. Author: Hao Lin (21/08/2020)
+void usart_init(); // Initializes USART registers by specification and ubrr value. Author: Hao Lin (21/08/2020)
 void usart_transmit(uint8_t data); // Defining function to transmit 1 character at a time. Author: Krithik Lekinwala (22/08/2020)
 void usart_transmit_raw(uint8_t rawData[], size_t arraySize); // Defining function to transmit single raw bytes one at a time. Author: Krithik Lekinwala (22/08/2020)
 

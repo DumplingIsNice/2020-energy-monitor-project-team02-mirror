@@ -17,9 +17,9 @@
 
 // Libraries to include.
 
-#include <avr/io.h> //Needed for using the macros for register addresses
 #include <stdint.h> // Needed to use size_t and other various types
 #include <stdlib.h> // 
+#include <avr/io.h> //Needed for using the macros for register addresses
 
 
 /* Macros to set/clear/toggle bits in a port */
@@ -37,6 +37,24 @@
 #define __S1(x) #x
 #define __S2(x) __S1(x)
 #define _SRC_LOC __FILE__ ":" __S2(__LINE__)
+
+
+/* [Global] Arrays to hold values (defined in common.c) */
+
+#define ADC_CH_VOLTAGE 1
+#define ADC_CH_CURRENT 2
+
+extern int current_adc_channel;
+
+#define RAW_ARRAY_SIZE 10
+
+extern float raw_voltages[RAW_ARRAY_SIZE];
+extern float raw_voltages_t[RAW_ARRAY_SIZE];
+extern unsigned raw_voltages_head;
+
+extern float raw_currents[RAW_ARRAY_SIZE];
+extern float raw_currents_t[RAW_ARRAY_SIZE];
+extern unsigned raw_currents_head;
 
 /*
  * Round the floating point number n to the number of decimal places specified.

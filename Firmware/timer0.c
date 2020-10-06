@@ -1,54 +1,28 @@
-#include "timer0.h"
-#include "adc.h"
-
-#include <avr/io.h>
+#include "common.h"
 #include <avr/interrupt.h>
-#include <stdint.h>
 
-// Declaring global variables
-uint16_t zeroCrossingTimes = 0;
-uint16_t timePassed = 0;
+uint16_t miliseconds;
 
+ISR(TIMER0_COMPA_vect) { if (++miliseconds >= RAW_ARRAY_SIZE * 2) miliseconds = 0; }
 
-// Sample ADC channel when interrupt is triggered every 1ms
-ISR(TIMER0_COMPA_vect) { 
-	timePassed++;
-	uint16_t adc0 = adc_read(0);
-	uint16_t adc1 = adc_read(1);
-	uint16_t adc2 = adc_read(2);
-}
-
-
-// ISR For INT0
-ISR(INT0_vect) {
-	zeroCrossingTimes++; // Incrementing amount of zero crossings
-	TCCR0B = 0b00000010; // Setting prescaler to 8 for 1ms interrupts
-}
-
-
-
-// Counts every 1ms 
+// Counts every 1ms
 void timer0_init()
 {
-	
-	TCCR0A = 0b00000010; // Setting to CTC mode
-	TCCR0B = 0b00000000; // Set prescaler of 64
-	TIMSK0 = 0b00000010; // Setting interrupt on output compare match A
-	EIMSK = 0b00000001; // Trigger for INT0
-	EICRA = 0b00000001; // Trigger on rising edge, stop on falling edge (i.e, trigger in any change)
-	OCR0A = 99; // Required for 1ms accuracy
-}
+	SET_PORT(TCCR0A, WGM01); /* Setting to CTC mode */
 
+#ifdef HARDWARE_BUILD
+ 	/* Set prescaler of 128 */
+	SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
+ 	/* overflow at count of 124 for 1 ms */
+	OCR0A = 124;
+#else
+ 	/* Set prescaler of 8 */
+	SET_PORT(TCCR0B, CS21);
 
-// Checks and resets the timer0 compare match flag
-bool timer0_checkAndClearCompare()
-{
-	// Checking compare match flag value
-	if((TIFR0 & (1 << 1 )) != 0) {
-		
-		// Reset timer overflow flag
-		TIFR0 |= (1 << 1);
-		return true;
-	}
-	return false;
+ 	/* overflow at count of 99 for 1 ms */
+	OCR0A = 99;
+#endif /* HARDWARE_BUILD */
+
+	/* Setting interrupt on output compare match A */
+	SET_PORT(TIMSK0, OCIE0A);
 }

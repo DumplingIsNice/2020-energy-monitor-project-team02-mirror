@@ -1,37 +1,89 @@
 #include "common.h"
+#include "dsp.h"
 
-#include <util/delay.h>
-#include <avr/io.h>
+#include <avr/interrupt.h>
+
+extern uint16_t miliseconds;  /* defined in timer0.c */
 
 
-// ADC initialisation
-void adc_init() {
-    ADMUX = 0b01000000;
-    ADCSRA = 0b10000101; // 32 prescaler and auto trigger
-    ADCSRB = 0b00000000; // Timer0 trigger, not using timers right now so all disabled
-    DIDR0 = 0b00000000; // Buffers are not disabled
+void adc_set_channel(uint8_t channel)
+{
+	ADMUX &= ~((1 << MUX2) | (1 << MUX1) | (1 << MUX0));
+	ADMUX |= channel;
 }
 
+/* This function reads the current ADC channel and return results */
+uint16_t adc_read()
+{
+	ADCSRA |= (1 << ADSC); // Start ADC conversion
 
-// This function reads an ADC channel and return results​
-uint16_t adc_read(uint8_t channel) {
-	ADMUX &= 0xF0; // Clear channel selection
-	ADMUX |= channel; // Set channel to convert
-	
-	ADCSRA |= (1<<ADSC); // Start ADC conversion
-	
 	//ADIF bit is checked to see if it is 0
 	//If ADIF bit is not 0, wait until it becomes 0
-	while ((ADCSRA & (1 << ADIF)) == 0) { 
-		;
+	while ((ADCSRA & (1 << ADIF)) == 0) { ;
 	}
-	
+
 	return ADC;
 }
 
-
 // Convert a single adcCount input and return voltage
-float adc_convert(uint16_t adcCount) {
-	float instantVoltage = (5*adcCount)/(float)1024;
+float adc_convert(uint16_t adcCount)
+{
+	float instantVoltage = (5 * adcCount) / (float) 1024;
 	return instantVoltage;
 }
+
+/* ADC initialisation
+ * Default channel is channel zero
+ */
+void adc_init()
+{
+	/* Enable ADC, Start ADC Conversion, Enable ADC AutoTrigger, Enable ADC interrupt on conversion complete
+	 * To get the full 10-bit resolution , the ADC clock must be at a maximum of 200 KHz
+	 * 	Prescaler = f_cpu / 200000
+	 */
+	SET_PORT(ADCSRA, ADEN), SET_PORT(ADCSRA, ADSC), SET_PORT(ADCSRA, ADATE), SET_PORT(ADCSRA, ADIE);
+#ifdef HARDWARE_BUILD
+	/* For hardware, prescaler must be 128 */
+	SET_PORT(ADCSRA, ADPS2), SET_PORT(ADCSRA, ADPS1), SET_PORT(ADCSRA, ADPS0);
+#else
+	/* For simulation, prescaler can be 4 */
+	SET_PORT(ADCSRA, ADPS1);
+#endif /* HARDWARE_BUILD */
+
+	/* Select Timer0 CTC A as ADC conversion trigger */
+	SET_PORT(ADCSRB, ADTS1), SET_PORT(ADCSRB, ADTS0);
+}
+
+/* Assuming we sample voltage first */
+
+ISR(ADC_vect)
+{
+	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
+		/* PORTB ^= 1 << PB5; */
+
+	uint16_t adc_value = ADC;
+
+	if (current_adc_channel == ADC_CH_VOLTAGE) {
+		raw_voltages[raw_voltages_head] = reverse_gain(adc_convert(adc_value));
+		raw_voltages_t[raw_voltages_head] = miliseconds;
+		++raw_voltages_head;
+
+		/* Switch the channel of the next sample */
+		current_adc_channel = ADC_CH_CURRENT;
+	} else if (current_adc_channel == ADC_CH_CURRENT) {
+		raw_currents[raw_currents_head] = reverse_gain(adc_convert(adc_value));
+		raw_currents_t[raw_currents_head] = miliseconds;
+		++raw_currents_head;
+
+		/* Switch the channel of the next sample */
+		current_adc_channel = ADC_CH_VOLTAGE;
+	}
+
+	if (raw_voltages_head >= RAW_ARRAY_SIZE) {
+		raw_voltages_head = 0;
+	}
+	if (raw_currents_head >= RAW_ARRAY_SIZE) {
+		raw_currents_head = 0;
+	}
+}
+

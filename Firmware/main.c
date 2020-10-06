@@ -1,14 +1,18 @@
-#include <avr/io.h>
 
+/* Local Includes */
 #include "common.h"
 #include "uart.h"
 #include "adc.h"
-#include <util/delay.h>
+#include "timer0.h"
+#include "dsp.h"
+
+/* AVR Includes */
+#include <avr/io.h>
 #include <avr/interrupt.h>
-//#define ENABLE_TESTING
-#define RMSVoltage 14.5
-#define PeakCurrent 125
-#define Power 1.60
+#include <util/delay.h>
+
+
+/* #define ENABLE_TESTING */
 
 int main()
 {
@@ -16,9 +20,26 @@ int main()
 	extern void test_function();
 	test_function();
 #endif /* ENABLE_TESTING */
-	usart_init(UBRR);
+	DDRB = 0xFF;
+	/* Initalisation code */
+	usart_init();
+	adc_init();
+	timer0_init();
+
+	/* Globally Enable Interrupts */
+	sei();
+
 	while (1) {
-		_delay_ms(1000);
+		int i = 0;
+		print("Voltage;");
+		for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+			print("  At time t = %f ms, %f V", raw_voltages_t[i], raw_voltages[i]);
+		}
+		print("\nCurrent");
+		for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+			print("  At time t = %f ms, %f A", raw_currents_t[i], raw_currents[i]);
+		}
+		print("\n ----");
 	}
 
 	return 0;

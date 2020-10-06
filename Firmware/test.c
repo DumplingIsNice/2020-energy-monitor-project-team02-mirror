@@ -7,7 +7,7 @@ static void test_uart()
 	int i = 0;
 	uint16_t intArray[] = {0, 1, 10, 100};
 
-	usart_init(UBRR);
+	usart_init();
 
 	/* Testing sending characters */
 	for (i = 0; "--- BEGIN TESTING ---\r\n"[i] != '\0'; ++i)
