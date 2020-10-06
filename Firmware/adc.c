@@ -10,6 +10,8 @@ void adc_set_channel(uint8_t channel)
 {
 	ADMUX &= ~((1 << MUX2) | (1 << MUX1) | (1 << MUX0));
 	ADMUX |= channel;
+
+	current_adc_channel = channel;
 }
 
 /* This function reads the current ADC channel and return results */
@@ -69,14 +71,14 @@ ISR(ADC_vect)
 		++raw_voltages_head;
 
 		/* Switch the channel of the next sample */
-		current_adc_channel = ADC_CH_CURRENT;
+		adc_set_channel(ADC_CH_CURRENT);
 	} else if (current_adc_channel == ADC_CH_CURRENT) {
 		raw_currents[raw_currents_head] = reverse_gain(adc_convert(adc_value));
 		raw_currents_t[raw_currents_head] = miliseconds;
 		++raw_currents_head;
 
 		/* Switch the channel of the next sample */
-		current_adc_channel = ADC_CH_VOLTAGE;
+		adc_set_channel(ADC_CH_VOLTAGE);
 	}
 
 	if (raw_voltages_head >= RAW_ARRAY_SIZE) {

@@ -41,8 +41,8 @@
 
 /* [Global] Arrays to hold values (defined in common.c) */
 
-#define ADC_CH_VOLTAGE 1
-#define ADC_CH_CURRENT 2
+#define ADC_CH_VOLTAGE 0
+#define ADC_CH_CURRENT 1
 
 extern int current_adc_channel;
 
