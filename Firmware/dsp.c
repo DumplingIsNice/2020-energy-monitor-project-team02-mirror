@@ -4,7 +4,7 @@
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value
  */
-float reverseVoltageGain(float adc_voltage)
+float reverse_voltage_gain(float adc_voltage)
 {
 	float vOffset = 2.1;
 	
@@ -28,7 +28,7 @@ float reverseVoltageGain(float adc_voltage)
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor current value
  */
-float reverseCurrentGain(float adc_current)
+float reverse_current_gain(float adc_current)
 {
 	float acVoltage;
 	float vOffset = 2.1;
