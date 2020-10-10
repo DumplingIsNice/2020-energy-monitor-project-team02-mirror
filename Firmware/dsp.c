@@ -51,7 +51,7 @@ float reverse_current_gain(float adc_current)
 	
 	
 	//float reversedCurrent = (dividerGain * amplifierGain * adc_current) - vOffset;
-	float reversedVoltage = (adc_current - vOffset) * dividerGain * amplifierGain; 
+	float reversedCurrent = (adc_current - vOffset) * dividerGain * amplifierGain; 
 	
 	return reversedCurrent;
 }
