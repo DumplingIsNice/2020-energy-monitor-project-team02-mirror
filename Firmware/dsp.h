@@ -13,6 +13,12 @@ float reverse_current_gain(float adc_voltage);
 /* Returns whether is sampling or not */
 bool is_sampling();
 
+/* Returns the calculated period of current sample */
+// int16_t get_period();
+
+/* Checks if the required cycles have elapsed */
+void check_cycle_complete();
+
 /* Initializes voltage zero crossing interrupt */
 void voltage_zc_interrupt_init();
 

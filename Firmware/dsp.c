@@ -77,18 +77,33 @@ bool is_sampling()
 	return signal_start;
 }
 
+void check_cycle_complete()
+{
+	static int cycles = 0;
+	
+	if (cycles >= CYCLE_SAMPLED - 1){
+		signal_start = false;
+		cycles = 0;
+	} else if (cycles < CYCLE_SAMPLED - 1){
+		signal_start = true;
+		cycles++;
+	}
+}
+
 ISR(INT0_vect)
 {
 	//Use this LED to check if interrupt is called.
-	//TGL_PORT(PORTB, PORTB5);
+
 	
-	signal_start = !signal_start; 
+	/* Zero crossing indicates the start to a new cycle of sampling */
+	//signal_start = !signal_start; 
 	
-	// Zero crossing indicates the start to a new cycle of sampling.
+	check_cycle_complete();
 	
 	if(signal_start){
 		timer0_start();
 	} else if (!signal_start){
-		timer0_stop();	
-	}	
+		timer0_stop();
+		TGL_PORT(PORTB, PORTB5);
+	}
 }
