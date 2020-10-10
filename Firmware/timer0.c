@@ -4,7 +4,7 @@
 
 uint16_t miliseconds;
 
-ISR(TIMER0_COMPA_vect) { if (++miliseconds >= RAW_ARRAY_SIZE * 2) miliseconds = 0; }
+ISR(TIMER0_COMPA_vect) { if (++miliseconds >= RAW_ARRAY_SIZE * 2) miliseconds = 0;}
 
 // Counts every 1ms
 void timer0_init()
@@ -39,6 +39,7 @@ void timer0_start()
 	/* Set prescaler of 8 */
 	SET_PORT(TCCR0B, CS21);
 	#endif /* HARDWARE_BUILD */
+	miliseconds = 0;
 }
 
 void timer0_stop()

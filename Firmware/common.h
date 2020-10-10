@@ -46,8 +46,8 @@
 
 extern int current_adc_channel;
 
-#define RAW_ARRAY_SIZE 10
 #define CYCLE_SAMPLED 1
+#define RAW_ARRAY_SIZE 10*CYCLE_SAMPLED
 
 extern float raw_voltages[RAW_ARRAY_SIZE];
 extern float raw_voltages_t[RAW_ARRAY_SIZE];

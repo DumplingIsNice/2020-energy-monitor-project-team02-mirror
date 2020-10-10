@@ -5,6 +5,8 @@
 #include <avr/interrupt.h>
 #include <stdbool.h>
 
+uint16_t miliseconds;
+
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value
  */
@@ -113,8 +115,9 @@ ISR(INT0_vect)
 	check_cycle_complete();
 	
 	if(signal_start){
-		//timer0_start();
-	} else if (!signal_start){
-		//timer0_stop();
+		timer0_start();
+	} else if (!signal_start){ // When (!signal_start) is when we should be performing calculations.
+		timer0_stop();
+		// elapsed_cycle_time = miliseconds; // Plans to set timer0 to free running.
 	}
 }
