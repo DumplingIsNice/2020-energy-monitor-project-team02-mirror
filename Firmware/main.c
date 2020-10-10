@@ -25,7 +25,7 @@ int main()
 	usart_init();
 	adc_init();
 	timer0_init();
-	voltage_zc_interrupt_init();
+	// voltage_zc_interrupt_init();
 
 	/* Globally Enable Interrupts */
 	sei();
@@ -40,6 +40,8 @@ int main()
 		for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 			print("  At time t = %f ms, %f A", raw_currents_t[i], raw_currents[i]);
 		}
+		print("\n ----");
+		print("Period is: %d ms", get_period());
 		print("\n ----");
 	}
 

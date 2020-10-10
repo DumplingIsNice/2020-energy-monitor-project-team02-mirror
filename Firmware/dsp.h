@@ -14,7 +14,7 @@ float reverse_current_gain(float adc_voltage);
 bool is_sampling();
 
 /* Returns the calculated period of current sample */
-// int16_t get_period();
+int16_t get_period();
 
 /* Checks if the required cycles have elapsed */
 void check_cycle_complete();

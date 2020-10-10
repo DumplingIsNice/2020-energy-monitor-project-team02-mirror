@@ -60,6 +60,7 @@ float reverse_current_gain(float adc_current)
 /* Currently sampling one cycle of the waveform at a time */
 
 static volatile bool signal_start = false;
+static volatile int16_t elapsed_cycle_time = 0;
 
 /* Initializes voltage zero crossing interrupt */
 void voltage_zc_interrupt_init()
@@ -79,6 +80,15 @@ bool is_sampling()
 	return signal_start;
 }
 
+int16_t get_period()
+{
+	int16_t period = 0;
+	
+	period = elapsed_cycle_time/CYCLE_SAMPLED;
+
+	return period;
+}
+
 void check_cycle_complete()
 {
 	static int cycles = 0;
@@ -95,7 +105,7 @@ void check_cycle_complete()
 ISR(INT0_vect)
 {
 	//Use this LED to check if interrupt is called.
-
+	//TGL_PORT(PORTB, PORTB5);
 	
 	/* Zero crossing indicates the start to a new cycle of sampling */
 	//signal_start = !signal_start; 
@@ -103,9 +113,8 @@ ISR(INT0_vect)
 	check_cycle_complete();
 	
 	if(signal_start){
-		timer0_start();
+		//timer0_start();
 	} else if (!signal_start){
-		timer0_stop();
-		TGL_PORT(PORTB, PORTB5);
+		//timer0_stop();
 	}
 }
