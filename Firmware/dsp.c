@@ -1,11 +1,14 @@
 #include "common.h"
 #include "adc.h"
+#include "timer0.h"
 
-/* TODO: THIS FUNCTION NEEDS TO BE IMPLIMENTED */
+#include <avr/interrupt.h>
+#include <stdbool.h>
+
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value
  */
-float reverseVoltageGain(float adc_voltage)
+float reverse_voltage_gain(float adc_voltage)
 {
 	float vOffset = 2.1;
 	
@@ -30,7 +33,7 @@ float reverseVoltageGain(float adc_voltage)
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor current value
  */
-float reverseCurrentGain(float adc_current)
+float reverse_current_gain(float adc_current)
 {
 	float acVoltage;
 	float vOffset = 2.1;
@@ -51,4 +54,43 @@ float reverseCurrentGain(float adc_current)
 	float reversedVoltage = (adc_current - vOffset) * dividerGain * amplifierGain; 
 	
 	return reversedCurrent;
+}
+
+/* Zero Crossing Interrupt */
+/* Currently sampling one cycle of the waveform at a time */
+
+static volatile bool signal_start = false;
+
+/* Initializes voltage zero crossing interrupt */
+void voltage_zc_interrupt_init()
+{	
+	SET_PORT(EIMSK, INT0);
+	
+	/* Rising edge trigger */
+	SET_PORT(EICRA, ISC01), SET_PORT(EICRA, ISC00);
+	
+	/* Changing Edge trigger 
+	EICRA |= (1 << ISC00); 
+	EICRA &= ~(1 << ISC01); */
+}
+
+bool is_sampling()
+{
+	return signal_start;
+}
+
+ISR(INT0_vect)
+{
+	//Use this LED to check if interrupt is called.
+	//TGL_PORT(PORTB, PORTB5);
+	
+	signal_start = !signal_start; 
+	
+	// Zero crossing indicates the start to a new cycle of sampling.
+	
+	if(signal_start){
+		timer0_start();
+	} else if (!signal_start){
+		timer0_stop();	
+	}	
 }

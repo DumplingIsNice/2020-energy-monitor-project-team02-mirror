@@ -1,4 +1,5 @@
 #include "common.h"
+#include "timer0.h"
 #include <avr/interrupt.h>
 
 uint16_t miliseconds;
@@ -25,4 +26,23 @@ void timer0_init()
 
 	/* Setting interrupt on output compare match A */
 	SET_PORT(TIMSK0, OCIE0A);
+}
+
+void timer0_start()
+{
+	/* Selects clock*/
+	
+	#ifdef HARDWARE_BUILD
+	/* Set prescaler of 128 */
+	SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
+	#else
+	/* Set prescaler of 8 */
+	SET_PORT(TCCR0B, CS21);
+	#endif /* HARDWARE_BUILD */
+}
+
+void timer0_stop()
+{
+	/* Select no clock */
+	CLR_PORT(TCCR0B, CS02), CLR_PORT(TCCR0B, CS01), CLR_PORT(TCCR0B, CS00);
 }

@@ -16,4 +16,8 @@
 /* Initialise Timer0 */
 void timer0_init();
 
+/* Starts and stops timer0 */
+void timer0_start();
+void timer0_stop();
+
 #endif
