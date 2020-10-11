@@ -84,7 +84,7 @@ ISR(ADC_vect)
 	if(!complete_sampling){
 		
 		if (current_adc_channel == ADC_CH_VOLTAGE) {
-			//raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
+			// raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
 			raw_voltages[raw_voltages_head] = adc_convert(adc_value);
 			raw_voltages_t[raw_voltages_head] = miliseconds;
 			++raw_voltages_head;
@@ -92,7 +92,7 @@ ISR(ADC_vect)
 			/* Switch the channel of the next sample */
 			adc_set_channel(ADC_CH_CURRENT);
 		} else if (current_adc_channel == ADC_CH_CURRENT) {
-			//raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
+			// raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
 			raw_currents[raw_currents_head] = adc_convert(adc_value);
 			raw_currents_t[raw_currents_head] = miliseconds;
 			++raw_currents_head;

@@ -149,6 +149,12 @@ void usart_print_string(char s[])
 void usart_print_float(float data) {
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0, hundredths = 0;
 
+	/* Handle / Deal with Negative Numbers */
+	if (data < 0) {
+		usart_transmit('-');
+		data = -data; /* Now make it positive and proceed as normal */
+	}
+
 	extractTenths(data, &tenths);
 	extractHundredths(data, &hundredths);
 

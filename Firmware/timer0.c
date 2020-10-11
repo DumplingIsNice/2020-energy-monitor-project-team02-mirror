@@ -19,19 +19,19 @@ void timer0_init()
 
 void timer0_reset()
 {
-	/* Selects clock*/
-	
-	#ifdef HARDWARE_BUILD
-		/* Set prescaler of 128 */
-		SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
-		/* overflow at count of 124 for 1 ms */
-		OCR0A = 124;
-	#else
-		/* Set prescaler of 8 */
-		SET_PORT(TCCR0B, CS21);
-		/* overflow at count of 99 for 1 ms */
-		OCR0A = 99;
-	#endif /* HARDWARE_BUILD */
+/* Selects clock*/
+
+#ifdef HARDWARE_BUILD
+	/* Set prescaler of 128 */
+	SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
+	/* overflow at count of 124 for 1 ms */
+	OCR0A = 124;
+#else
+	/* Set prescaler of 8 */
+	SET_PORT(TCCR0B, CS21);
+	/* overflow at count of 99 for 1 ms */
+	OCR0A = 99;
+#endif /* HARDWARE_BUILD */
 	
 	miliseconds = 0;
 }
