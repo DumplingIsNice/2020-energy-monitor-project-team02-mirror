@@ -28,7 +28,7 @@ void timer0_init()
 	SET_PORT(TIMSK0, OCIE0A);
 }
 
-void timer0_start()
+void timer0_reset()
 {
 	/* Selects clock*/
 	
