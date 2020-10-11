@@ -5,7 +5,7 @@
 #include <avr/interrupt.h>
 #include <stdbool.h>
 
-uint16_t miliseconds;
+extern uint16_t miliseconds;
 
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value
@@ -61,8 +61,17 @@ float reverse_current_gain(float adc_current)
 /* Zero Crossing Interrupt */
 /* Currently sampling one cycle of the waveform at a time */
 
-static volatile bool signal_start = false;
+bool signal_start = false;
 static volatile int16_t elapsed_cycle_time = 0;
+
+ISR(INT0_vect)
+{
+	//Use this LED to check if interrupt is called.
+	//TGL_PORT(PORTB, PORTB5);
+	
+	/* Zero crossing indicates the start to a new cycle of sampling */
+	signal_start = !signal_start;
+}
 
 /* Initializes voltage zero crossing interrupt */
 void voltage_zc_interrupt_init()
@@ -77,11 +86,12 @@ void voltage_zc_interrupt_init()
 	EICRA &= ~(1 << ISC01); */
 }
 
-bool is_sampling()
+void set_elapsed_cycle()
 {
-	return signal_start;
+	elapsed_cycle_time = miliseconds;
 }
 
+/* Returns the calculated period of current sample */
 int16_t get_period()
 {
 	int16_t period = 0;
@@ -91,6 +101,7 @@ int16_t get_period()
 	return period;
 }
 
+/* Checks if the required cycles have elapsed */
 void check_cycle_complete()
 {
 	static int cycles = 0;
@@ -101,23 +112,5 @@ void check_cycle_complete()
 	} else if (cycles < CYCLE_SAMPLED - 1){
 		signal_start = true;
 		cycles++;
-	}
-}
-
-ISR(INT0_vect)
-{
-	//Use this LED to check if interrupt is called.
-	//TGL_PORT(PORTB, PORTB5);
-	
-	/* Zero crossing indicates the start to a new cycle of sampling */
-	//signal_start = !signal_start; 
-	
-	check_cycle_complete();
-	
-	if(signal_start){
-		timer0_start();
-	} else if (!signal_start){ // When (!signal_start) is when we should be performing calculations.
-		timer0_stop();
-		// elapsed_cycle_time = miliseconds; // Plans to set timer0 to free running.
 	}
 }

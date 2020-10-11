@@ -25,7 +25,7 @@ int main()
 	usart_init();
 	adc_init();
 	timer0_init();
-	//voltage_zc_interrupt_init();
+	voltage_zc_interrupt_init();
 
 	/* Globally Enable Interrupts */
 	sei();

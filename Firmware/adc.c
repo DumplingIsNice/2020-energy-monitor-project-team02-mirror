@@ -1,10 +1,11 @@
 #include "common.h"
+#include "timer0.h"
 #include "dsp.h"
 
 #include <avr/interrupt.h>
 
 extern uint16_t miliseconds;  /* defined in timer0.c */
-
+extern bool signal_start; /* defined in dsp.c */
 
 void adc_set_channel(uint8_t channel)
 {
@@ -41,7 +42,7 @@ void adc_init()
 {
 	/* Enable ADC, Start ADC Conversion, Enable ADC AutoTrigger, Enable ADC interrupt on conversion complete
 	 * To get the full 10-bit resolution , the ADC clock must be at a maximum of 200 KHz
-	 * 	Prescaler = f_cpu / 200000
+	 * Prescaler = f_cpu / 200000
 	 */
 	SET_PORT(ADCSRA, ADEN), SET_PORT(ADCSRA, ADSC), SET_PORT(ADCSRA, ADATE), SET_PORT(ADCSRA, ADIE);
 #ifdef HARDWARE_BUILD
@@ -62,18 +63,30 @@ ISR(ADC_vect)
 {
 	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
 		/* PORTB ^= 1 << PB5; */
+		
+	if (signal_start){
+		set_elapsed_cycle();
+		signal_start = false;
+		raw_voltages_head = 0;
+		raw_currents_head = 0;
+		/* Perform non-time dependent operations first */
+		adc_set_channel(ADC_CH_VOLTAGE);
+		timer0_reset();
+	}
 
 	uint16_t adc_value = ADC;
 
 	if (current_adc_channel == ADC_CH_VOLTAGE) {
-		raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
+		//raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
+		raw_voltages[raw_voltages_head] = adc_convert(adc_value);
 		raw_voltages_t[raw_voltages_head] = miliseconds;
 		++raw_voltages_head;
 
 		/* Switch the channel of the next sample */
 		adc_set_channel(ADC_CH_CURRENT);
 	} else if (current_adc_channel == ADC_CH_CURRENT) {
-		raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
+		//raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
+		raw_currents[raw_currents_head] = adc_convert(adc_value);
 		raw_currents_t[raw_currents_head] = miliseconds;
 		++raw_currents_head;
 

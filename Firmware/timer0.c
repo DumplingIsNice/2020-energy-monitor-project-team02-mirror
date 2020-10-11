@@ -4,25 +4,14 @@
 
 uint16_t miliseconds;
 
-ISR(TIMER0_COMPA_vect) { if (++miliseconds >= RAW_ARRAY_SIZE * 2) miliseconds = 0;}
+ISR(TIMER0_COMPA_vect) { /*if (++miliseconds >= RAW_ARRAY_SIZE * 2) miliseconds = 0; */ miliseconds++;}
 
 // Counts every 1ms
 void timer0_init()
 {
 	SET_PORT(TCCR0A, WGM01); /* Setting to CTC mode */
-
-#ifdef HARDWARE_BUILD
- 	/* Set prescaler of 128 */
-	SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
- 	/* overflow at count of 124 for 1 ms */
-	OCR0A = 124;
-#else
- 	/* Set prescaler of 8 */
-	SET_PORT(TCCR0B, CS21);
-
- 	/* overflow at count of 99 for 1 ms */
-	OCR0A = 99;
-#endif /* HARDWARE_BUILD */
+	
+	timer0_reset();
 
 	/* Setting interrupt on output compare match A */
 	SET_PORT(TIMSK0, OCIE0A);
@@ -33,12 +22,17 @@ void timer0_reset()
 	/* Selects clock*/
 	
 	#ifdef HARDWARE_BUILD
-	/* Set prescaler of 128 */
-	SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
+		/* Set prescaler of 128 */
+		SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
+		/* overflow at count of 124 for 1 ms */
+		OCR0A = 124;
 	#else
-	/* Set prescaler of 8 */
-	SET_PORT(TCCR0B, CS21);
+		/* Set prescaler of 8 */
+		SET_PORT(TCCR0B, CS21);
+		/* overflow at count of 99 for 1 ms */
+		OCR0A = 99;
 	#endif /* HARDWARE_BUILD */
+	
 	miliseconds = 0;
 }
 
