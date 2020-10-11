@@ -12,19 +12,27 @@ extern volatile uint16_t miliseconds;
 int current_adc_channel = ADC_CH_VOLTAGE;
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
+float volatile adc_voltages[RAW_ARRAY_SIZE];
+float volatile adc_voltages_t[RAW_ARRAY_SIZE];
+unsigned volatile adc_voltages_head; /* index to next free space in array */
+
+float volatile adc_currents[RAW_ARRAY_SIZE];
+float volatile adc_currents_t[RAW_ARRAY_SIZE];
+unsigned volatile adc_currents_head;  /* index to next free space in array */
+
+/* Reverse Gained array of values */
 float volatile raw_voltages[RAW_ARRAY_SIZE];
 float volatile raw_voltages_t[RAW_ARRAY_SIZE];
-unsigned volatile raw_voltages_head; /* index to next free space in array */
 
 float volatile raw_currents[RAW_ARRAY_SIZE];
 float volatile raw_currents_t[RAW_ARRAY_SIZE];
-unsigned volatile raw_currents_head;  /* index to next free space in array */
 
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value
  */
-float reverse_voltage_gain(float adc_voltage)
+void reverse_voltage_gain()
 {
+	int i;
 	float vOffset = 2.1;
 	
 	// Voltage divider inverse gain
@@ -40,16 +48,18 @@ float reverse_voltage_gain(float adc_voltage)
 	
 	
 	//float reversedVoltage = (dividerGain * amplifierGain * adc_voltage) - vOffset;
-	float reversedVoltage = (adc_voltage - vOffset) * dividerGain * amplifierGain;
-	
-	return reversedVoltage;
+	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+		raw_voltages[i] = (adc_voltages[i] - vOffset) * dividerGain * amplifierGain;
+		raw_voltages_t[i] = adc_voltages_t[i];
+	}
 }
 
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor current value
  */
-float reverse_current_gain(float adc_current)
+void reverse_current_gain()
 {
+	int i;
 	float acVoltage;
 	float vOffset = 2.1;
 	
@@ -66,9 +76,10 @@ float reverse_current_gain(float adc_current)
 	
 	
 	//float reversedCurrent = (dividerGain * amplifierGain * adc_current) - vOffset;
-	float reversedCurrent = (adc_current - vOffset) * dividerGain * amplifierGain; 
-	
-	return reversedCurrent;
+	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+		raw_currents[i] = (adc_currents[i] - vOffset) * dividerGain * amplifierGain;
+		raw_currents_t[i] = adc_currents_t[i];
+	}
 }
 
 /* Zero Crossing Interrupt */

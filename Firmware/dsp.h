@@ -17,16 +17,24 @@ extern int current_adc_channel;
 #define CYCLE_SAMPLED 1
 #define RAW_ARRAY_SIZE 10*CYCLE_SAMPLED
 
-extern volatile float raw_voltages[RAW_ARRAY_SIZE];
-extern volatile float raw_voltages_t[RAW_ARRAY_SIZE];
-extern volatile unsigned raw_voltages_head;
+/* Raw Voltage and Current Readings (Along with time value of each reading) */
+extern volatile float adc_voltages[RAW_ARRAY_SIZE];
+extern volatile float adc_voltages_t[RAW_ARRAY_SIZE];
+extern volatile unsigned adc_voltages_head;
 
-extern volatile float raw_currents[RAW_ARRAY_SIZE];
-extern volatile float raw_currents_t[RAW_ARRAY_SIZE];
-extern volatile unsigned raw_currents_head;
+extern volatile float adc_currents[RAW_ARRAY_SIZE];
+extern volatile float adc_currents_t[RAW_ARRAY_SIZE];
+extern volatile unsigned adc_currents_head;
 
-float reverse_voltage_gain(float adc_voltage);
-float reverse_current_gain(float adc_voltage);
+/* Reverse Gained array of values */
+float volatile raw_voltages[RAW_ARRAY_SIZE];
+float volatile raw_voltages_t[RAW_ARRAY_SIZE];
+
+float volatile raw_currents[RAW_ARRAY_SIZE];
+float volatile raw_currents_t[RAW_ARRAY_SIZE];
+
+void reverse_voltage_gain();
+void reverse_current_gain();
 
 /* Record elapsed time at cycle completion */
 void set_elapsed_cycle();
