@@ -89,3 +89,12 @@ ISR(ADC_vect)
 	}
 }
 
+void adc_on()
+{
+	CLR_PORT(ADCSRA, ADEN);
+}
+
+void adc_off()
+{
+	SET_PORT(ADCSRA, ADEN);
+}

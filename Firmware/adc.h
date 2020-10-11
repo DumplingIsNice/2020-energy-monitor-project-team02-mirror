@@ -19,5 +19,8 @@ void adc_init();
 uint16_t adc_read();
 float adc_convert(uint16_t value);
 
+/* Functions for turning adc on and off*/
+void adc_on();
+void adc_off();
 
 #endif
