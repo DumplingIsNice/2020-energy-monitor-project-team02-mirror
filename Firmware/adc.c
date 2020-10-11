@@ -65,11 +65,12 @@ ISR(ADC_vect)
 		/* PORTB ^= 1 << PB5; */
 		
 	if (signal_start){
+		/* Perform non-time critical operations first */
 		set_elapsed_cycle();
 		signal_start = false;
 		raw_voltages_head = 0;
 		raw_currents_head = 0;
-		/* Perform non-time dependent operations first */
+		/* Time critical operations */
 		adc_set_channel(ADC_CH_VOLTAGE);
 		timer0_reset();
 	}
