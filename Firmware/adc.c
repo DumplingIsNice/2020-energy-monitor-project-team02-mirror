@@ -1,11 +1,14 @@
 #include "common.h"
 #include "timer0.h"
+#include "adc.h"
 #include "dsp.h"
 
 #include <avr/interrupt.h>
 
 extern uint16_t miliseconds;  /* defined in timer0.c */
 extern bool signal_start; /* defined in dsp.c */
+
+static bool complete_sampling = false;
 
 void adc_set_channel(uint8_t channel)
 {
@@ -68,47 +71,52 @@ ISR(ADC_vect)
 		/* Perform non-time critical operations first */
 		set_elapsed_cycle();
 		signal_start = false;
+		complete_sampling = false;
 		raw_voltages_head = 0;
 		raw_currents_head = 0;
 		/* Time critical operations */
-		adc_set_channel(ADC_CH_VOLTAGE);
+		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
 		timer0_reset();
 	}
 
 	uint16_t adc_value = ADC;
+	
+	if(!complete_sampling){
+		
+		if (current_adc_channel == ADC_CH_VOLTAGE) {
+			//raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
+			raw_voltages[raw_voltages_head] = adc_convert(adc_value);
+			raw_voltages_t[raw_voltages_head] = miliseconds;
+			++raw_voltages_head;
 
-	if (current_adc_channel == ADC_CH_VOLTAGE) {
-		//raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
-		raw_voltages[raw_voltages_head] = adc_convert(adc_value);
-		raw_voltages_t[raw_voltages_head] = miliseconds;
-		++raw_voltages_head;
-
-		/* Switch the channel of the next sample */
-		adc_set_channel(ADC_CH_CURRENT);
-	} else if (current_adc_channel == ADC_CH_CURRENT) {
-		//raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
-		raw_currents[raw_currents_head] = adc_convert(adc_value);
-		raw_currents_t[raw_currents_head] = miliseconds;
-		++raw_currents_head;
-
-		/* Switch the channel of the next sample */
-		adc_set_channel(ADC_CH_VOLTAGE);
+			/* Switch the channel of the next sample */
+			adc_set_channel(ADC_CH_CURRENT);
+		} else if (current_adc_channel == ADC_CH_CURRENT) {
+			//raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
+			raw_currents[raw_currents_head] = adc_convert(adc_value);
+			raw_currents_t[raw_currents_head] = miliseconds;
+			++raw_currents_head;
+		
+			/* Switch the channel of the next sample */
+			adc_set_channel(ADC_CH_VOLTAGE);
+		}		
 	}
-
+	
 	if (raw_voltages_head >= RAW_ARRAY_SIZE) {
 		raw_voltages_head = 0;
 	}
 	if (raw_currents_head >= RAW_ARRAY_SIZE) {
 		raw_currents_head = 0;
-	}
+		complete_sampling = true;
+	} 
 }
 
 void adc_on()
 {
-	CLR_PORT(ADCSRA, ADEN);
+	SET_PORT(ADCSRA, ADEN);
 }
 
 void adc_off()
 {
-	SET_PORT(ADCSRA, ADEN);
+	CLR_PORT(ADCSRA, ADEN);
 }
