@@ -5,7 +5,7 @@
 
 #include <avr/interrupt.h>
 
-extern uint16_t miliseconds;  /* defined in timer0.c */
+extern volatile uint16_t miliseconds;  /* defined in timer0.c */
 extern bool signal_start; /* defined in dsp.c */
 
 static bool complete_sampling = false;

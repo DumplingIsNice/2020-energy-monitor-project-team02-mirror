@@ -1,11 +1,24 @@
 #include "common.h"
+#include "dsp.h"
 #include "adc.h"
 #include "timer0.h"
 
 #include <avr/interrupt.h>
 #include <stdbool.h>
 
-extern uint16_t miliseconds;
+extern volatile uint16_t miliseconds;
+
+/* Inital channel is voltage (we sample voltage first, then current) */
+int current_adc_channel = ADC_CH_VOLTAGE;
+
+/* Raw Voltage and Current Readings (Along with time value of each reading) */
+float volatile raw_voltages[RAW_ARRAY_SIZE];
+float volatile raw_voltages_t[RAW_ARRAY_SIZE];
+unsigned volatile raw_voltages_head; /* index to next free space in array */
+
+float volatile raw_currents[RAW_ARRAY_SIZE];
+float volatile raw_currents_t[RAW_ARRAY_SIZE];
+unsigned volatile raw_currents_head;  /* index to next free space in array */
 
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value

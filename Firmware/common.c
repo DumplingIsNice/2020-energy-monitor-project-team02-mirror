@@ -3,20 +3,6 @@
 #include "common.h"
 #include "uart.h"
 
-/* Global value arrays */
-
-/* Inital channel is voltage (we sample voltage first, then current) */
-int current_adc_channel = ADC_CH_VOLTAGE;
-
-/* Raw Voltage and Current Readings (Along with time value of each reading) */
-float raw_voltages[RAW_ARRAY_SIZE];
-float raw_voltages_t[RAW_ARRAY_SIZE];
-unsigned raw_voltages_head; /* index to next free space in array */
-
-float raw_currents[RAW_ARRAY_SIZE];
-float raw_currents_t[RAW_ARRAY_SIZE];
-unsigned raw_currents_head;  /* index to next free space in array */
-
 /*
  * Return the number of characters that would be needed to represent the integer
  * `num` as a string (returned length does NOT include null-terminator) .
