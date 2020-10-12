@@ -23,4 +23,6 @@ float adc_convert(uint16_t value);
 void adc_on();
 void adc_off();
 
+void sampling_init();
+
 #endif

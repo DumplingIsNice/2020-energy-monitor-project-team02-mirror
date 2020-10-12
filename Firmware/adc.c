@@ -75,23 +75,13 @@ ISR(ADC_vect)
 	/* Hold array values so it's not overwritten during calculation AND debug printing */
 	if(print_complete){
 		signal_start = false; /* We must skip the current cycle as memcpy takes time */
-		print_complete = false; /* Replace with process_complete for ISR calc */
+		print_complete = false; /* Replace with process_complete for RMS calc && display */
 		
 		memcpy(&raw_voltages, &adc_voltages, sizeof adc_voltages);
 		//memcpy(&raw_currents, &adc_currents, sizeof adc_currents);
 	}
 		
-	if (signal_start){
-		/* Perform non-time critical operations first */
-		set_elapsed_cycle();
-		signal_start = false;
-		complete_sampling = false;
-		adc_voltages_head = 0;
-		adc_currents_head = 0;
-		/* Time critical operations */
-		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
-		timer0_reset();
-	}
+	sampling_init();
 
 	uint16_t adc_value = ADC;
 	
@@ -133,4 +123,19 @@ void adc_on()
 void adc_off()
 {
 	CLR_PORT(ADCSRA, ADEN);
+}
+
+void sampling_init()
+{
+	if (signal_start){
+		/* Perform non-time critical operations first */
+		set_elapsed_cycle();
+		signal_start = false;
+		complete_sampling = false;
+		adc_voltages_head = 0;
+		adc_currents_head = 0;
+		/* Time critical operations */
+		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
+		timer0_reset();
+	}
 }
