@@ -31,22 +31,21 @@ int main()
 	sei();
 
 	while (1) {
-		reverse_voltage_gain();
-		//reverse_current_gain();
-		
 		int i = 0;
-		print("Voltage;");
-		for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-			print("  At time t = %f ms, %f V", raw_voltages_t[i], raw_voltages[i]);
+		if (complete_sampling) {
+			reverse_voltage_gain();
+			reverse_current_gain();
+			print("V;");
+			for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+				print("  %f ms, %f V", raw_voltages_t[i], raw_voltages[i]);
+			}
+			print("\nC");
+			for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+				print("  t %f ms, %f A", adc_currents_t[i], adc_currents[i]);
+			}
+			print("T %d ms", get_period());
+			print("\n -");
 		}
-		print("\nCurrent");
-		for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-			print("  At time t = %f ms, %f A", adc_currents_t[i], adc_currents[i]);
-		}
-		print("\n ----");
-		print("Period is: %d ms", get_period());
-		print("\n ----");
-		print_complete = true;
 	}
 
 	return 0;

@@ -9,11 +9,8 @@
 #define MILISECOND_DELAY 1+0.5 /* Delay from Vzc and setup for sampling */
 
 extern volatile uint16_t miliseconds;  /* defined in timer0.c */
-extern bool signal_start; /* defined in dsp.c */
-
-bool print_complete = false;
-
-static bool complete_sampling = false;
+extern volatile bool signal_start; /* defined in dsp.c */
+volatile int complete_sampling = 0;
 
 void adc_set_channel(uint8_t channel)
 {
@@ -70,33 +67,21 @@ void adc_init()
 ISR(ADC_vect)
 {
 	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
-		/* PORTB ^= 1 << PB5; */
-		
-	/* Hold array values so it's not overwritten during calculation AND debug printing */
-	if(print_complete){
-		signal_start = false; /* We must skip the current cycle as memcpy takes time */
-		print_complete = false; /* Replace with process_complete for RMS calc && display */
-		
-		memcpy(&raw_voltages, &adc_voltages, sizeof adc_voltages);
-		//memcpy(&raw_currents, &adc_currents, sizeof adc_currents);
-	}
-		
-	sampling_init();
+	/* PORTB ^= 1 << PB5; */
 
 	uint16_t adc_value = ADC;
-	
+
+	sampling_init();
+
 	if(!complete_sampling){
-		
 		if (current_adc_channel == ADC_CH_VOLTAGE) {
-			// raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
 			adc_voltages[adc_voltages_head] = adc_convert(adc_value);
 			adc_voltages_t[adc_voltages_head] = miliseconds+MILISECOND_DELAY;
 			++adc_voltages_head;
 
 			/* Switch the channel of the next sample */
 			adc_set_channel(ADC_CH_CURRENT);
-		} else if (current_adc_channel == ADC_CH_CURRENT) {
-			// raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
+		} else {
 			adc_currents[adc_currents_head] = adc_convert(adc_value);
 			adc_currents_t[adc_currents_head] = miliseconds+MILISECOND_DELAY;
 			++adc_currents_head;
@@ -111,8 +96,19 @@ ISR(ADC_vect)
 	}
 	if (adc_currents_head >= RAW_ARRAY_SIZE) {
 		adc_currents_head = 0;
-		complete_sampling = true;
-	} 
+		complete_sampling = 1;
+		timer0_stop();
+
+		/* Copy array values so it's not overwritten during calculation AND debug printing */
+		signal_start = 0; /* We must skip the current cycle as memcpy takes time */
+
+		memcpy((void *) raw_voltages, (void *) adc_voltages, sizeof (adc_voltages));
+		memcpy((void *) raw_voltages_t, (const void *) adc_voltages_t, sizeof (adc_voltages_t));
+
+		memcpy((void *) raw_currents, (void *) adc_currents, sizeof (adc_currents));
+		memcpy((void *) raw_currents_t, (const void *) adc_currents_t, sizeof (adc_voltages_t));
+
+	}
 }
 
 void adc_on()
@@ -130,10 +126,10 @@ void sampling_init()
 	if (signal_start){
 		/* Perform non-time critical operations first */
 		set_elapsed_cycle();
-		signal_start = false;
-		complete_sampling = false;
-		adc_voltages_head = 0;
-		adc_currents_head = 0;
+		signal_start = 0;
+		complete_sampling = 0;
+/*		adc_voltages_head = 0;
+		adc_currents_head = 0;*/
 		/* Time critical operations */
 		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
 		timer0_reset();

@@ -5,6 +5,7 @@
 
 #include <avr/interrupt.h>
 #include <stdbool.h>
+#include <string.h>
 
 extern volatile uint16_t miliseconds;
 
@@ -27,6 +28,12 @@ float volatile raw_voltages_t[RAW_ARRAY_SIZE];
 float volatile raw_currents[RAW_ARRAY_SIZE];
 float volatile raw_currents_t[RAW_ARRAY_SIZE];
 
+/* Zero Crossing Interrupt */
+/* Currently sampling one cycle of the waveform at a time */
+
+volatile bool signal_start = false;
+static volatile int16_t elapsed_cycle_time = 0;
+
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value
  */
@@ -46,11 +53,12 @@ void reverse_voltage_gain()
 	uint16_t R1 = 4700;
 	float amplifierGain =  1/(float)(R2/((float)R1));
 	
-	
 	//float reversedVoltage = (dividerGain * amplifierGain * adc_voltage) - vOffset;
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-		raw_voltages[i] = (adc_voltages[i] - vOffset) * dividerGain * amplifierGain;
-		raw_voltages_t[i] = adc_voltages_t[i];
+		/* The voltage values in raw_currents are actually the ADC values
+		 * Overwrite them with the actual raw voltage values
+		 */
+		raw_voltages[i] = (raw_voltages[i] - vOffset) * dividerGain * amplifierGain;
 	}
 }
 
@@ -60,7 +68,6 @@ void reverse_voltage_gain()
 void reverse_current_gain()
 {
 	int i;
-	float acVoltage;
 	float vOffset = 2.1;
 	
 	
@@ -74,25 +81,19 @@ void reverse_current_gain()
 	uint16_t R1 = 22000;
 	float amplifierGain =  1/(float)(R2/((float)R1));
 	
-	
-	//float reversedCurrent = (dividerGain * amplifierGain * adc_current) - vOffset;
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-		raw_currents[i] = (adc_currents[i] - vOffset) * dividerGain * amplifierGain;
-		raw_currents_t[i] = adc_currents_t[i];
+		/* The current values in raw_currents are actually the ADC values
+		 * Overwrite them with the actual raw current values
+		 */
+		raw_currents[i] = (raw_currents[i] - vOffset) * dividerGain * amplifierGain;
 	}
 }
-
-/* Zero Crossing Interrupt */
-/* Currently sampling one cycle of the waveform at a time */
-
-bool signal_start = false;
-static volatile int16_t elapsed_cycle_time = 0;
 
 ISR(INT0_vect)
 {
 	//Use this LED to check if interrupt is called.
 	//TGL_PORT(PORTB, PORTB5);
-	
+
 	/* Zero crossing indicates the start to a new cycle of sampling */
 	signal_start = !signal_start;
 }
@@ -116,13 +117,9 @@ void set_elapsed_cycle()
 }
 
 /* Returns the calculated period of current sample */
-int16_t get_period()
+uint16_t get_period()
 {
-	int16_t period = 0;
-	
-	period = elapsed_cycle_time/CYCLE_SAMPLED;
-
-	return period;
+	return elapsed_cycle_time / CYCLE_SAMPLED;
 }
 
 /* Checks if the required cycles have elapsed */

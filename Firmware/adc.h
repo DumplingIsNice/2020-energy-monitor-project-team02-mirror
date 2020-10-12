@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+extern volatile int complete_sampling;
+
 // Functions
 
 /* MISC */

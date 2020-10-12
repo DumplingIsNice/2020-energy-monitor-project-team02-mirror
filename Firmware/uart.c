@@ -100,7 +100,7 @@ void usart_init()
 	UCSR0A = 0b00000000;
 
 	UCSR0B |= (1 << TXEN0) & ~(1 << UCSZ02);
-	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); 
+	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00);
 	UBRR0 = UBRR;
 
 }
