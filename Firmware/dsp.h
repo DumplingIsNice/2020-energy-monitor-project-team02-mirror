@@ -33,6 +33,8 @@ float volatile raw_voltages_t[RAW_ARRAY_SIZE];
 float volatile raw_currents[RAW_ARRAY_SIZE];
 float volatile raw_currents_t[RAW_ARRAY_SIZE];
 
+extern bool print_complete; /* defined in adc.c */
+
 void reverse_voltage_gain();
 void reverse_current_gain();
 

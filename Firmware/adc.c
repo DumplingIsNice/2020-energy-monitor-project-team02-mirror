@@ -4,9 +4,14 @@
 #include "dsp.h"
 
 #include <avr/interrupt.h>
+#include <string.h>
+
+#define MILISECOND_DELAY 1+0.5 /* Delay from Vzc and setup for sampling */
 
 extern volatile uint16_t miliseconds;  /* defined in timer0.c */
 extern bool signal_start; /* defined in dsp.c */
+
+bool print_complete = false;
 
 static bool complete_sampling = false;
 
@@ -67,6 +72,15 @@ ISR(ADC_vect)
 	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
 		/* PORTB ^= 1 << PB5; */
 		
+	/* Hold array values so it's not overwritten during calculation AND debug printing */
+	if(print_complete){
+		signal_start = false; /* We must skip the current cycle as memcpy takes time */
+		print_complete = false; /* Replace with process_complete for ISR calc */
+		
+		memcpy(&raw_voltages, &adc_voltages, sizeof adc_voltages);
+		//memcpy(&raw_currents, &adc_currents, sizeof adc_currents);
+	}
+		
 	if (signal_start){
 		/* Perform non-time critical operations first */
 		set_elapsed_cycle();
@@ -86,7 +100,7 @@ ISR(ADC_vect)
 		if (current_adc_channel == ADC_CH_VOLTAGE) {
 			// raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
 			adc_voltages[adc_voltages_head] = adc_convert(adc_value);
-			adc_voltages_t[adc_voltages_head] = miliseconds;
+			adc_voltages_t[adc_voltages_head] = miliseconds+MILISECOND_DELAY;
 			++adc_voltages_head;
 
 			/* Switch the channel of the next sample */
@@ -94,7 +108,7 @@ ISR(ADC_vect)
 		} else if (current_adc_channel == ADC_CH_CURRENT) {
 			// raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
 			adc_currents[adc_currents_head] = adc_convert(adc_value);
-			adc_currents_t[adc_currents_head] = miliseconds;
+			adc_currents_t[adc_currents_head] = miliseconds+MILISECOND_DELAY;
 			++adc_currents_head;
 		
 			/* Switch the channel of the next sample */
