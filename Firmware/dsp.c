@@ -7,6 +7,9 @@
 #include <stdbool.h>
 #include <string.h>
 
+#define CUBE(x) (x * x * x)
+#define SQUARE(x) (x * x)
+
 extern volatile uint16_t miliseconds;
 
 /* Inital channel is voltage (we sample voltage first, then current) */
@@ -33,6 +36,23 @@ float volatile raw_currents_t[RAW_ARRAY_SIZE];
 
 volatile bool signal_start = false;
 static volatile int16_t elapsed_cycle_time = 0;
+
+/* Cubic interpolate between a two points */
+float cubic_point(float t, float yleft, float y0, float y1, float yright)
+{
+	float a = (-1 / 2 * yleft) + (3 / 2 * y0) - (3 / 2 * y1) + (1 / 2 * yright);
+	float b = yleft - (5 / 2 * y0) + (2 * y1) - (1 / 2 * yright);
+	float c = (-1 / 2 * yleft) + (1 / 2 * y1);
+	float d = y0;
+
+	return (a * CUBE(t)) + (b * SQUARE(t)) + (c * t) + (d);
+}
+
+/* Cubic interpolate the raw arrays */
+void cubic_interpolate()
+{
+	/* !! TODO !! */
+}
 
 /* Remove the gain and shifts added by all the analogue circuitry to get
  * back the original sensor voltage value
