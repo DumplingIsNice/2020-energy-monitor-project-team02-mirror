@@ -36,8 +36,7 @@ uint16_t adc_read()
 // Convert a single adcCount input and return voltage
 float adc_convert(uint16_t adcCount)
 {
-	float instantVoltage = (5 * adcCount) / (float) 1024;
-	return instantVoltage;
+	return (5 * adcCount) / (float) 1024;
 }
 
 /* ADC initialisation
