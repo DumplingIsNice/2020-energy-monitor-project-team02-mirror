@@ -43,7 +43,7 @@ void reverse_voltage_gain()
 	
 	// Voltage amplifier gain
 	uint16_t R2 = 4700;
-	uint16_t R1 = 1500;
+	uint16_t R1 = 4700;
 	float amplifierGain =  1/(float)(R2/((float)R1));
 	
 	
