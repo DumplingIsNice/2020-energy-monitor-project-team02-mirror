@@ -72,8 +72,8 @@ ISR(ADC_vect)
 		set_elapsed_cycle();
 		signal_start = false;
 		complete_sampling = false;
-		raw_voltages_head = 0;
-		raw_currents_head = 0;
+		adc_voltages_head = 0;
+		adc_currents_head = 0;
 		/* Time critical operations */
 		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
 		timer0_reset();
@@ -85,28 +85,28 @@ ISR(ADC_vect)
 		
 		if (current_adc_channel == ADC_CH_VOLTAGE) {
 			// raw_voltages[raw_voltages_head] = reverse_voltage_gain(adc_convert(adc_value));
-			raw_voltages[raw_voltages_head] = adc_convert(adc_value);
-			raw_voltages_t[raw_voltages_head] = miliseconds;
-			++raw_voltages_head;
+			adc_voltages[adc_voltages_head] = adc_convert(adc_value);
+			adc_voltages_t[adc_voltages_head] = miliseconds;
+			++adc_voltages_head;
 
 			/* Switch the channel of the next sample */
 			adc_set_channel(ADC_CH_CURRENT);
 		} else if (current_adc_channel == ADC_CH_CURRENT) {
 			// raw_currents[raw_currents_head] = reverse_current_gain(adc_convert(adc_value));
-			raw_currents[raw_currents_head] = adc_convert(adc_value);
-			raw_currents_t[raw_currents_head] = miliseconds;
-			++raw_currents_head;
+			adc_currents[adc_currents_head] = adc_convert(adc_value);
+			adc_currents_t[adc_currents_head] = miliseconds;
+			++adc_currents_head;
 		
 			/* Switch the channel of the next sample */
 			adc_set_channel(ADC_CH_VOLTAGE);
 		}		
 	}
 	
-	if (raw_voltages_head >= RAW_ARRAY_SIZE) {
-		raw_voltages_head = 0;
+	if (adc_voltages_head >= RAW_ARRAY_SIZE) {
+		adc_voltages_head = 0;
 	}
-	if (raw_currents_head >= RAW_ARRAY_SIZE) {
-		raw_currents_head = 0;
+	if (adc_currents_head >= RAW_ARRAY_SIZE) {
+		adc_currents_head = 0;
 		complete_sampling = true;
 	} 
 }

@@ -34,11 +34,11 @@ int main()
 		int i = 0;
 		print("Voltage;");
 		for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-			print("  At time t = %f ms, %f V", raw_voltages_t[i], raw_voltages[i]);
+			print("  At time t = %f ms, %f V", adc_voltages_t[i], adc_voltages[i]);
 		}
 		print("\nCurrent");
 		for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-			print("  At time t = %f ms, %f A", raw_currents_t[i], raw_currents[i]);
+			print("  At time t = %f ms, %f A", adc_currents_t[i], adc_currents[i]);
 		}
 		print("\n ----");
 		print("Period is: %d ms", get_period());
