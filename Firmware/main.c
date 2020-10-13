@@ -13,6 +13,8 @@
 
 /* #define ENABLE_TESTING */
 
+volatile char calc_complete = 0;
+
 int main()
 {
 #ifdef ENABLE_TESTING
@@ -30,9 +32,10 @@ int main()
 	sei();
 
 	while (1) {
-		if (complete_sampling) {
+		if (complete_sampling && !calc_complete) {
 			adc2real_voltage();
 			adc2real_current();
+			calc_complete = 1;
 /*
 			reverse_voltage_gain();
 			reverse_current_gain();

@@ -61,7 +61,7 @@ void adc2real_voltage()
 		/* The voltage values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw voltage values
 		 */
-		raw_voltages[i] = 0.087743 * raw_voltages[i] - 37.73636;
+		raw_voltages[i] = 0.0877427 * raw_voltages[i] - 37.7365;
 	}
 }
 
@@ -73,7 +73,7 @@ void adc2real_current()
 		/* The voltage values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw voltage values
 		 */
-		raw_currents[i] = 0.003425 * raw_currents[i] - 1.47322;
+		raw_currents[i] = 0.0034253 * raw_currents[i] - 1.4731673;
 	}
 }
 
@@ -89,20 +89,20 @@ void reverse_voltage_gain()
 	// Voltage divider inverse gain
 	uint16_t Rb1 = 3300;
 	uint16_t Ra1 = 56000;
-	float dividerGain = 1/(float)(Rb1/(float)(Ra1 + Rb1));
+	float dividerGain = (float)(Rb1/(float)(Ra1 + Rb1));
 
 
 	// Voltage amplifier gain
 	uint16_t R2 = 4700;
 	uint16_t R1 = 4700;
-	float amplifierGain =  1/(float)(R2/((float)R1));
+	float amplifierGain =  (float)(R2/((float)R1));
 
 	//float reversedVoltage = (dividerGain * amplifierGain * adc_voltage) - vOffset;
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 		/* The voltage values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw voltage values
 		 */
-		raw_voltages[i] = (raw_voltages[i] - vOffset) * dividerGain * amplifierGain;
+		raw_voltages[i] = (raw_voltages[i] - vOffset) / (dividerGain * amplifierGain);
 	}
 }
 
@@ -117,19 +117,19 @@ void reverse_current_gain()
 	
 	// Voltage divider inverse gain
 	float Rs1 = 0.56;
-	float dividerGain = 1/(float)(Rs1);
+	float dividerGain = (float)(Rs1);
 	
 	
 	// Voltage amplifier gain
 	uint16_t R2 = 56000;
 	uint16_t R1 = 22000;
-	float amplifierGain =  1/(float)(R2/((float)R1));
+	float amplifierGain =  (float)(R2/((float)R1));
 	
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 		/* The current values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw current values
 		 */
-		raw_currents[i] = (raw_currents[i] - vOffset) * dividerGain * amplifierGain;
+		raw_currents[i] = (raw_currents[i] - vOffset) / (dividerGain * amplifierGain);
 	}
 }
 #endif /* 0 */
@@ -192,6 +192,8 @@ ISR(INT0_vect)
 
 		complete_sampling = 1;
 	} else {
+		extern volatile char calc_complete;
+		calc_complete = 0;
 		complete_sampling = 0;
 		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
 		adc_voltages_head = adc_currents_head = 0;
