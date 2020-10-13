@@ -16,7 +16,8 @@ extern int current_adc_channel;
 
 #define CYCLE_SAMPLED 1
 #define RAW_ARRAY_SIZE (10 * CYCLE_SAMPLED)
-#define INTERPOLATED_ARRAY_SIZE (RAW_ARRAY_SIE)
+/* Assuming we create one new point per sample point, we get (3n - 4) new points */
+#define INTERPOLATED_ARRAY_SIZE (3 * RAW_ARRAY_SIZE - 4)
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
 /* The extern forward decleration in the same file as the variable definition
@@ -48,6 +49,7 @@ void reverse_current_gain();
 
 void adc2real_voltage();
 void adc2real_current();
+void cubic_interpolate();
 
 /* Record elapsed time at cycle completion */
 void set_elapsed_cycle();

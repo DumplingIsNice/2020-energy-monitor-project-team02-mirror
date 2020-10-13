@@ -36,6 +36,7 @@ int main()
 			adc2real_voltage();
 			adc2real_current();
 			calc_complete = 1;
+			cubic_interpolate();
 /*
 			reverse_voltage_gain();
 			reverse_current_gain();
