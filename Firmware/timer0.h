@@ -13,6 +13,8 @@
 
 /* TIMER0 */
 
+extern volatile uint16_t miliseconds;
+
 /* Initialise Timer0 */
 void timer0_init();
 

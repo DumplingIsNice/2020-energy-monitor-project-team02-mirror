@@ -8,7 +8,6 @@
 */
 
 #include "common.h"
-#include <util/delay.h> // Needed to use _delay_ms()
 
 #define UART_BPS 9600UL // Baud rate / Bits Per Second value the UART module is configured to (_9600 BPS_)
 #define UBRR ((F_CPU / (UART_BPS * 16)) - 1) // Prescaler value for initializing baud rate.

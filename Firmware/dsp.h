@@ -19,23 +19,35 @@ extern int current_adc_channel;
 #define INTERPOLATED_ARRAY_SIZE (RAW_ARRAY_SIE)
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
-extern volatile float adc_voltages[RAW_ARRAY_SIZE];
-extern volatile float adc_voltages_t[RAW_ARRAY_SIZE];
+/* The extern forward decleration in the same file as the variable definition
+ * confuses the Proteus simulator - so wrap it in the #ifndef to ensure
+ * we do not have the extern declerations in the same file the variables are
+ * defined in ("dsp.c")
+ * */
+#ifndef DSP_C
+extern volatile int complete_sampling;
+
+extern volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
+extern volatile unsigned adc_voltages_t[RAW_ARRAY_SIZE];
 extern volatile unsigned adc_voltages_head;
 
-extern volatile float adc_currents[RAW_ARRAY_SIZE];
-extern volatile float adc_currents_t[RAW_ARRAY_SIZE];
+extern volatile unsigned adc_currents[RAW_ARRAY_SIZE];
+extern volatile unsigned adc_currents_t[RAW_ARRAY_SIZE];
 extern volatile unsigned adc_currents_head;
 
 /* Reverse Gained array of values */
-extern float volatile raw_voltages[RAW_ARRAY_SIZE];
-extern float volatile raw_voltages_t[RAW_ARRAY_SIZE];
+extern volatile float raw_voltages[RAW_ARRAY_SIZE];
+extern volatile float raw_voltages_t[RAW_ARRAY_SIZE];
 
-extern float volatile raw_currents[RAW_ARRAY_SIZE];
-extern float volatile raw_currents_t[RAW_ARRAY_SIZE];
+extern volatile float raw_currents[RAW_ARRAY_SIZE];
+extern volatile float raw_currents_t[RAW_ARRAY_SIZE];
+#endif /* DSP_C */
 
 void reverse_voltage_gain();
 void reverse_current_gain();
+
+void adc2real_voltage();
+void adc2real_current();
 
 /* Record elapsed time at cycle completion */
 void set_elapsed_cycle();

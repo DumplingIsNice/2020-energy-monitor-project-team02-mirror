@@ -1,17 +1,19 @@
 #include "common.h"
-#include "timer0.h"
 #include <avr/interrupt.h>
 
-uint16_t miliseconds;
+volatile uint16_t miliseconds;
 
-ISR(TIMER0_COMPA_vect) { /*if (++miliseconds >= RAW_ARRAY_SIZE * 2) miliseconds = 0; */ miliseconds++;}
+
+ISR(TIMER0_COMPA_vect) { }
 
 // Counts every 1ms
 void timer0_init()
 {
 	SET_PORT(TCCR0A, WGM01); /* Setting to CTC mode */
-	
-	timer0_reset();
+
+	/* Select no clock initially (timer is stopped) and set timer counter to 0 */
+	CLR_PORT(TCCR0B, CS02), CLR_PORT(TCCR0B, CS01), CLR_PORT(TCCR0B, CS00);
+	TCNT0 = miliseconds = 0x00;
 
 	/* Setting interrupt on output compare match A */
 	SET_PORT(TIMSK0, OCIE0A);
@@ -32,8 +34,9 @@ void timer0_reset()
 	/* overflow at count of 99 for 1 ms */
 	OCR0A = 99;
 #endif /* HARDWARE_BUILD */
-	
-	miliseconds = 0;
+
+	/* reset the timer counter */
+	TCNT0 = miliseconds = 0x00;
 }
 
 void timer0_stop()
