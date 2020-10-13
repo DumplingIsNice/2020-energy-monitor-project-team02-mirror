@@ -35,8 +35,8 @@ int main()
 		if (complete_sampling && !calc_complete) {
 			adc2real_voltage();
 			adc2real_current();
-			calc_complete = 1;
 			cubic_interpolate();
+			calc_complete = 1;
 /*
 			reverse_voltage_gain();
 			reverse_current_gain();

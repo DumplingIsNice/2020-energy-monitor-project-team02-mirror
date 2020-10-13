@@ -167,6 +167,7 @@ void reverse_current_gain()
 
 ISR(INT0_vect)
 {
+	extern volatile char calc_complete;
 	//Use this LED to check if interrupt is called.
 	/*TGL_PORT(PORTB, PORTB5);*/
 
@@ -222,8 +223,7 @@ ISR(INT0_vect)
 		raw_currents_t[9] = adc_currents_t[9];
 
 		complete_sampling = 1;
-	} else {
-		extern volatile char calc_complete;
+	} else if (calc_complete) {
 		calc_complete = 0;
 		complete_sampling = 0;
 		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
