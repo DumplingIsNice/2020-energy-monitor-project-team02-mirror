@@ -9,7 +9,6 @@
 #define MILISECOND_DELAY 1+0.5 /* Delay from Vzc and setup for sampling */
 
 extern volatile uint16_t miliseconds;  /* defined in timer0.c */
-extern volatile bool signal_start; /* defined in dsp.c */
 volatile int complete_sampling = 0;
 
 void adc_set_channel(uint8_t channel)
@@ -70,8 +69,6 @@ ISR(ADC_vect)
 
 	uint16_t adc_value = ADC;
 
-	sampling_init();
-
 	if(!complete_sampling){
 		if (current_adc_channel == ADC_CH_VOLTAGE) {
 			adc_voltages[adc_voltages_head] = adc_convert(adc_value);
@@ -94,19 +91,32 @@ ISR(ADC_vect)
 		adc_voltages_head = 0;
 	}
 	if (adc_currents_head >= RAW_ARRAY_SIZE) {
-		adc_currents_head = 0;
-		complete_sampling = 1;
 		timer0_stop();
+		complete_sampling = 1;
+		adc_currents_head = 0;
+
+		set_elapsed_cycle();
 
 		/* Copy array values so it's not overwritten during calculation AND debug printing */
-		signal_start = 0; /* We must skip the current cycle as memcpy takes time */
 
+/*		THIS IS FASTER THEN memcpy() BY ~ 102 us
+
+		raw_voltages[0] = adc_voltages[0];
+		raw_voltages[1] = adc_voltages[1];
+		raw_voltages[2] = adc_voltages[2];
+		raw_voltages[3] = adc_voltages[3];
+		raw_voltages[4] = adc_voltages[4];
+		raw_voltages[5] = adc_voltages[5];
+		raw_voltages[6] = adc_voltages[6];
+		raw_voltages[7] = adc_voltages[7];
+		raw_voltages[8] = adc_voltages[8];
+		raw_voltages[9] = adc_voltages[9];
+*/
 		memcpy((void *) raw_voltages, (void *) adc_voltages, sizeof (adc_voltages));
 		memcpy((void *) raw_voltages_t, (const void *) adc_voltages_t, sizeof (adc_voltages_t));
 
 		memcpy((void *) raw_currents, (void *) adc_currents, sizeof (adc_currents));
 		memcpy((void *) raw_currents_t, (const void *) adc_currents_t, sizeof (adc_voltages_t));
-
 	}
 }
 
@@ -118,19 +128,4 @@ void adc_on()
 void adc_off()
 {
 	CLR_PORT(ADCSRA, ADEN);
-}
-
-void sampling_init()
-{
-	if (signal_start){
-		/* Perform non-time critical operations first */
-		set_elapsed_cycle();
-		signal_start = 0;
-		complete_sampling = 0;
-/*		adc_voltages_head = 0;
-		adc_currents_head = 0;*/
-		/* Time critical operations */
-		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
-		timer0_reset();
-	}
 }

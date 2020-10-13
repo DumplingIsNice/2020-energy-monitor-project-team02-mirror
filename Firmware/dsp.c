@@ -33,8 +33,6 @@ float volatile raw_currents_t[RAW_ARRAY_SIZE];
 
 /* Zero Crossing Interrupt */
 /* Currently sampling one cycle of the waveform at a time */
-
-volatile bool signal_start = false;
 static volatile int16_t elapsed_cycle_time = 0;
 
 /* Cubic interpolate between a two points */
@@ -115,7 +113,11 @@ ISR(INT0_vect)
 	//TGL_PORT(PORTB, PORTB5);
 
 	/* Zero crossing indicates the start to a new cycle of sampling */
-	signal_start = !signal_start;
+	/* Perform non-time critical operations first */
+	complete_sampling = 0;
+	/* Time critical operations */
+	adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
+	timer0_reset();
 }
 
 /* Initializes voltage zero crossing interrupt */
@@ -145,6 +147,7 @@ uint16_t get_period()
 /* Checks if the required cycles have elapsed */
 void check_cycle_complete()
 {
+/*
 	static int cycles = 0;
 	
 	if (cycles >= CYCLE_SAMPLED - 1){
@@ -154,4 +157,5 @@ void check_cycle_complete()
 		signal_start = true;
 		cycles++;
 	}
+*/
 }
