@@ -16,8 +16,8 @@ extern int current_adc_channel;
 
 #define CYCLE_SAMPLED 1
 #define RAW_ARRAY_SIZE (10 * CYCLE_SAMPLED)
-/* Assuming we create one new point per sample point, we get (3n - 4) new points */
-#define INTERPOLATED_ARRAY_SIZE (3 * RAW_ARRAY_SIZE - 4)
+/* Assuming we create one new point per sample point, we get (2n - 2) new points */
+#define INTERPOLATED_ARRAY_SIZE (2 * RAW_ARRAY_SIZE - 2)
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
 /* The extern forward decleration in the same file as the variable definition
@@ -26,7 +26,7 @@ extern int current_adc_channel;
  * defined in ("dsp.c")
  * */
 #ifndef DSP_C
-extern volatile int complete_sampling;
+extern volatile unsigned currently_sampling;
 
 extern volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
 extern volatile unsigned adc_voltages_t[RAW_ARRAY_SIZE];
@@ -42,6 +42,9 @@ extern volatile float raw_voltages_t[RAW_ARRAY_SIZE];
 
 extern volatile float raw_currents[RAW_ARRAY_SIZE];
 extern volatile float raw_currents_t[RAW_ARRAY_SIZE];
+
+extern float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
+extern float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 #endif /* DSP_C */
 
 void reverse_voltage_gain();

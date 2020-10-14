@@ -81,6 +81,4 @@ void print(char fstr[], ...)
 	}
 
 	va_end(vaargs);
-
-	USART_NEWLINE;
 }

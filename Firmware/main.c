@@ -12,8 +12,7 @@
 
 
 /* #define ENABLE_TESTING */
-
-volatile char calc_complete = 0;
+volatile unsigned enable_zc = 1;
 
 int main()
 {
@@ -32,11 +31,21 @@ int main()
 	sei();
 
 	while (1) {
-		if (complete_sampling && !calc_complete) {
+		if (!currently_sampling && !enable_zc) {
+			unsigned i = 0;
+			
 			adc2real_voltage();
 			adc2real_current();
 			cubic_interpolate();
-			calc_complete = 1;
+			
+			print("V\r[");
+			for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
+				print("%f ", interpolated_voltages[i]);
+			}
+			print("]\r");
+			
+			enable_zc = 1;
+			// cubic_interpolate();
 /*
 			reverse_voltage_gain();
 			reverse_current_gain();
