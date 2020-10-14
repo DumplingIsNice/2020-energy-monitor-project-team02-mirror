@@ -271,3 +271,16 @@ void check_cycle_complete()
 	}
 */
 }
+
+
+float NumericalIntegreat(float input[35]){
+	float numericalResult = input[0];
+	for(uint8_t i = 1; i <33 ; i= i+2){
+		numericalResult = numericalResult+input[i]*4;
+		numericalResult = numericalResult+input[i+1]*2;
+	}
+	numericalResult = numericalResult+input[33]*4;
+	numericalResult = numericalResult + input[32];
+	numericalResult = numericalResult*(0.5/3);
+	return numericalResult;
+}
