@@ -56,7 +56,7 @@ void Disp_Set(float val) {
 	
 	extract_digits(val, &ones, &tens, &hundreds);
 	extractTenths(val, &tenths);
-	extractHundredths(val, &hundredths)
+	extractHundredths(val, &hundredths);
 	
 	placeValues[0] = tens;
 	placeValues[1] = ones;

@@ -9,6 +9,7 @@
 #include <math.h>
 #include <avr/interrupt.h>
 
+#define PI 3.141592
 #define CUBE(x) (x * x * x)
 #define SQUARE(x) (x * x)
 
@@ -103,18 +104,13 @@ void calculate_rms()
 {
 	unsigned i;
 	const float period = 0.02;
-	float current_integral, voltage_integral;
 
-	/* Square */
+	/* Interpolated voltage is now array of (V * I) */
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
-		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
-		interpolated_currents[i] = SQUARE(interpolated_currents[i]);
+		interpolated_voltages[i] = interpolated_voltages[i] * interpolated_currents[i];
 	}
 	
-	voltage_integral = numerical_integreat(interpolated_voltages) / period;
-	current_integral = numerical_integreat(interpolated_currents) / period;
-		
-	power = sqrt(voltage_integral * current_integral);
+	power = numerical_integreat(interpolated_voltages) / period;
 }
 
 /* Convert ADC Value (0 - 1023) to Real Analogue Sensor Voltage Value */
