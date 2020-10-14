@@ -65,16 +65,10 @@ ISR(ADC_vect)
 		adc_voltages[adc_voltages_head] = ADC;
 		adc_voltages_t[adc_voltages_head] = miliseconds;
 		++adc_voltages_head;
-
-		/* Switch the channel of the next sample */
-		adc_set_channel(ADC_CH_CURRENT);
 	} else {
 		adc_currents[adc_currents_head] = ADC;
 		adc_currents_t[adc_currents_head] = miliseconds;
 		++adc_currents_head;
-
-		/* Switch the channel of the next sample */
-		adc_set_channel(ADC_CH_VOLTAGE);
 	}
 
 	miliseconds++;

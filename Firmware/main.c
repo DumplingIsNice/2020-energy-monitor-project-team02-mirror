@@ -13,6 +13,7 @@
 
 /* #define ENABLE_TESTING */
 volatile unsigned enable_zc = 1;
+static unsigned sampeled_voltage_current = 0;
 
 int main()
 {
@@ -32,24 +33,30 @@ int main()
 
 	while (1) {
 		if (!currently_sampling && !enable_zc) {
-			unsigned i = 0;
+			if (sampeled_voltage_current) {
+				unsigned i = 0;
 			
-			adc2real_voltage();
-			adc2real_current();
-			cubic_interpolate();
+				adc2real_voltage();
+				adc2real_current();
+				cubic_interpolate();
 			
-			print("V\r[");
-			for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
-				print("%f ", interpolated_voltages[i]);
+				print("raw V\r[");
+				for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+					print("%f ", raw_voltages[i]);
+				}
+				print("]\r");
+			
+				print("intr V\r[");
+				for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
+					print("%f ", interpolated_voltages[i]);
+				}
+				print("]\r");
+
+				sampeled_voltage_current = 0;
+				enable_zc = 1;
+			} else { /* We still need to sample current */
+				sampeled_voltage_current = enable_zc = 1;
 			}
-			print("]\r");
-			
-			enable_zc = 1;
-			// cubic_interpolate();
-/*
-			reverse_voltage_gain();
-			reverse_current_gain();
-*/
 		}
 	}
 

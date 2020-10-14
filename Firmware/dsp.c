@@ -40,14 +40,16 @@ float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 static volatile int16_t elapsed_cycle_time = 0;
 
 /* Cubic interpolate between a two points */
-static float cubic_point(float t, float yleft, float y0, float y1, float yright)
+static float cubic_point(float x, float y0, float y1, float y2, float y3)
 {
-	float a = (-1 / 2 * yleft) + (3 / 2 * y0) - (3 / 2 * y1) + (1 / 2 * yright);
-	float b = yleft - (5 / 2 * y0) + (2 * y1) - (1 / 2 * yright);
-	float c = (-1 / 2 * yleft) + (1 / 2 * y1);
-	float d = y0;
-
-	return (a * CUBE(t)) + (b * SQUARE(t)) + (c * t) + (d);
+	float a = (-1.f / 2 * y0) + (3.f / 2 * y1) - (3.f / 2 * y2) + (1.f / 2 * y3);
+	float b = y0 - (5.f / 2 * y1) + (2.f * y2) - (1.f / 2 * y3);
+	float c = (-1.f / 2 * y0) + (1.f / 2 * y2);
+	float d = y1;
+	
+	print("%fx^3 + %fx^2 + %fx + %f\r", a, b, c, d);
+	
+	return (a * CUBE(x)) + (b * SQUARE(x)) + (c * x) + (d);
 }
 
 /* Cubic interpolate the raw arrays */
@@ -65,7 +67,7 @@ void cubic_interpolate()
 		interpolated_voltages[j++] = cubic_point(0.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
 	}
 	/* Last point is extrapolated */
-	interpolated_voltages[j++] = cubic_point(1.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
+	interpolated_voltages[j] = cubic_point(1.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
 
 	/* Current */
 	interpolated_currents[0] = raw_currents[0];
@@ -185,8 +187,13 @@ ISR(INT0_vect)
 	/* Zero crossing indicates the start or end of a cycle of sampling */
 	if (!currently_sampling && enable_zc) {
 		currently_sampling = 1;
-		adc_set_channel(ADC_CH_VOLTAGE); /* Implicitly assumes voltage is first sample */
 		adc_voltages_head = adc_currents_head = 0;
+		/* Change the channel we will sample next */ 
+		if (current_adc_channel == ADC_CH_VOLTAGE) {
+			adc_set_channel(ADC_CH_CURRENT);
+		} else {
+			adc_set_channel(ADC_CH_VOLTAGE);
+		}
 		timer0_reset();
 	} else if (currently_sampling && enable_zc) {
 		currently_sampling = 0;
