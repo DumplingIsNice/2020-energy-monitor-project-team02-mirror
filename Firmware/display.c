@@ -52,8 +52,9 @@ void Disp_Init(void) {
 *	UART functions made previously to extract digits of a float value.
 */
 void Disp_Set(float val) {
+#if 0
 	uint16_t hundreds, tens, ones, tenths, hundredths = 0;
-	
+
 	extract_digits(val, &ones, &tens, &hundreds);
 	extractTenths(val, &tenths);
 	extractHundredths(val, &hundredths);
@@ -64,12 +65,12 @@ void Disp_Set(float val) {
 	placeValues[3] = hundredths;
 	
 	
-	
+
 	//placeValues[3] = val%10;
 	//placeValues[2] = (val%100 - placeValues[3])/10;
 	//placeValues[1] = (val%1000 - placeValues[2]*10 - placeValues[3])/100;
 	//placeValues[0] = (val - val%1000)/1000;
-	
+#endif /* 0 */
 }
 
 

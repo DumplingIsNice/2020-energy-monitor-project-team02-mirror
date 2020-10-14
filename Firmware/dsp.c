@@ -43,7 +43,7 @@ float power = 0;
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
 
-/*static float numerical_intergreat(float *input)
+static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
 	
@@ -58,19 +58,20 @@ static volatile int16_t elapsed_cycle_time = 0;
 
 	return numericalResult;
 }
-*/
+/*
 
 static float numerical_intergreater(float *input){ // Using Boole's rule
 	
 	float numericalResult = input[0] * 7;
 	
-	for(uint8_t i = 1; i < 32; i = i +5){
-		numericalResult += 32*input[i]+12*input[i+1] +32*input[i+2] + 14*input[i+3];
+	for(uint8_t i = 1; i < 32; i = i + 5){
+		numericalResult += 32 * input[i] + 12 * input[i + 1] + 32 * input[i + 2] + 14 * input[i + 3];
 	}
-	numericalResult += 32*input[33]+12*input[34] +32*input[35] + 14*input[36];
+	numericalResult += 32 * input[33] + 12 * input[34] + 32 * input[35] + 14 * input[36];
 	return numericalResult;
 	
 }
+*/
 
 /* Cubic interpolate between a two points */
 static float cubic_point(float x, float y0, float y1, float y2, float y3)
@@ -91,25 +92,29 @@ void cubic_interpolate()
 	/* Voltage */
 	/* First point is the same */
 	interpolated_voltages[0] = raw_voltages[0];
-	for (i = j = 1; i < RAW_ARRAY_SIZE - 1; ++i) {
+	interpolated_voltages[1] = cubic_point(0.5, 2 * raw_voltages[0] - raw_voltages[1], raw_voltages[0], raw_voltages[1], raw_voltages[2]);
+	for (i = 1, j = 2; i < RAW_ARRAY_SIZE - 1; ++i) {
 		/* Original Point (y0) */
 		interpolated_voltages[j++] = cubic_point(0, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
 		/* Create new (Missing) Mid-Point */
 		interpolated_voltages[j++] = cubic_point(0.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
 	}
 	/* Last point is extrapolated */
-	interpolated_voltages[j] = cubic_point(1.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
+	interpolated_voltages[j++] = raw_voltages[i];
+	interpolated_voltages[j] = raw_voltages[i];
 
 	/* Current */
 	interpolated_currents[0] = raw_currents[0];
-	for (i = j = 1; i < RAW_ARRAY_SIZE - 1; ++i) {
+	interpolated_currents[1] = cubic_point(0.5, 2 * raw_currents[0] - raw_currents[1], raw_currents[0], raw_currents[1], raw_currents[2]);
+	for (i = 1, j = 2; i < RAW_ARRAY_SIZE - 1; ++i) {
 		/* Original Point (y0) */
 		interpolated_currents[j++] = cubic_point(0, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
 		/* Create new (Missing) Mid-Point */
 		interpolated_currents[j++] = cubic_point(0.5, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
 	}
 	/* Last point is extrapolated */
-	interpolated_currents[j++] = cubic_point(1.5, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
+	interpolated_currents[j++] = raw_currents[i];
+	interpolated_currents[j] = raw_currents[i];
 
 }
 
@@ -123,7 +128,7 @@ void calculate_rms()
 		interpolated_voltages[i] = interpolated_voltages[i] * interpolated_currents[i];
 	}
 	
-	power = numerical_intergreater(interpolated_voltages) / period;
+	power = numerical_intergreat(interpolated_voltages) / period;
 }
 
 /* Convert ADC Value (0 - 1023) to Real Analogue Sensor Voltage Value */
