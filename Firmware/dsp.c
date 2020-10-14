@@ -43,7 +43,7 @@ float power = 0;
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
 
-static float numerical_integreat(float *input)
+/*static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
 	
@@ -57,6 +57,19 @@ static float numerical_integreat(float *input)
 	numericalResult = numericalResult * (0.0005 / 3);
 
 	return numericalResult;
+}
+*/
+
+static float numerical_intergreater(float *input){ // Using Boole's rule
+	
+	float numericalResult = input[0] * 7;
+	
+	for(uint8_t i = 1; i < 32; i = i +5){
+		numericalResult += 32*input[i]+12*input[i+1] +32*input[i+2] + 14*input[i+3];
+	}
+	numericalResult += 32*input[33]+12*input[34] +32*input[35] + 14*input[36];
+	return numericalResult;
+	
 }
 
 /* Cubic interpolate between a two points */
@@ -110,7 +123,7 @@ void calculate_rms()
 		interpolated_voltages[i] = interpolated_voltages[i] * interpolated_currents[i];
 	}
 	
-	power = numerical_integreat(interpolated_voltages) / period;
+	power = numerical_intergreater(interpolated_voltages) / period;
 }
 
 /* Convert ADC Value (0 - 1023) to Real Analogue Sensor Voltage Value */
