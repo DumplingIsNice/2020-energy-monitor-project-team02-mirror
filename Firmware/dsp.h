@@ -45,23 +45,20 @@ extern volatile float raw_currents_t[RAW_ARRAY_SIZE];
 
 extern float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 extern float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
-#endif /* DSP_C */
 
-void reverse_voltage_gain();
-void reverse_current_gain();
+extern float power;
+#endif /* DSP_C */
 
 void adc2real_voltage();
 void adc2real_current();
 void cubic_interpolate();
+void calculate_rms();
 
 /* Record elapsed time at cycle completion */
 void set_elapsed_cycle();
 
 /* Returns the calculated period of current sample */
 uint16_t get_period();
-
-/* Checks if the required cycles have elapsed (For future use) */
-void check_cycle_complete();
 
 /* Initializes voltage zero crossing interrupt */
 void voltage_zc_interrupt_init();

@@ -6,6 +6,7 @@
 #include "timer0.h"
 
 #include <string.h>
+#include <math.h>
 #include <avr/interrupt.h>
 
 #define CUBE(x) (x * x * x)
@@ -35,9 +36,27 @@ volatile float raw_currents_t[RAW_ARRAY_SIZE];
 float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 
+float power = 0;
+
 /* Zero Crossing Interrupt */
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
+
+static float numerical_integreat(float *input)
+{
+	float numericalResult = input[0];
+	
+	for(uint8_t i = 1; i <33 ; i= i+2){
+		numericalResult = numericalResult + input[i] * 4;
+		numericalResult = numericalResult + input[i + 1] * 2;
+	}
+	
+	numericalResult = numericalResult + input[33] * 4;
+	numericalResult = numericalResult + input[34];
+	numericalResult = numericalResult * (0.0005 / 3);
+
+	return numericalResult;
+}
 
 /* Cubic interpolate between a two points */
 static float cubic_point(float x, float y0, float y1, float y2, float y3)
@@ -46,9 +65,7 @@ static float cubic_point(float x, float y0, float y1, float y2, float y3)
 	float b = y0 - (5.f / 2 * y1) + (2.f * y2) - (1.f / 2 * y3);
 	float c = (-1.f / 2 * y0) + (1.f / 2 * y2);
 	float d = y1;
-	
-	print("%fx^3 + %fx^2 + %fx + %f\r", a, b, c, d);
-	
+		
 	return (a * CUBE(x)) + (b * SQUARE(x)) + (c * x) + (d);
 }
 
@@ -82,29 +99,47 @@ void cubic_interpolate()
 
 }
 
+void calculate_rms()
+{
+	unsigned i;
+	const float period = 0.02;
+	float current_integral, voltage_integral;
+
+	/* Square */
+	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
+		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
+		interpolated_currents[i] = SQUARE(interpolated_currents[i]);
+	}
+	
+	voltage_integral = numerical_integreat(interpolated_voltages) / period;
+	current_integral = numerical_integreat(interpolated_currents) / period;
+		
+	power = sqrt(voltage_integral * current_integral);
+}
+
 /* Convert ADC Value (0 - 1023) to Real Analogue Sensor Voltage Value */
 void adc2real_voltage()
 {
 	int i;
 
-	float vOffset = 2.1;
+	const float vOffset = 2.1;
 	
 	// Voltage divider inverse gain
-	uint16_t Rb1 = 3300;
-	uint16_t Ra1 = 56000;
-	float dividerGain = 1/(float)(Rb1/(float)(Ra1 + Rb1));
+	const uint16_t Rb1 = 3300;
+	const uint16_t Ra1 = 56000;
+	const float dividerGain = 1/ (float) (Rb1 / (float) (Ra1 + Rb1));
 	
 	
 	// Voltage amplifier gain
-	uint16_t R2 = 4700;
-	uint16_t R1 = 4700;
-	float amplifierGain =  1/(float)(R2/((float)R1));
+	const uint16_t R2 = 4700;
+	const uint16_t R1 = 4700;
+	const float amplifierGain =  1 / (float) (R2 / ((float) R1));
 
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 		/* The voltage values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw voltage values
 		 */
-		/* raw_voltages[i] = 0.0877427 * raw_voltages[i] - 37.7365; */
+		/* raw_voltages[i] = (float) 0.0877427 * raw_voltages[i] - (float) 37.7365; */
 		raw_voltages[i] = ((5 * adc_voltages[i] / 1024.f) - vOffset) * dividerGain * amplifierGain;
 	}
 }
@@ -113,70 +148,29 @@ void adc2real_voltage()
 void adc2real_current()
 {
 	int i;
+
+	const float vOffset = 2.1;
+	
+	// Voltage divider inverse gain
+	const float Rs1 = 0.56;
+	const float dividerGain = 1 / (float) (Rs1);
+	
+	
+	// Voltage amplifier gain
+	const uint16_t R2 = 56000;
+	const uint16_t R1 = 22000;
+	const float amplifierGain =  1 / (float) (R2 / ((float) R1));
+	
+		
+	
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 		/* The voltage values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw voltage values
 		 */
-		raw_currents[i] = 0.0034253 * raw_currents[i] - 1.4731673;
+		/* raw_currents[i] = 0.0034253 * raw_currents[i] - 1.4731673; */
+		raw_currents[i] = ((5 * adc_currents[i] / 1024.f) - vOffset) * dividerGain * amplifierGain;
 	}
 }
-
-#if 0
-/* Remove the gain and shifts added by all the analogue circuitry to get
- * back the original sensor voltage value
- */
-void reverse_voltage_gain()
-{
-	int i;
-	float vOffset = 2.1;
-
-	// Voltage divider inverse gain
-	uint16_t Rb1 = 3300;
-	uint16_t Ra1 = 56000;
-	float dividerGain = (float)(Rb1/(float)(Ra1 + Rb1));
-
-
-	// Voltage amplifier gain
-	uint16_t R2 = 4700;
-	uint16_t R1 = 4700;
-	float amplifierGain =  (float)(R2/((float)R1));
-
-	//float reversedVoltage = (dividerGain * amplifierGain * adc_voltage) - vOffset;
-	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-		/* The voltage values in raw_currents are actually the ADC values
-		 * Overwrite them with the actual raw voltage values
-		 */
-		raw_voltages[i] = (raw_voltages[i] - vOffset) / (dividerGain * amplifierGain);
-	}
-}
-
-/* Remove the gain and shifts added by all the analogue circuitry to get
- * back the original sensor current value
- */
-void reverse_current_gain()
-{
-	int i;
-	float vOffset = 2.1;
-	
-	
-	// Voltage divider inverse gain
-	float Rs1 = 0.56;
-	float dividerGain = (float)(Rs1);
-	
-	
-	// Voltage amplifier gain
-	uint16_t R2 = 56000;
-	uint16_t R1 = 22000;
-	float amplifierGain =  (float)(R2/((float)R1));
-	
-	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-		/* The current values in raw_currents are actually the ADC values
-		 * Overwrite them with the actual raw current values
-		 */
-		raw_currents[i] = (raw_currents[i] - vOffset) / (dividerGain * amplifierGain);
-	}
-}
-#endif /* 0 */
 
 ISR(INT0_vect)
 {
@@ -225,33 +219,4 @@ void set_elapsed_cycle()
 uint16_t get_period()
 {
 	return elapsed_cycle_time / CYCLE_SAMPLED;
-}
-
-/* Checks if the required cycles have elapsed */
-void check_cycle_complete()
-{
-/*
-	static int cycles = 0;
-	
-	if (cycles >= CYCLE_SAMPLED - 1){
-		signal_start = false;
-		cycles = 0;
-	} else if (cycles < CYCLE_SAMPLED - 1){
-		signal_start = true;
-		cycles++;
-	}
-*/
-}
-
-
-float NumericalIntegreat(float input[35]){
-	float numericalResult = input[0];
-	for(uint8_t i = 1; i <33 ; i= i+2){
-		numericalResult = numericalResult+input[i]*4;
-		numericalResult = numericalResult+input[i+1]*2;
-	}
-	numericalResult = numericalResult+input[33]*4;
-	numericalResult = numericalResult + input[32];
-	numericalResult = numericalResult*(0.5/3);
-	return numericalResult;
 }

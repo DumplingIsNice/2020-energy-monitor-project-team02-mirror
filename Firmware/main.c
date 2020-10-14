@@ -39,19 +39,8 @@ int main()
 				adc2real_voltage();
 				adc2real_current();
 				cubic_interpolate();
-			
-				print("raw V\r[");
-				for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
-					print("%f ", raw_voltages[i]);
-				}
-				print("]\r");
-			
-				print("intr V\r[");
-				for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
-					print("%f ", interpolated_voltages[i]);
-				}
-				print("]\r");
-
+				calculate_rms();		
+				print("P %f\r", power);		
 				sampeled_voltage_current = 0;
 				enable_zc = 1;
 			} else { /* We still need to sample current */
