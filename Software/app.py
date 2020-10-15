@@ -17,11 +17,11 @@ def index():
 def add_record():
 	pass
 
-@app.route("add/records", methods=['POST'])
+@app.route("/add/records", methods=['POST'])
 def add_records():
 	pass
 
-@app.route("delete/records", methods=['POST'])
+@app.route("/delete/records", methods=['POST'])
 def delete_records():
 	pass
 
