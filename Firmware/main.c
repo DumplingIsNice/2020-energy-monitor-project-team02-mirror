@@ -13,7 +13,6 @@
 
 /* #define ENABLE_TESTING */
 volatile unsigned enable_zc = 1;
-static unsigned sampeled_voltage_current = 0;
 
 int main()
 {
@@ -21,7 +20,10 @@ int main()
 	extern void test_function();
 	test_function();
 #endif /* ENABLE_TESTING */
+	unsigned sampeled_voltage_current = 0;
+
 	DDRB = 0xFF;
+
 	/* Initalisation code */
 	usart_init();
 	adc_init();

@@ -29,19 +29,14 @@ extern int current_adc_channel;
 extern volatile unsigned currently_sampling;
 
 extern volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
-extern volatile unsigned adc_voltages_t[RAW_ARRAY_SIZE];
 extern volatile unsigned adc_voltages_head;
 
 extern volatile unsigned adc_currents[RAW_ARRAY_SIZE];
-extern volatile unsigned adc_currents_t[RAW_ARRAY_SIZE];
 extern volatile unsigned adc_currents_head;
 
 /* Reverse Gained array of values */
-extern volatile float raw_voltages[RAW_ARRAY_SIZE];
-extern volatile float raw_voltages_t[RAW_ARRAY_SIZE];
-
-extern volatile float raw_currents[RAW_ARRAY_SIZE];
-extern volatile float raw_currents_t[RAW_ARRAY_SIZE];
+extern float raw_voltages[RAW_ARRAY_SIZE];
+extern float raw_currents[RAW_ARRAY_SIZE];
 
 extern float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 extern float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
@@ -53,9 +48,6 @@ void adc2real_voltage();
 void adc2real_current();
 void cubic_interpolate();
 void calculate_rms();
-
-/* Record elapsed time at cycle completion */
-void set_elapsed_cycle();
 
 /* Returns the calculated period of current sample */
 uint16_t get_period();

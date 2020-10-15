@@ -30,11 +30,8 @@ volatile unsigned adc_currents_t[RAW_ARRAY_SIZE];
 volatile unsigned adc_currents_head;  /* index to next free space in array */
 
 /* Reverse Gained array of values */
-volatile float raw_voltages[RAW_ARRAY_SIZE];
-volatile float raw_voltages_t[RAW_ARRAY_SIZE];
-
-volatile float raw_currents[RAW_ARRAY_SIZE];
-volatile float raw_currents_t[RAW_ARRAY_SIZE];
+float raw_voltages[RAW_ARRAY_SIZE];
+float raw_currents[RAW_ARRAY_SIZE];
 
 float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
@@ -45,7 +42,7 @@ float power = 0;
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
 
-
+/* Using Simpson's Rule */
 static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
@@ -61,20 +58,6 @@ static float numerical_intergreat(float *input)
 
 	return numericalResult;
 }
-
-
-/*
-static float numerical_intergreater(float *input){ // Using Boole's rule
-	
-	float numericalResult = input[0] * 7;
-
-	for(uint8_t i = 1; i < 32; i = i +4){
-		numericalResult += 32*input[i]+12*input[i+1] +32*input[i+2] + 14*input[i+3];
-	}
-	numericalResult += 32*input[33]+12*input[34] +32*input[35] + 7*input[36];
-	return numericalResult*(0.001/45);
-}
-*/
 
 /* Cubic interpolate between a two points */
 static float cubic_point(float x, float y0, float y1, float y2, float y3)
@@ -217,7 +200,7 @@ ISR(INT0_vect)
 		currently_sampling = 0;
 		enable_zc = 0;
 		timer0_stop();
-		set_elapsed_cycle();
+		elapsed_cycle_time = miliseconds;
 
 		/* Force sample the ADC one more time to get 20 samples */
 		SET_PORT(ADCSRA, ADSC);
@@ -235,11 +218,6 @@ void voltage_zc_interrupt_init()
 	/* Changing Edge trigger 
 	EICRA |= (1 << ISC00); 
 	EICRA &= ~(1 << ISC01); */
-}
-
-void set_elapsed_cycle()
-{
-	elapsed_cycle_time = miliseconds;
 }
 
 /* Returns the calculated period of current sample */

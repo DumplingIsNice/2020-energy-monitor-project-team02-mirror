@@ -15,10 +15,7 @@
 
 extern volatile uint16_t miliseconds;
 
-/* Initialise Timer0 */
 void timer0_init();
-
-/* Starts and stops timer0 */
 void timer0_reset();
 void timer0_stop();
 
