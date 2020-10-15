@@ -45,21 +45,23 @@ float power = 0;
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
 
+
 static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
 
-	for(uint8_t i = 1; i < 33 ; i= i+2){
+	for(uint8_t i = 1; i < 37 ; i= i+2){
 		numericalResult = numericalResult + input[i] * 4;
 		numericalResult = numericalResult + input[i + 1] * 2;
 	}
 
-	numericalResult = numericalResult + input[33] * 4;
-	numericalResult = numericalResult + input[34];
+	numericalResult = numericalResult + input[37] * 4;
+	numericalResult = numericalResult + input[38];
 	numericalResult = numericalResult * (0.0005 / 3);
 
 	return numericalResult;
 }
+
 
 /*
 static float numerical_intergreater(float *input){ // Using Boole's rule
