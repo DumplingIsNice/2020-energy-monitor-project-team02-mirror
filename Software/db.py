@@ -4,39 +4,45 @@
 ## This module is going to impliment a sort of database to store and laod values
 ##	for the Voltage, Current, Power etc. that we get from the microcontroller
 
-### The database format is described in ./README.md
+### The database format is described below
+# Records are stored in the following order, in the following format:
+#
+# power peak_current rms_voltage energy
+#
+# Each vlaue is space-deliminated
+# Each line represents the next point in time, a time
 
 import os
 
-class db:
-	def __int__(self, filepath=None):
-		# We have been given a file path, load the database in
-		if filepath:
-			# Stuff to do with the actual file
-			self.load_database(filepath)
-		else:
-			self.filename = None
-			self.filesize = None
 
-		# Stuff to do with database elements
-		# First row of database file, the actual data fields (i.e. Voltage, Current etc.)
-		self.fields = []
-		# Dictionary of form: {'field_name':[field_values]}
-		self.fieldValues = {}
+filepath = "record.txt"
 
-	def add_field(self, fieldName):
-		pass;
+# Store a single record
+# (dictionary with 'power' 'pk_current' 'rms_voltage' and 'energy' keys)
+def store_record(record):
+	file = open(filepath, "a")
+	write_string = str(record['power']) + ' ' + str(record['pk_current']) + ' ' + str(record['rms_voltage']) + ' ' + str(record['energy'])
+	file.write(write_string + '\n')
+	file.close()
 
-	def remove_field(self, fieldName):
-		pass;
+# Store a list of records
+# (list of dictionaries with each dictionary having 'power' 'pk_current' 'rms_voltage' and 'energy' keys)
+def store_records(records):
+	file = open(filepath, "a")
+	for record in records:
+		write_string = str(record['power']) + ' ' + str(record['pk_current']) + ' ' + str(record['rms_voltage']) + ' ' + str(record['energy'])
+		file.write(write_string + '\n')
+	file.close()
 
-	def add_value(self, fieldName):
-		pass;
+# reutrns a list of dictionaries with the keys 'power' 'pk_current' 'rms_voltage' and 'energy'
+def load_records():
+	records = [{}]
+	file = open(filepath, "a")
+	for line in file:
+		tokenised = line.split(' ')
+		records.append({'power': float(tokenised[0]), 'pk_current': float(tokenised[1]), 'rms_voltage': float(tokenised[2]), 'energy': float(tokenised[3])})
+	file.close()
+	return records;
 
-	def remove_value(self, fieldName):
-		pass;
-
-	# Load a database from a given filepath
-	# File path can be with or without extention (i.e.: 'one.db' is the same as 'one')
-	def load_database(self, filepath):
-		pass # TODO: Impliment
+def wipe_records():
+	os.remove(filepath)

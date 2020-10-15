@@ -18,7 +18,7 @@ OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o obj/dsp.o obj/displ
 CFLAGS_DEBUG=-g3 -gdwarf-2 -O0 -Wall -Wextra
 
 # Compiler and Linker Flags
-CFLAGS=-mmcu=atmega328p $(CFLAGS_DEBUG)
+CFLAGS=-mmcu=atmega328p -O0 $(CFLAGS_DEBUG)
 LDFLAGS=-mmcu=atmega328p
 
 # Default Compiler/Linker Flags Used by Atmel Studio 7 On Windows.
