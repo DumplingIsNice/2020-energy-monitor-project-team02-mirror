@@ -17,7 +17,7 @@ extern int current_adc_channel;
 #define CYCLE_SAMPLED 1
 #define RAW_ARRAY_SIZE (20 * CYCLE_SAMPLED)
 /* Assuming we create one new point per sample point, we get (2n - 2) new points */
-#define INTERPOLATED_ARRAY_SIZE (2 * RAW_ARRAY_SIZE)
+#define INTERPOLATED_ARRAY_SIZE (2 * RAW_ARRAY_SIZE - 1)
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
 /* The extern forward decleration in the same file as the variable definition

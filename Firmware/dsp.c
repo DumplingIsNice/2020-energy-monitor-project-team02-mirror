@@ -15,8 +15,10 @@
 
 volatile unsigned currently_sampling = 0;
 
-/* Inital channel is voltage (we sample voltage first, then current) */
-int current_adc_channel = ADC_CH_VOLTAGE;
+/* Inital channel is voltage (we sample voltage first, then current)
+ * (Note the ZC interrupt will start with the opposit of the current channel)
+ */
+int current_adc_channel = ADC_CH_CURRENT;
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
 volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
@@ -46,18 +48,19 @@ static volatile int16_t elapsed_cycle_time = 0;
 static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
-	
-	for(uint8_t i = 1; i <33 ; i= i+2){
+
+	for(uint8_t i = 1; i < 33 ; i= i+2){
 		numericalResult = numericalResult + input[i] * 4;
 		numericalResult = numericalResult + input[i + 1] * 2;
 	}
-	
+
 	numericalResult = numericalResult + input[33] * 4;
 	numericalResult = numericalResult + input[34];
 	numericalResult = numericalResult * (0.0005 / 3);
 
 	return numericalResult;
 }
+
 /*
 static float numerical_intergreater(float *input){ // Using Boole's rule
 	
@@ -89,31 +92,38 @@ void cubic_interpolate()
 
 	/* Voltage */
 	/* First point is the same */
-	interpolated_voltages[0] = raw_voltages[0];
-	interpolated_voltages[1] = cubic_point(0.5, 2 * raw_voltages[0] - raw_voltages[1], raw_voltages[0], raw_voltages[1], raw_voltages[2]);
-	for (i = 1, j = 2; i < RAW_ARRAY_SIZE - 1; ++i) {
+	i = j = 0;
+	/* First point is the same */
+	interpolated_voltages[j++] = raw_voltages[i];
+	/* Point between first and second point is calculated a little differently (most inaccurate) */
+	interpolated_voltages[j++] = cubic_point(0.5, 2 * raw_voltages[i] - raw_voltages[i + 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
+	for (++i; i < 20 - 2; ++i) {
 		/* Original Point (y0) */
-		interpolated_voltages[j++] = cubic_point(0, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
+		interpolated_voltages[j++] = raw_voltages[i];
 		/* Create new (Missing) Mid-Point */
 		interpolated_voltages[j++] = cubic_point(0.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
 	}
-	/* Last point is extrapolated */
+	/* Point between second-to-last and last point is calculated a little differently (most inaccurate) */
 	interpolated_voltages[j++] = raw_voltages[i];
-	interpolated_voltages[j] = raw_voltages[i];
+	interpolated_voltages[j++] = cubic_point(0.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], 2 * raw_voltages[i + 1] - raw_voltages[i]);
+	interpolated_voltages[j++] = raw_voltages[++i];
 
 	/* Current */
-	interpolated_currents[0] = raw_currents[0];
-	interpolated_currents[1] = cubic_point(0.5, 2 * raw_currents[0] - raw_currents[1], raw_currents[0], raw_currents[1], raw_currents[2]);
-	for (i = 1, j = 2; i < RAW_ARRAY_SIZE - 1; ++i) {
+	i = j = 0;
+	/* First point is the same */
+	interpolated_currents[j++] = raw_currents[i];
+	/* Point between first and second point is calculated a little differently (most inaccurate) */
+	interpolated_currents[j++] = cubic_point(0.5, 2 * raw_currents[i] - raw_currents[i + 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
+	for (++i; i < 20 - 2; ++i) {
 		/* Original Point (y0) */
-		interpolated_currents[j++] = cubic_point(0, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
+		interpolated_currents[j++] = raw_currents[i];
 		/* Create new (Missing) Mid-Point */
 		interpolated_currents[j++] = cubic_point(0.5, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
 	}
-	/* Last point is extrapolated */
+	/* Point between second-to-last and last point is calculated a little differently (most inaccurate) */
 	interpolated_currents[j++] = raw_currents[i];
-	interpolated_currents[j] = raw_currents[i];
-
+	interpolated_currents[j++] = cubic_point(0.5, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], 2 * raw_currents[i + 1] - raw_currents[i]);
+	interpolated_currents[j++] = raw_currents[++i];
 }
 
 void calculate_rms()
@@ -206,7 +216,10 @@ ISR(INT0_vect)
 		enable_zc = 0;
 		timer0_stop();
 		set_elapsed_cycle();
-	} 
+
+		/* Force sample the ADC one more time to get 20 samples */
+		SET_PORT(ADCSRA, ADSC);
+	}
 }
 
 /* Initializes voltage zero crossing interrupt */
