@@ -36,10 +36,15 @@ float raw_currents[RAW_ARRAY_SIZE];
 float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 
+/* Array of (interpolated) V * (interpoloated) I */
+float instantanous_power[INTERPOLATED_ARRAY_SIZE];
+
 float power;
 float rms_voltage;
 float pk_current;
 float energy;
+
+static const float period = 0.02;
 
 /* Zero Crossing Interrupt */
 /* Currently sampling one cycle of the waveform at a time */
@@ -117,14 +122,11 @@ void cubic_interpolate()
 void calculate_power()
 {
 	unsigned i;
-	const float period = 0.02;
 
-	/* Interpolated voltage is now array of (V * I) */
-	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
-		interpolated_voltages[i] = interpolated_voltages[i] * interpolated_currents[i];
-	}
-	
-	power = numerical_intergreat(interpolated_voltages) / period;
+	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
+		instantanous_power[i] = interpolated_voltages[i] * interpolated_currents[i];
+
+	power = numerical_intergreat(instantanous_power) / period;
 }
 
 void calculate_energy()
@@ -132,8 +134,19 @@ void calculate_energy()
 
 }
 
+/* NOTE the RMS Voltage calculation should be done last as it overrides the
+ * interpolated_voltages array with the square of the interpolated voltages
+ */
 void calculate_rms_voltage()
 {
+	unsigned i;
+
+	/* WARNING: interpolated_voltages IS NOW SQUARED !!! */
+	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
+		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
+	}
+
+	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period);
 
 }
 

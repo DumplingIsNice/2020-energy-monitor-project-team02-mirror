@@ -39,10 +39,11 @@ int main()
 				adc2real_voltage();
 				adc2real_current();
 				cubic_interpolate();
-				calculate_rms_voltage();
-				calculate_pk_current();
+
 				calculate_power();
 				calculate_energy();
+				calculate_pk_current();
+				calculate_rms_voltage();
 
 				print("%f V(RMS)\r", rms_voltage);
 				print("%f A\r", pk_current);
