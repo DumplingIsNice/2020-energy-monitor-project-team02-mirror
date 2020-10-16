@@ -139,7 +139,10 @@ void calculate_rms_voltage()
 
 void calculate_pk_current()
 {
-
+	unsigned i;
+	for (pk_current = i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
+		if (interpolated_currents[i] > pk_current)
+			pk_current = interpolated_currents[i];
 }
 
 

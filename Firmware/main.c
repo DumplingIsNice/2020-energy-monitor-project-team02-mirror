@@ -47,7 +47,7 @@ int main()
 				print("%f V(RMS)\r", rms_voltage);
 				print("%f A\r", pk_current);
 				print("%f W\r", power);
-				print("%f J\r", energy);
+				print("%f J\r\r", energy);
 
 				sampeled_voltage_current = 0;
 				enable_zc = 1;
