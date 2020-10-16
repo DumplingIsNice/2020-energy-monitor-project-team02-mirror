@@ -170,6 +170,11 @@ void usart_print_float(float data) {
 		usart_transmit('.');
 		usart_transmit(tenths);
 		usart_transmit(hundredths);
+	} else if (hundreds == ZERO) {
+		usart_transmit(tens);
+		usart_transmit(ones);
+		usart_transmit('.');
+		usart_transmit(tenths);
 	} else {
 		usart_transmit(hundreds);
 		usart_transmit(tens);
