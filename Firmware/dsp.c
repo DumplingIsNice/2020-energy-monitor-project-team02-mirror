@@ -36,7 +36,10 @@ float raw_currents[RAW_ARRAY_SIZE];
 float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 
-float power = 0;
+float power;
+float rms_voltage;
+float pk_current;
+float energy;
 
 /* Zero Crossing Interrupt */
 /* Currently sampling one cycle of the waveform at a time */
@@ -111,7 +114,7 @@ void cubic_interpolate()
 	interpolated_currents[j++] = raw_currents[++i];
 }
 
-void calculate_rms()
+void calculate_power()
 {
 	unsigned i;
 	const float period = 0.02;
@@ -123,6 +126,22 @@ void calculate_rms()
 	
 	power = numerical_intergreat(interpolated_voltages) / period;
 }
+
+void calculate_energy()
+{
+
+}
+
+void calculate_rms_voltage()
+{
+
+}
+
+void calculate_pk_current()
+{
+
+}
+
 
 /* Convert ADC Value (0 - 1023) to Real Analogue Sensor Voltage Value */
 void adc2real_voltage()

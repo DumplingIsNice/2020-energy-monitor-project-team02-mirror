@@ -42,12 +42,18 @@ extern float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 extern float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 
 extern float power;
+extern float rms_voltage;
+extern float pk_current;
+extern float energy;
 #endif /* DSP_C */
 
 void adc2real_voltage();
 void adc2real_current();
 void cubic_interpolate();
-void calculate_rms();
+void calculate_power();
+void calculate_energy();
+void calculate_rms_voltage();
+void calculate_pk_current();
 
 /* Returns the calculated period of current sample */
 uint16_t get_period();

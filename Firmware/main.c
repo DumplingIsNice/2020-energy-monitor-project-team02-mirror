@@ -36,13 +36,19 @@ int main()
 	while (1) {
 		if (!currently_sampling && !enable_zc) {
 			if (sampeled_voltage_current) {
-				unsigned i = 0;
-			
 				adc2real_voltage();
 				adc2real_current();
 				cubic_interpolate();
-				calculate_rms();		
-				print("P %f\r", power);		
+				calculate_rms_voltage();
+				calculate_pk_current();
+				calculate_power();
+				calculate_energy();
+
+				print("%f V(RMS)\r", rms_voltage);
+				print("%f A\r", pk_current);
+				print("%f W\r", power);
+				print("%f J\r", energy);
+
 				sampeled_voltage_current = 0;
 				enable_zc = 1;
 			} else { /* We still need to sample current */
