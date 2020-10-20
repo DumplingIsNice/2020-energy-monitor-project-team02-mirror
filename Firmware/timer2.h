@@ -1,5 +1,5 @@
-#ifndef TIMER0_H_
-#define TIMER0_H_
+#ifndef TIMER2_H_
+#define TIMER2_H_
 
 /* TIMER2 */
 

@@ -53,7 +53,6 @@ int main()
 				print("%f A\r", pk_current);
 				print("%f W\r", power);
 				print("%f J\r", energy);
-				print("%f\r\r", period_ms * 1e-3);
 
 				sampeled_voltage_current = 0;
 				enable_zc = 1;

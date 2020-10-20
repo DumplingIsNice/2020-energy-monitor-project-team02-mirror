@@ -128,7 +128,7 @@ void calculate_power()
 /* NOTE: This funciton must be called after calculating power !! */
 void calculate_energy()
 {
-	energy = power * (period_ms * 1e-3);
+	energy += power * (period_ms * 1e-3);
 }
 
 /* NOTE the RMS Voltage calculation should be done last as it overrides the
