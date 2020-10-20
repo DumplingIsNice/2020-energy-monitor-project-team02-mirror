@@ -4,6 +4,12 @@
 // Sends an integer to display with number value input to the function
 void Disp_Send(uint8_t val);
 
+/* control signal control */
+
+void toggle_SH_ST();
+void toggle_SH_CP();
+void init_shift_reg();
+
 /* Display initialise */
 void Disp_Init(void);
 
@@ -16,7 +22,7 @@ void Disp_Set(float val);
 /* Function for displaying a specific type for value */
 /* Each function have a fixed DP point */
 
-void display_voltage(); // Dp at ds2
+void set_voltage_display(); // Dp at ds2
 
 void display_current(); // Dp at ds1
 
@@ -32,5 +38,14 @@ void position_on(uint8_t position);
 /* Returns the seven segment binary pattern of a digit */
 
 int8_t digit_to_sevenseg(int8_t number);
+
+/* Send the next digit to Disp_Send() and display position */
+void disp_scan_next();
+
+/* Sets flag to display next value in rotation */
+void disp_next_value();
+
+/* resets display parameters for next value */
+void disp_reset();
 
 #endif
