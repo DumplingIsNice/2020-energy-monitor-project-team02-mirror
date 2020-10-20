@@ -208,6 +208,7 @@ ISR(INT0_vect)
 			cycle_count = 0;
 		} else {
 			++cycle_count;
+			timer0_reset();
 		}
 	}
 }
