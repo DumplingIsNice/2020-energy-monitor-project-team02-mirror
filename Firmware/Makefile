@@ -11,7 +11,7 @@ LD=avr-ld
 BIN=FW.ELF
 
 # List of Object Files To Link (One per .c Source File)
-OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o obj/dsp.o obj/display.o obj/timer0.o
+OBJs=obj/main.o obj/uart.o obj/common.o obj/adc.o obj/test.o obj/dsp.o obj/display.o obj/timer0.o obj/timer2.o
 
 # Extra Debugging Flags
 # Note that Proteus expects the .elf to have debugging symbols in the dwarf verison 2 format (hence -gdwarf-2)
@@ -64,6 +64,10 @@ obj/display.o:display.c common.h
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
 obj/timer0.o:timer0.c common.h
+	@printf "\t - Compiling $< into $@\n"
+	@$(CC) -c $(CFLAGS) -o $@ $<
+
+obj/timer2.o:timer2.c common.h
 	@printf "\t - Compiling $< into $@\n"
 	@$(CC) -c $(CFLAGS) -o $@ $<
 
