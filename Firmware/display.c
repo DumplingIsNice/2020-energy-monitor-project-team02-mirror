@@ -9,11 +9,13 @@
 #define shiftRegOff PORTC &= ~(1<<PORTC5)
 
 /* Holds place value digits in an array, calculated using extract functions in UART */
-extern uint8_t placeValues[4] = {0,0,0,0};
+static uint8_t placeValues[4] = {0,0,0,0};
 
 /* Holds ports for each display (1 - 4 respectively) where displays[0] = Ds1, displays[1] = Ds2 etc */
 static uint8_t displays[4] = {(1<<PORTD4), (1<<PORTD5), (1<<PORTD6), (1<<PORTD7)};
 	
+/* Tracks energy consumed from start up. Ignore the first value. */
+static float energy_track = 0; 
 
 /* All potential numbers to display on the seven segment in array form for easy access */
 static const uint8_t sevenSegMapping[11] = {
@@ -68,7 +70,6 @@ void Disp_Set(float val)
 	placeValues[2] = tenths;
 	placeValues[3] = hundredths;
 }
-
 
 void Disp_Send(uint8_t val) {
 	/* SHIFT REGISTER WORKS ON RISING EDGE TRIGGER */
@@ -132,4 +133,30 @@ void position_on(uint8_t position)
 			PORTD &= ~displays[position-1];
 			break;
 	}
+}
+
+int8_t digit_to_sevenseg(int8_t number){
+	switch(number){
+		case 0:
+			return sevenSegMapping[0];
+		case 1:
+			return sevenSegMapping[1];
+		case 2:
+			return sevenSegMapping[2];
+		case 3:
+			return sevenSegMapping[3];
+		case 4:
+			return sevenSegMapping[4];
+		case 5:
+			return sevenSegMapping[5];
+		case 6:
+			return sevenSegMapping[6];
+		case 7:
+			return sevenSegMapping[7];
+		case 8:
+			return sevenSegMapping[8];
+		case 9:
+			return sevenSegMapping[9];
+	}
+	return 0;
 }

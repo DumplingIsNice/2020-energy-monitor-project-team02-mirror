@@ -20,7 +20,7 @@ void display_voltage(); // Dp at ds2
 
 void display_current(); // Dp at ds1
 
-void display_power(); // Dp at ds1
+void display_power(float power); // Dp at ds1
 
 void display_energy(); // This one require a persistant variable. Resets at certain value.
 
@@ -28,5 +28,9 @@ void display_energy(); // This one require a persistant variable. Resets at cert
 /* ds1 = 1; ds2 = 2; ds3 = 3; ds4 = 4 */
 
 void position_on(uint8_t position);
+
+/* Returns the seven segment binary pattern of a digit */
+
+int8_t digit_to_sevenseg(int8_t number);
 
 #endif
