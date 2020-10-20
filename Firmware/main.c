@@ -55,6 +55,7 @@ int main()
 			print("%f\r\r", period_ms * 1e-3);
 
 			currently_sampling = 0;
+			cycle_count = 0;
 			ENABLE_ZERO_CROSSING;
 		}
 	}

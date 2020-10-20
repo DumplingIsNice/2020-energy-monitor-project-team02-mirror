@@ -46,13 +46,13 @@ static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
 
-	for(uint8_t i = 1; i < 117 ; i= i+2){
+	for(uint8_t i = 1; i < 110 ; i= i+2){
 		numericalResult = numericalResult + input[i] * 4;
 		numericalResult = numericalResult + input[i + 1] * 2;
 	}
 
-	numericalResult = numericalResult + input[118] * 4;
-	numericalResult = numericalResult + input[119];
+	numericalResult = numericalResult + input[111] * 4;
+	numericalResult = numericalResult + input[112];
 	numericalResult = numericalResult * (0.0005/3);
 
 	return numericalResult;
@@ -80,7 +80,7 @@ void cubic_interpolate()
 	interpolated_values[j++] = raw_values[i];
 	/* Point between first and second point is calculated a little differently (most inaccurate) */
 	interpolated_values[j++] = cubic_point(0.5, 2 * raw_values[i] - raw_values[i + 1], raw_values[i], raw_values[i + 1], raw_values[i + 2]);
-	for (++i; i < 20 - 2; ++i) {
+	for (++i; i < RAW_ARRAY_SIZE - 2; ++i) {
 		/* Original Point (y0) */
 		interpolated_values[j++] = raw_values[i];
 		/* Create new (Missing) Mid-Point */
@@ -94,7 +94,7 @@ void cubic_interpolate()
 
 void calculate_power()
 {
-	power = numerical_intergreat(interpolated_values) / (period_ms * 1e-3);
+	power = numerical_intergreat(interpolated_values) / (57 * 1e-3);
 }
 
 /* NOTE: This funciton must be called after calculating power !! */

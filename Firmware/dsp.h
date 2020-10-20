@@ -16,9 +16,11 @@
 #define DISABLE_ZERO_CROSSING (EIMSK &= ~(1 << INT0))
 
 extern int current_adc_channel;
+extern int cycle_count;
+
 
 #define CYCLE_SAMPLED 3
-#define RAW_ARRAY_SIZE (20 * CYCLE_SAMPLED)
+#define RAW_ARRAY_SIZE (19 * CYCLE_SAMPLED)
 /* Assuming we create one new point per sample point, we get (2n - 2) new points */
 #define INTERPOLATED_ARRAY_SIZE (2 * RAW_ARRAY_SIZE - 1)
 
