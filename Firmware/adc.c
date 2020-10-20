@@ -37,7 +37,9 @@ ISR(ADC_vect)
 {
 	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
 	/*TGL_PORT(PORTB, PORTB5);*/
-	
+	if (currently_sampling >= 2)
+		print("current_sampling is 2!!\r");
+
 	*adc_pointers[currently_sampling] = ADC;
-	++adc_pointers[currently_sampling];
+	adc_pointers[currently_sampling]++;
 }

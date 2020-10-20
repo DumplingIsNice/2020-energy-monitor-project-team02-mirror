@@ -194,22 +194,22 @@ void adc2real_current()
 
 ISR(INT0_vect)
 {
-	if (currently_sampling == 2) {
+	
+	if (cycle_count == 3) {
+		++currently_sampling;
+		adc_set_channel(currently_sampling);
+		cycle_count = 0;
+	} else {
+		++cycle_count;
+		timer0_reset();
+	}
+
+	if (currently_sampling >= 2) {
 		timer0_stop;
 		DISABLE_ZERO_CROSSING;
 		adc_pointers[0] = adc_voltages;
 		adc_pointers[1] = adc_currents;
 		period_ms = 0.02;
-
-	} else {
-		adc_set_channel(currently_sampling);
-		if (cycle_count == 3) {
-			++currently_sampling;
-			cycle_count = 0;
-		} else {
-			++cycle_count;
-			timer0_reset();
-		}
 	}
 }
 
