@@ -44,8 +44,6 @@ float rms_voltage;
 float pk_current;
 float energy;
 
-static const float period = 0.02;
-
 /* Zero Crossing Interrupt */
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
@@ -126,12 +124,13 @@ void calculate_power()
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
 		instantanous_power[i] = interpolated_voltages[i] * interpolated_currents[i];
 
-	power = numerical_intergreat(instantanous_power) / period;
+	power = numerical_intergreat(instantanous_power) / (period_ms * 1e-3);
 }
 
+/* NOTE: This funciton must be called after calculating power !! */
 void calculate_energy()
 {
-
+	energy = power * (period_ms * 1e-3);
 }
 
 /* NOTE the RMS Voltage calculation should be done last as it overrides the
@@ -146,7 +145,7 @@ void calculate_rms_voltage()
 		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
 	}
 
-	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period);
+	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / (period_ms * 1e-3));
 
 }
 
@@ -223,7 +222,7 @@ ISR(INT0_vect)
 	/* Zero crossing indicates the start or end of a cycle of sampling */
 	if (!currently_sampling && enable_zc) {
 		currently_sampling = 1;
-		adc_voltages_head = adc_currents_head = 0;
+		period_ms = adc_voltages_head = adc_currents_head = 0;
 		/* Change the channel we will sample next */ 
 		if (current_adc_channel == ADC_CH_VOLTAGE) {
 			adc_set_channel(ADC_CH_CURRENT);
@@ -235,8 +234,8 @@ ISR(INT0_vect)
 		currently_sampling = 0;
 		enable_zc = 0;
 		timer0_stop();
-		elapsed_cycle_time = miliseconds;
-
+		/* Incriment it by one as the final timer interrupt won't occur */
+		++period_ms;
 		/* Force sample the ADC one more time to get 20 samples */
 		SET_PORT(ADCSRA, ADSC);
 	}
@@ -253,10 +252,4 @@ void voltage_zc_interrupt_init()
 	/* Changing Edge trigger 
 	EICRA |= (1 << ISC00); 
 	EICRA &= ~(1 << ISC01); */
-}
-
-/* Returns the calculated period of current sample */
-uint16_t get_period()
-{
-	return elapsed_cycle_time / CYCLE_SAMPLED;
 }

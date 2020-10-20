@@ -1,10 +1,10 @@
 #include "common.h"
 #include <avr/interrupt.h>
 
-volatile uint16_t miliseconds;
+volatile uint16_t period_ms;
 
 
-ISR(TIMER0_COMPA_vect) { }
+ISR(TIMER0_COMPA_vect) { ++period_ms; }
 
 // Counts every 1ms
 void timer0_init()
@@ -13,7 +13,7 @@ void timer0_init()
 
 	/* Select no clock initially (timer is stopped) and set timer counter to 0 */
 	CLR_PORT(TCCR0B, CS02), CLR_PORT(TCCR0B, CS01), CLR_PORT(TCCR0B, CS00);
-	TCNT0 = miliseconds = 0x00;
+	TCNT0 = period_ms = 0x00;
 
 	/* Setting interrupt on output compare match A */
 	SET_PORT(TIMSK0, OCIE0A);
@@ -36,7 +36,7 @@ void timer0_reset()
 #endif /* HARDWARE_BUILD */
 
 	/* reset the timer counter */
-	TCNT0 = miliseconds = 0x00;
+	TCNT0 = period_ms = 0x00;
 }
 
 void timer0_stop()

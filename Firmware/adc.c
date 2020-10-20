@@ -44,5 +44,4 @@ ISR(ADC_vect)
 	} else {
 		adc_currents[adc_currents_head++] = ADC;
 	}
-	miliseconds++;
 }

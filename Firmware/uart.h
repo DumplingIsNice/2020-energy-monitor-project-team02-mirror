@@ -37,4 +37,10 @@ void usart_print_string(char s[]);
 void usart_print_float(float data);
 void usart_print_integer(uint16_t x);
 void usart_print_array_intergers(uint16_t intArray[], uint16_t arrayLength); // Print out an array of POSITIVE integers. Inputs will be array of type int, and length of the array. Author: Hao Lin (22/08/2020)
+
+/* Number extraction functions */
+void extractHundredths(float data, uint16_t *hundredths);
+void extractTenths(float data, uint16_t *tenths);
+void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint16_t *hundreds);
+
 #endif /* UART_H */

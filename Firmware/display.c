@@ -33,7 +33,6 @@ static const uint8_t sevenSegMapping[11] = {
 };
 
 
-
 /* Display initialise */
 void Disp_Init(void) {
 	DDRD |= (1 << DDD4);
@@ -51,8 +50,8 @@ void Disp_Init(void) {
 *	Calculates place values for the number input along with decimal places. Makes use of 
 *	UART functions made previously to extract digits of a float value.
 */
-void Disp_Set(float val) {
-#if 0
+void Disp_Set(float val)
+{
 	uint16_t hundreds, tens, ones, tenths, hundredths = 0;
 
 	extract_digits(val, &ones, &tens, &hundreds);
@@ -64,13 +63,6 @@ void Disp_Set(float val) {
 	placeValues[2] = tenths;
 	placeValues[3] = hundredths;
 	
-	
-
-	//placeValues[3] = val%10;
-	//placeValues[2] = (val%100 - placeValues[3])/10;
-	//placeValues[1] = (val%1000 - placeValues[2]*10 - placeValues[3])/100;
-	//placeValues[0] = (val - val%1000)/1000;
-#endif /* 0 */
 }
 
 

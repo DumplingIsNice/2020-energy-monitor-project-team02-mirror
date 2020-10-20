@@ -26,7 +26,7 @@ static void ascii_convert(uint16_t *number)
 
 
 //	Extracts digits of a number below 1000. Author: Hao Lin (22/08/2020)
-static void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint16_t *hundreds)
+void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint16_t *hundreds)
 { 
 	*ones = number % 10;
 	*tens = (number % 100 - *ones) / 10;
@@ -37,7 +37,7 @@ static void extract_digits(uint16_t number, uint16_t *ones, uint16_t *tens, uint
 /*	Function to extract tenths place (1st digit after decimal place). Takes data and pointer to tenths variable.
 *	Defined as a static function because we do not use it outside of this file.
 */
-static void extractTenths(float data, uint16_t *tenths)
+void extractTenths(float data, uint16_t *tenths)
 {
 	uint16_t ones = 0, tens = 0, hundreds = 0;
 	extract_digits(data, &ones, &tens, &hundreds);
@@ -59,7 +59,7 @@ static void extractTenths(float data, uint16_t *tenths)
 /*	Function to extract hundredths place (2nd digit after decimal place), taking the data and the pointer to hundredths as an input.
 *	Defined as a static function because we do not use it outside of this file.
 */
-static void extractHundredths(float data, uint16_t *hundredths)
+void extractHundredths(float data, uint16_t *hundredths)
 {
 	uint16_t ones = 0, tens = 0, hundreds = 0, tenths = 0;
 	extract_digits(data, &ones, &tens, &hundreds);
