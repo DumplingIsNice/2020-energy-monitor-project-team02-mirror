@@ -25,7 +25,7 @@ int cycle_count = 0;
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
 volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
 volatile unsigned adc_currents[RAW_ARRAY_SIZE];
-unsigned *adc_pointers[2] = {adc_voltages, adc_currents};
+volatile unsigned *adc_pointers[2] = {adc_voltages, adc_currents};
 
 /* Reverse Gained array of values */
 float raw_values[RAW_ARRAY_SIZE];
@@ -205,7 +205,7 @@ ISR(INT0_vect)
 	}
 
 	if (currently_sampling >= 2) {
-		timer0_stop;
+		timer0_stop();
 		DISABLE_ZERO_CROSSING;
 		adc_pointers[0] = adc_voltages;
 		adc_pointers[1] = adc_currents;
