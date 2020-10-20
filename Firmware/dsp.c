@@ -28,11 +28,9 @@ volatile unsigned adc_currents[RAW_ARRAY_SIZE];
 unsigned *adc_pointers[2] = {adc_voltages, adc_currents};
 
 /* Reverse Gained array of values */
-float raw_voltages[RAW_ARRAY_SIZE];
-float raw_currents[RAW_ARRAY_SIZE];
+float raw_values[RAW_ARRAY_SIZE];
 
-float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
-float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
+float interpoalted_values[INTERPOLATED_ARRAY_SIZE];
 
 /* Array of (interpolated) V * (interpoloated) I */
 float instantanous_power[INTERPOLATED_ARRAY_SIZE];
@@ -83,19 +81,19 @@ void cubic_interpolate()
 	/* First point is the same */
 	i = j = 0;
 	/* First point is the same */
-	interpolated_voltages[j++] = raw_voltages[i];
+	interpoalted_values[j++] = raw_values[i];
 	/* Point between first and second point is calculated a little differently (most inaccurate) */
-	interpolated_voltages[j++] = cubic_point(0.5, 2 * raw_voltages[i] - raw_voltages[i + 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
+	interpoalted_values[j++] = cubic_point(0.5, 2 * raw_values[i] - raw_values[i + 1], raw_values[i], raw_values[i + 1], raw_values[i + 2]);
 	for (++i; i < 20 - 2; ++i) {
 		/* Original Point (y0) */
-		interpolated_voltages[j++] = raw_voltages[i];
+		interpoalted_values[j++] = raw_values[i];
 		/* Create new (Missing) Mid-Point */
-		interpolated_voltages[j++] = cubic_point(0.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
+		interpoalted_values[j++] = cubic_point(0.5, raw_values[i - 1], raw_values[i], raw_values[i + 1], raw_values[i + 2]);
 	}
 	/* Point between second-to-last and last point is calculated a little differently (most inaccurate) */
-	interpolated_voltages[j++] = raw_voltages[i];
-	interpolated_voltages[j++] = cubic_point(0.5, raw_voltages[i - 1], raw_voltages[i], raw_voltages[i + 1], 2 * raw_voltages[i + 1] - raw_voltages[i]);
-	interpolated_voltages[j++] = raw_voltages[++i];
+	interpoalted_values[j++] = raw_values[i];
+	interpoalted_values[j++] = cubic_point(0.5, raw_values[i - 1], raw_values[i], raw_values[i + 1], 2 * raw_values[i + 1] - raw_values[i]);
+	interpoalted_values[j++] = raw_values[++i];
 
 	/* Current */
 	i = j = 0;
@@ -120,7 +118,7 @@ void calculate_power()
 	unsigned i;
 
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
-		instantanous_power[i] = interpolated_voltages[i] * interpolated_currents[i];
+		instantanous_power[i] = interpoalted_values[i] * interpolated_currents[i];
 
 	power = numerical_intergreat(instantanous_power) / (period_ms * 1e-3);
 }
@@ -140,10 +138,10 @@ void calculate_rms_voltage()
 
 	/* WARNING: interpolated_voltages IS NOW SQUARED !!! */
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
-		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
+		interpoalted_values[i] = SQUARE(interpoalted_values[i]);
 	}
 
-	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / (period_ms * 1e-3));
+	rms_voltage = sqrt(numerical_intergreat(interpoalted_values) / (period_ms * 1e-3));
 
 }
 
@@ -179,7 +177,7 @@ void adc2real_voltage()
 		 * Overwrite them with the actual raw voltage values
 		 */
 		/* raw_voltages[i] = (float) 0.0877427 * raw_voltages[i] - (float) 37.7365; */
-		raw_voltages[i] = ((5 * adc_voltages[i] / 1024.f) - vOffset) * dividerGain * amplifierGain;
+		raw_values[i] = ((5 * adc_voltages[i] / 1024.f) - vOffset) * dividerGain * amplifierGain;
 	}
 }
 
