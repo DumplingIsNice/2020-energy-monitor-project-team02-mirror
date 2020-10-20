@@ -18,9 +18,10 @@ for f = frequency_range
 			Z = (j * 2 * pi * f * inductance) + r;
 			S = v^2 / Z;
 			if (abs(S) >= S_min && abs(S) <= S_max)
-				disp([num2str(v) 'Vrms @ ' num2str(f) 'Hz, R_L = ' num2str(r) ' (|S| = ' num2str(abs(S)) ')']);
+				disp([num2str(v) 'Vrms @ ' num2str(f) 'Hz, R_L = ' num2str(uint8((r / max_load * 100) + 0.5))  '% (' num2str(r) ') ' ' (|S| = ' num2str(abs(S)) ')']);
 			end
 		end
 	end
 end
+
 
