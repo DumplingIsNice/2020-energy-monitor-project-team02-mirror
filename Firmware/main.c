@@ -4,6 +4,7 @@
 #include "uart.h"
 #include "adc.h"
 #include "timer0.h"
+#include "timer2.h"
 #include "dsp.h"
 
 /* AVR Includes */
@@ -28,6 +29,7 @@ int main()
 	usart_init();
 	adc_init();
 	timer0_init();
+	timer2_init();
 	voltage_zc_interrupt_init();
 
 	/* Globally Enable Interrupts */
