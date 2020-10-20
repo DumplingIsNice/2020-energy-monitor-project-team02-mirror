@@ -56,6 +56,7 @@ int main()
 
 			currently_sampling = 0;
 			ENABLE_ZERO_CROSSING;
+			timer0_reset();
 		}
 	}
 
