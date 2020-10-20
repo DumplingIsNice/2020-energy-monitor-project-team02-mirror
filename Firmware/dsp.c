@@ -198,6 +198,7 @@ ISR(INT0_vect)
 		DISABLE_ZERO_CROSSING;
 		adc_pointers[0] = adc_voltages;
 		adc_pointers[1] = adc_currents;
+		period_ms = 0.02;
 	} else {
 		adc_set_channel(currently_sampling);
 		if (cycle_count == 3) {
