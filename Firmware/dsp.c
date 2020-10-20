@@ -22,11 +22,9 @@ int current_adc_channel = ADC_CH_CURRENT;
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
 volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
-volatile unsigned adc_voltages_t[RAW_ARRAY_SIZE];
 volatile unsigned adc_voltages_head; /* index to next free space in array */
 
 volatile unsigned adc_currents[RAW_ARRAY_SIZE];
-volatile unsigned adc_currents_t[RAW_ARRAY_SIZE];
 volatile unsigned adc_currents_head;  /* index to next free space in array */
 
 /* Reverse Gained array of values */
