@@ -231,15 +231,19 @@ void set_power_display()
 void set_energy_display()
 {
 	/* Tracks energy consumed from start up. Ignore the first value. */
-	static float energy_track = 0;
+	// static float energy_track = 0;
 	
 	disp_pos = 4;
 	
+	/*
 	if(energy_track >= 9.99){
 		energy_track = 0;
 	}
+	*/
 	
-	Disp_Set(energy_track += energy);
+	//Disp_Set(energy_track += energy);
+	
+	Disp_Set(energy);
 	
 	/* Need to shift all values left to work with disp_scan_next() */
 	for(uint8_t i = 0; i < PLACE_VALUE_SIZE-1; i++){

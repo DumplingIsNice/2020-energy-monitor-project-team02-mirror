@@ -12,6 +12,7 @@ ISR(TIMER2_COMPA_vect)
 {
 	//Use this LED to check if interrupt is called.
 	//TGL_PORT(PORTB, PORTB5);
+	TGL_PORT(PORTB, PORTB5);
 	if (timer2_miliseconds >= 100){ // 1s
 		change_display = 1;
 		timer2_miliseconds = 0;
@@ -34,6 +35,10 @@ void timer2_init()
 		/* Set prescaler of 64 */
 		SET_PORT(TCCR2B, CS20);
 		SET_PORT(TCCR2B, CS21);
+		
+		/* Set prescaler of 256 
+		SET_PORT(TCCR2B, CS20);
+		SET_PORT(TCCR2B, CS22);*/
 
 		/* overflow at count of 248 for 10 ms */
 		OCR2A = 248;
