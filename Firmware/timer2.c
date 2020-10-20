@@ -4,6 +4,7 @@
 #include <avr/interrupt.h>
 
 volatile uint16_t timer2_miliseconds;
+volatile uint8_t change_display = 0;
 
 /* TIMER2 */
 
@@ -12,7 +13,7 @@ ISR(TIMER2_COMPA_vect)
 	//Use this LED to check if interrupt is called.
 	//TGL_PORT(PORTB, PORTB5);
 	if (timer2_miliseconds >= 100){ // 1s
-		disp_next_value();
+		change_display = 1;
 		timer2_miliseconds = 0;
 	} else {
 		disp_scan_next();

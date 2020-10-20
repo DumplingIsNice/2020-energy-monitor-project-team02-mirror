@@ -53,16 +53,17 @@ int main()
 				print("%f A\r", pk_current);
 				print("%f W\r", power);
 				print("%f J\r", energy);
-				print("%f\r\r", period_ms * 1e-3);
+				print("%f ms Period \r\r", period_ms * 1e-3);
 
 				sampeled_voltage_current = 0;
 				enable_zc = 1;
 				
-				set_voltage_display();
-				
 			} else { /* We still need to sample current */
 				sampeled_voltage_current = enable_zc = 1;
 			}
+		}
+		if(change_display){
+			disp_next_value();
 		}
 	}
 

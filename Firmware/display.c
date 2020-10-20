@@ -4,22 +4,25 @@
 #include "uart.h"
 
 /* Common toggle defines for display and bit shift register */
-#define disableDisplays PORTD |= (0b11110000)
-#define enableDisplays PORTD |= (0b00000000)
-#define shiftRegOn PORTC |= (1<<PORTC5) 
-#define shiftRegOff PORTC &= ~(1<<PORTC5)
+#define DISABLE_DISPLAYS PORTD |= (0b11110000)
+#define ENABLE_DISPLAYS PORTD |= (0b00000000)
+#define SHIFT_REG_ON PORTC |= (1<<PORTC5) 
+#define SHIFT_REG_OFF PORTC &= ~(1<<PORTC5)
 
 #define DP_APPEND |= (1<<7)
 #define PLACE_VALUE_SIZE 4
 
 /* Holds place value digits in an array, calculated using extract functions in UART */
 static uint8_t placeValues[4] = {0,0,0,0};
+	
+/* The current position of the 4-digit number we're displaying */
+static volatile uint8_t disp_pos = 4;
+
+/* The current unit we're displaying */
+static volatile uint8_t unit = 0;
 
 /* Holds ports for each display (1 - 4 respectively) where displays[0] = Ds1, displays[1] = Ds2 etc */
 static uint8_t displays[4] = {(1<<PORTD4), (1<<PORTD5), (1<<PORTD6), (1<<PORTD7)};
-	
-/* Tracks energy consumed from start up. Ignore the first value. */
-static float energy_track = 0; 
 
 /* All potential numbers to display on the seven segment in array form for easy access */
 static const uint8_t sevenSegMapping[11] = {
@@ -36,6 +39,7 @@ static const uint8_t sevenSegMapping[11] = {
 	0b10000000,  /* . (decimal point) */
 };
 
+/* All potential indicators of the value displayed */
 static const uint8_t indicationUnit[4] = 
 {
 	0b00011100, /* v */
@@ -43,13 +47,6 @@ static const uint8_t indicationUnit[4] =
 	0b01110011, /* P */
 	0b01111001, /* E */
 };
-
-/* the seven segment number to render to the display */
-static volatile uint8_t disp_num = 0;
-/* the current position of the 4-digit number we're displaying */
-static volatile uint8_t disp_pos = 4;
-
-static volatile uint8_t unit = 0;
 
 void Disp_Send(uint8_t val) {
 	// Construct the bit pattern to turn on the segments needed to
@@ -74,11 +71,13 @@ void Disp_Send(uint8_t val) {
 		toggle_SH_CP();
 	}
 	
-	//3. Disable all digits
-	disableDisplays;
-	//4. Latch the output by toggling SH_ST pin
+	// Disable all digits
+	DISABLE_DISPLAYS;
+	
+	// Latch the output by toggling SH_ST pin
 	toggle_SH_ST();
-	//5. Now, depending on the value of pos, enable the correct digit
+	
+	// Now, depending on the value of disp_pos, enable the correct digit
 	// (i.e. set Ds1, Ds2, Ds3 and Ds4 appropriately)
 	position_on(disp_pos);
 }
@@ -99,7 +98,7 @@ void init_shift_reg(){
 	}
 }
 
-/* Display initialise */
+/* Display initialisation */
 void Disp_Init(void) {
 	DDRD |= (1 << DDD4);
 	DDRD |= (1 << DDD5);
@@ -110,7 +109,7 @@ void Disp_Init(void) {
 	DDRC |= (1 << DDC4);
 	DDRC |= (1 << DDC5);
 	
-	disableDisplays;
+	DISABLE_DISPLAYS;
 }
 
 /* 
@@ -136,7 +135,6 @@ void Disp_Set(float val)
 
 void position_on(uint8_t position)
 {
-	disableDisplays;
 	switch(position){
 		case 1:
 			PORTD &= ~displays[position-1];
@@ -153,6 +151,7 @@ void position_on(uint8_t position)
 	}
 }
 
+/* Returns the seven segment binary pattern of a digit */
 int8_t digit_to_sevenseg(int8_t number){
 	switch(number){
 		case 0:
@@ -179,28 +178,8 @@ int8_t digit_to_sevenseg(int8_t number){
 	return 0;
 }
 
-void display_power(float power)
-{
-	
-	/*
-	uint8_t to_send = 0;
-	uint8_t i = 1;
-	
-	Disp_Set(power); // Sets the current placeValue, containing the digits of power.
-	
-	while(1){
-		to_send = digit_to_sevenseg(placeValues[i]);
-		
-		Disp_Send(to_send);
-		position_on(i);
-		
-		if(i >= 4){
-			i = 1;
-		} else {
-			i++;	
-		}
-	} */
-}
+/* Functions for displaying a specific type of value */
+/* Each function have a fixed DP point */
 
 void set_voltage_display()
 {
@@ -217,6 +196,62 @@ void set_voltage_display()
 	unit = 0; /* v */
 }
 
+void set_current_display()
+{
+	disp_pos = 4;
+	
+	Disp_Set(pk_current);
+	
+	/* Need to shift all values left to work with disp_scan_next() */
+	for(uint8_t i = 0; i < PLACE_VALUE_SIZE-1; i++){
+		placeValues[i] = digit_to_sevenseg(placeValues[i+1]);
+	}
+	
+	placeValues[0] DP_APPEND; /* Dp at ds1 */
+	
+	unit = 1; /* A */
+}
+
+void set_power_display()
+{
+	disp_pos = 4;
+	
+	Disp_Set(power);
+	
+	/* Need to shift all values left to work with disp_scan_next() */
+	for(uint8_t i = 0; i < PLACE_VALUE_SIZE-1; i++){
+		placeValues[i] = digit_to_sevenseg(placeValues[i+1]);
+	}
+	
+	placeValues[0] DP_APPEND; /* Dp at ds1 */
+	
+	unit = 2; /* P */
+}
+
+void set_energy_display()
+{
+	/* Tracks energy consumed from start up. Ignore the first value. */
+	static float energy_track = 0;
+	
+	disp_pos = 4;
+	
+	if(energy_track >= 9.99){
+		energy_track = 0;
+	}
+	
+	Disp_Set(energy_track += energy);
+	
+	/* Need to shift all values left to work with disp_scan_next() */
+	for(uint8_t i = 0; i < PLACE_VALUE_SIZE-1; i++){
+		placeValues[i] = digit_to_sevenseg(placeValues[i+1]);
+	}
+	
+	placeValues[0] DP_APPEND; /* Dp at ds1 */
+	
+	unit = 3; /* E */
+}
+
+/* Send the next digit to Disp_Send() and position_on() */
 void disp_scan_next()
 {
 	switch(disp_pos){
@@ -243,12 +278,31 @@ void disp_scan_next()
 	}
 }
 
+/* Sets the display of next value */
 void disp_next_value()
 {
+	static uint8_t to_disp = 0;
 	
-}
-
-void disp_reset()
-{
-	disp_pos = 4;
+	change_display = 0;
+		
+	if(to_disp >= 3){
+		to_disp = 0;
+	} else {
+		to_disp++;
+	}
+	
+	switch(to_disp){
+		case 0:
+			set_voltage_display();
+			break;
+		case 1:
+			set_current_display();
+			break;
+		case 2:
+			set_power_display();
+			break;
+		case 3:
+			set_energy_display();
+			break;
+	}
 }
