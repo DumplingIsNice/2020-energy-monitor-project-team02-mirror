@@ -1,8 +1,9 @@
 #include "common.h"
 #include "timer2.h"
+#include "display.h"
 #include <avr/interrupt.h>
 
-extern volatile uint16_t timer2_miliseconds;
+volatile uint16_t timer2_miliseconds;
 
 /* TIMER2 */
 
@@ -10,15 +11,13 @@ ISR(TIMER2_COMPA_vect)
 {
 	//Use this LED to check if interrupt is called.
 	//TGL_PORT(PORTB, PORTB5);
-	/*
-	if(timer2_miliseconds >= 10){
+	if (timer2_miliseconds >= 100){ // 1s
+		disp_next_value();
 		timer2_miliseconds = 0;
-		// Set a flag for which ;
-		TGL_PORT(PORTB, PORTB5);
 	} else {
-		++timer2_miliseconds;	
+		disp_scan_next();
+		++timer2_miliseconds;
 	}
-	*/
 }
 
 void timer2_init()
@@ -31,11 +30,12 @@ void timer2_init()
 		/* overflow at count of 124 for 1 ms */
 		OCR2A = 124;
 	#else
-		/* Set prescaler of 8 */
+		/* Set prescaler of 64 */
+		SET_PORT(TCCR2B, CS20);
 		SET_PORT(TCCR2B, CS21);
 
-		/* overflow at count of 99 for 1 ms */
-		OCR2A = 99;
+		/* overflow at count of 248 for 10 ms */
+		OCR2A = 248;
 	#endif /* HARDWARE_BUILD */
 
 		/* Setting interrupt on output compare match A */

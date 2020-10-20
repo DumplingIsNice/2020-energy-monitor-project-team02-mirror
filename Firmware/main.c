@@ -56,6 +56,7 @@ int main()
 
 				sampeled_voltage_current = 0;
 				enable_zc = 1;
+				set_voltage_display();
 			} else { /* We still need to sample current */
 				sampeled_voltage_current = enable_zc = 1;
 			}
