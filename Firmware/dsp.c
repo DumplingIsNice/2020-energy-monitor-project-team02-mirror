@@ -34,9 +34,6 @@ float raw_currents[RAW_ARRAY_SIZE];
 float interpolated_voltages[INTERPOLATED_ARRAY_SIZE];
 float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 
-/* Array of (interpolated) V * (interpoloated) I */
-float instantanous_power[INTERPOLATED_ARRAY_SIZE];
-
 float power;
 float rms_voltage;
 float pk_current;
@@ -46,19 +43,22 @@ float energy;
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
 
+static volatile int cycles = 0;
+
 /* Using Simpson's Rule */
 static float numerical_intergreat(float *input)
 {
+	uint8_t i;
 	float numericalResult = input[0];
 
-	for(uint8_t i = 1; i < 37 ; i= i+2){
+	for(i = 1; i < INTERPOLATED_ARRAY_SIZE - 2 ; i= i+2){
 		numericalResult = numericalResult + input[i] * 4;
 		numericalResult = numericalResult + input[i + 1] * 2;
 	}
 
-	numericalResult = numericalResult + input[37] * 4;
-	numericalResult = numericalResult + input[38];
-	numericalResult = numericalResult * (0.0005 / 3);
+	numericalResult = numericalResult + input[i++] * 4;
+	numericalResult = numericalResult + input[i];
+	numericalResult = numericalResult * (0.000506 / 3);
 
 	return numericalResult;
 }
@@ -86,7 +86,7 @@ void cubic_interpolate()
 	interpolated_voltages[j++] = raw_voltages[i];
 	/* Point between first and second point is calculated a little differently (most inaccurate) */
 	interpolated_voltages[j++] = cubic_point(0.5, 2 * raw_voltages[i] - raw_voltages[i + 1], raw_voltages[i], raw_voltages[i + 1], raw_voltages[i + 2]);
-	for (++i; i < 20 - 2; ++i) {
+	for (++i; i < RAW_ARRAY_SIZE - 2; ++i) {
 		/* Original Point (y0) */
 		interpolated_voltages[j++] = raw_voltages[i];
 		/* Create new (Missing) Mid-Point */
@@ -103,7 +103,7 @@ void cubic_interpolate()
 	interpolated_currents[j++] = raw_currents[i];
 	/* Point between first and second point is calculated a little differently (most inaccurate) */
 	interpolated_currents[j++] = cubic_point(0.5, 2 * raw_currents[i] - raw_currents[i + 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
-	for (++i; i < 20 - 2; ++i) {
+	for (++i; i < RAW_ARRAY_SIZE - 2; ++i) {
 		/* Original Point (y0) */
 		interpolated_currents[j++] = raw_currents[i];
 		/* Create new (Missing) Mid-Point */
@@ -120,9 +120,9 @@ void calculate_power()
 	unsigned i;
 
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
-		instantanous_power[i] = interpolated_voltages[i] * interpolated_currents[i];
+		interpolated_currents[i] = interpolated_voltages[i] * interpolated_currents[i];
 
-	power = numerical_intergreat(instantanous_power) / (period_ms * 1e-3);
+	power = numerical_intergreat(interpolated_currents) / (period_ms * 1e-3);
 }
 
 /* NOTE: This funciton must be called after calculating power !! */
@@ -221,21 +221,25 @@ ISR(INT0_vect)
 	if (!currently_sampling && enable_zc) {
 		currently_sampling = 1;
 		period_ms = adc_voltages_head = adc_currents_head = 0;
-		/* Change the channel we will sample next */ 
-		if (current_adc_channel == ADC_CH_VOLTAGE) {
-			adc_set_channel(ADC_CH_CURRENT);
-		} else {
-			adc_set_channel(ADC_CH_VOLTAGE);
-		}
+		cycles = 0;
+		adc_set_channel(ADC_CH_VOLTAGE);
 		timer0_reset();
-	} else if (currently_sampling && enable_zc) {
+	} else if (currently_sampling && enable_zc && current_adc_channel == ADC_CH_CURRENT && cycles == 2) {
 		currently_sampling = 0;
 		enable_zc = 0;
 		timer0_stop();
 		/* Incriment it by one as the final timer interrupt won't occur */
 		++period_ms;
-		/* Force sample the ADC one more time to get 20 samples */
-		SET_PORT(ADCSRA, ADSC);
+	} else if (currently_sampling && enable_zc && current_adc_channel == ADC_CH_VOLTAGE && cycles == 2) {
+		cycles = 0;
+		adc_set_channel(ADC_CH_CURRENT);
+		timer0_reset();
+	} else if (currently_sampling && enable_zc) {
+		++cycles;
+		if (cycles == 2) {
+			timer0_stop();
+			SET_PORT(ADCSRA, ADSC); /* Force ADC Sample */
+		}
 	}
 }
 

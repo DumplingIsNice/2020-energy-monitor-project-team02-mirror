@@ -22,15 +22,13 @@ int main()
 	extern void test_function();
 	test_function();
 #endif /* ENABLE_TESTING */
-	unsigned sampeled_voltage_current = 0;
-
 	DDRB = 0xFF;
 
 	/* Initalisation code */
 	usart_init();
 	adc_init();
 	timer0_init();
-	timer2_init();
+/*	timer2_init(); */
 	Disp_Init();
 	voltage_zc_interrupt_init();
 
@@ -39,28 +37,23 @@ int main()
 
 	while (1) {
 		if (!currently_sampling && !enable_zc) {
-			if (sampeled_voltage_current) {
-				adc2real_voltage();
-				adc2real_current();
-				cubic_interpolate();
+			period_ms = 40;
+			adc2real_voltage();
+			adc2real_current();
+			cubic_interpolate();
 
-				calculate_power();
-				calculate_energy();
-				calculate_pk_current();
-				calculate_rms_voltage();
+			calculate_pk_current();
+			calculate_power();
+			calculate_energy();
+			calculate_rms_voltage();
 
-				print("%f V(RMS)\r", rms_voltage);
-				print("%f A\r", pk_current);
-				print("%f W\r", power);
-				print("%f J\r", energy);
-				print("%f\r\r", period_ms * 1e-3);
+			print("%f V(RMS)\r", rms_voltage);
+			print("%f A\r", pk_current);
+			print("%f W\r", power);
+			print("%f J\r", energy);
+			print("%f\r\r", period_ms * 1e-3);
 
-				sampeled_voltage_current = 0;
-				enable_zc = 1;
-				
-			} else { /* We still need to sample current */
-				sampeled_voltage_current = enable_zc = 1;
-			}
+			enable_zc = 1;
 		}
 	}
 
