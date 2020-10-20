@@ -30,10 +30,7 @@ unsigned *adc_pointers[2] = {adc_voltages, adc_currents};
 /* Reverse Gained array of values */
 float raw_values[RAW_ARRAY_SIZE];
 
-float interpoalted_values[INTERPOLATED_ARRAY_SIZE];
-
-/* Array of (interpolated) V * (interpoloated) I */
-float instantanous_power[INTERPOLATED_ARRAY_SIZE];
+float interpolated_values[INTERPOLATED_ARRAY_SIZE];
 
 float power;
 float rms_voltage;
@@ -49,14 +46,14 @@ static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
 
-	for(uint8_t i = 1; i < 37 ; i= i+2){
+	for(uint8_t i = 1; i < 117 ; i= i+2){
 		numericalResult = numericalResult + input[i] * 4;
 		numericalResult = numericalResult + input[i + 1] * 2;
 	}
 
-	numericalResult = numericalResult + input[37] * 4;
-	numericalResult = numericalResult + input[38];
-	numericalResult = numericalResult * (0.0005 / 3);
+	numericalResult = numericalResult + input[118] * 4;
+	numericalResult = numericalResult + input[119];
+	numericalResult = numericalResult * (0.0005);
 
 	return numericalResult;
 }
@@ -77,50 +74,27 @@ void cubic_interpolate()
 {
 	unsigned i, j;
 
-	/* Voltage */
 	/* First point is the same */
 	i = j = 0;
 	/* First point is the same */
-	interpoalted_values[j++] = raw_values[i];
+	interpolated_values[j++] = raw_values[i];
 	/* Point between first and second point is calculated a little differently (most inaccurate) */
-	interpoalted_values[j++] = cubic_point(0.5, 2 * raw_values[i] - raw_values[i + 1], raw_values[i], raw_values[i + 1], raw_values[i + 2]);
+	interpolated_values[j++] = cubic_point(0.5, 2 * raw_values[i] - raw_values[i + 1], raw_values[i], raw_values[i + 1], raw_values[i + 2]);
 	for (++i; i < 20 - 2; ++i) {
 		/* Original Point (y0) */
-		interpoalted_values[j++] = raw_values[i];
+		interpolated_values[j++] = raw_values[i];
 		/* Create new (Missing) Mid-Point */
-		interpoalted_values[j++] = cubic_point(0.5, raw_values[i - 1], raw_values[i], raw_values[i + 1], raw_values[i + 2]);
+		interpolated_values[j++] = cubic_point(0.5, raw_values[i - 1], raw_values[i], raw_values[i + 1], raw_values[i + 2]);
 	}
 	/* Point between second-to-last and last point is calculated a little differently (most inaccurate) */
-	interpoalted_values[j++] = raw_values[i];
-	interpoalted_values[j++] = cubic_point(0.5, raw_values[i - 1], raw_values[i], raw_values[i + 1], 2 * raw_values[i + 1] - raw_values[i]);
-	interpoalted_values[j++] = raw_values[++i];
-
-	/* Current */
-	i = j = 0;
-	/* First point is the same */
-	interpolated_currents[j++] = raw_currents[i];
-	/* Point between first and second point is calculated a little differently (most inaccurate) */
-	interpolated_currents[j++] = cubic_point(0.5, 2 * raw_currents[i] - raw_currents[i + 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
-	for (++i; i < 20 - 2; ++i) {
-		/* Original Point (y0) */
-		interpolated_currents[j++] = raw_currents[i];
-		/* Create new (Missing) Mid-Point */
-		interpolated_currents[j++] = cubic_point(0.5, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], raw_currents[i + 2]);
-	}
-	/* Point between second-to-last and last point is calculated a little differently (most inaccurate) */
-	interpolated_currents[j++] = raw_currents[i];
-	interpolated_currents[j++] = cubic_point(0.5, raw_currents[i - 1], raw_currents[i], raw_currents[i + 1], 2 * raw_currents[i + 1] - raw_currents[i]);
-	interpolated_currents[j++] = raw_currents[++i];
+	interpolated_values[j++] = raw_values[i];
+	interpolated_values[j++] = cubic_point(0.5, raw_values[i - 1], raw_values[i], raw_values[i + 1], 2 * raw_values[i + 1] - raw_values[i]);
+	interpolated_values[j++] = raw_values[++i];
 }
 
 void calculate_power()
 {
-	unsigned i;
-
-	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
-		instantanous_power[i] = interpoalted_values[i] * interpolated_currents[i];
-
-	power = numerical_intergreat(instantanous_power) / (period_ms * 1e-3);
+	power = numerical_intergreat(interpolated_values) / (period_ms * 1e-3);
 }
 
 /* NOTE: This funciton must be called after calculating power !! */
@@ -138,19 +112,27 @@ void calculate_rms_voltage()
 
 	/* WARNING: interpolated_voltages IS NOW SQUARED !!! */
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
-		interpoalted_values[i] = SQUARE(interpoalted_values[i]);
+		interpolated_values[i] = SQUARE(interpolated_values[i]);
 	}
 
-	rms_voltage = sqrt(numerical_intergreat(interpoalted_values) / (period_ms * 1e-3));
-
+	rms_voltage = sqrt(numerical_intergreat(interpolated_values) / (period_ms * 1e-3));
 }
 
 void calculate_pk_current()
 {
-	unsigned i;
-	for (pk_current = i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
-		if (interpolated_currents[i] > pk_current)
-			pk_current = interpolated_currents[i];
+	unsigned i, peak;
+	unsigned y0, y1, y2, y3;
+	for (peak = i = 0; i < RAW_ARRAY_SIZE; ++i)
+		if (adc_currents[i] > pk_current)
+			peak = adc_currents[i];
+
+	/* peak and peak + 1 should both be the same value */
+	y0 = adc_currents[i - 1];
+	y1 = adc_currents[i];
+	y2 = adc_currents[i + 1];
+	y3 = adc_currents[i + 2];
+
+	pk_current = cubic_point(0.5, y0, y1, y2, y3);
 }
 
 
@@ -197,7 +179,6 @@ void adc2real_current()
 	const uint16_t R2 = 56000;
 	const uint16_t R1 = 22000;
 	const float amplifierGain =  1 / (float) (R2 / ((float) R1));
-	
 		
 	
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
@@ -205,7 +186,9 @@ void adc2real_current()
 		 * Overwrite them with the actual raw voltage values
 		 */
 		/* raw_currents[i] = 0.0034253 * raw_currents[i] - 1.4731673; */
-		raw_currents[i] = ((5 * adc_currents[i] / 1024.f) - vOffset) * dividerGain * amplifierGain;
+		float converted_current = ((5 * adc_currents[i] / 1024.f) - vOffset) * dividerGain * amplifierGain;
+		
+		raw_values[i] = raw_values[i] * converted_current;
 	}
 }
 

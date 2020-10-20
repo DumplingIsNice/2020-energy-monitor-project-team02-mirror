@@ -34,14 +34,19 @@ int main()
 
 	while (1) {
 		if (currently_sampling >= 2) {
+			/* Calculating RMS Voltage */
 			adc2real_voltage();
+			cubic_interpolate();
+			calculate_rms_voltage();
+
+			/* Calculating Power */
 			adc2real_current();
 			cubic_interpolate();
-
 			calculate_power();
 			calculate_energy();
+
+			/* Get peak current */
 			calculate_pk_current();
-			calculate_rms_voltage();
 
 			print("%f V(RMS)\r", rms_voltage);
 			print("%f A\r", pk_current);
