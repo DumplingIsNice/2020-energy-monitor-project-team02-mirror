@@ -33,7 +33,7 @@ extern volatile unsigned currently_sampling;
 
 extern volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
 extern volatile unsigned adc_currents[RAW_ARRAY_SIZE];
-unsigned *adc_pointers[2];
+volatile unsigned *adc_pointers[2];
 
 /* Reverse Gained array of values */
 extern float raw_voltages[RAW_ARRAY_SIZE];
