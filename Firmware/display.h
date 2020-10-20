@@ -1,8 +1,6 @@
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 
-static float energy_track; // Tracks energy consumed from start up. Ignore the first value.
-
 // Sends an integer to display with number value input to the function
 void Disp_Send(uint8_t val);
 

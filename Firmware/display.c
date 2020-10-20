@@ -9,7 +9,7 @@
 #define shiftRegOff PORTC &= ~(1<<PORTC5)
 
 /* Holds place value digits in an array, calculated using extract functions in UART */
-static uint8_t placeValues[4] = {0,0,0,0};
+extern uint8_t placeValues[4] = {0,0,0,0};
 
 /* Holds ports for each display (1 - 4 respectively) where displays[0] = Ds1, displays[1] = Ds2 etc */
 static uint8_t displays[4] = {(1<<PORTD4), (1<<PORTD5), (1<<PORTD6), (1<<PORTD7)};
