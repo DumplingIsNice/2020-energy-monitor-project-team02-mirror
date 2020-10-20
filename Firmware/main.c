@@ -6,6 +6,7 @@
 #include "timer0.h"
 #include "timer2.h"
 #include "dsp.h"
+#include "display.h"
 
 /* AVR Includes */
 #include <avr/io.h>
@@ -30,6 +31,7 @@ int main()
 	adc_init();
 	timer0_init();
 	timer2_init();
+	Disp_Init();
 	voltage_zc_interrupt_init();
 
 	/* Globally Enable Interrupts */
@@ -55,6 +57,7 @@ int main()
 
 				sampeled_voltage_current = 0;
 				enable_zc = 1;
+				
 			} else { /* We still need to sample current */
 				sampeled_voltage_current = enable_zc = 1;
 			}

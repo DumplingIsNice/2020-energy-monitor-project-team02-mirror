@@ -8,13 +8,11 @@
 #define shiftRegOn PORTC |= (1<<PORTC5) 
 #define shiftRegOff PORTC &= ~(1<<PORTC5)
 
-
 /* Holds place value digits in an array, calculated using extract functions in UART */
 static uint8_t placeValues[4] = {0,0,0,0};
 
 /* Holds ports for each display (1 - 4 respectively) where displays[0] = Ds1, displays[1] = Ds2 etc */
 static uint8_t displays[4] = {(1<<PORTD4), (1<<PORTD5), (1<<PORTD6), (1<<PORTD7)};
-	
 	
 
 /* All potential numbers to display on the seven segment in array form for easy access */
@@ -32,6 +30,13 @@ static const uint8_t sevenSegMapping[11] = {
 	0b10000000,  /* . (decimal point) */
 };
 
+static const uint8_t indicationUnit[3] = 
+{
+	0b00011100, /* v */
+	0b01110111, /* A */
+	0b01110011, /* P */
+	0b01111001, /* E */
+};
 
 /* Display initialise */
 void Disp_Init(void) {
@@ -62,7 +67,6 @@ void Disp_Set(float val)
 	placeValues[1] = ones;
 	placeValues[2] = tenths;
 	placeValues[3] = hundredths;
-	
 }
 
 
@@ -107,3 +111,4 @@ void Disp_Send(uint8_t val) {
 	/* Now set SH_ST to latch the output of the shift register */
 	PORTC |= (1 << 5);
 }
+

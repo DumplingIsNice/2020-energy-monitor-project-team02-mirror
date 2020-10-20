@@ -2,7 +2,7 @@
 #include "timer2.h"
 #include <avr/interrupt.h>
 
-volatile uint16_t timer2_miliseconds;
+extern volatile uint16_t timer2_miliseconds;
 
 /* TIMER2 */
 
@@ -13,6 +13,7 @@ ISR(TIMER2_COMPA_vect)
 	/*
 	if(timer2_miliseconds >= 10){
 		timer2_miliseconds = 0;
+		// Set a flag for which ;
 		TGL_PORT(PORTB, PORTB5);
 	} else {
 		++timer2_miliseconds;	
