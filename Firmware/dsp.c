@@ -53,7 +53,7 @@ static float numerical_intergreat(float *input)
 
 	numericalResult = numericalResult + input[118] * 4;
 	numericalResult = numericalResult + input[119];
-	numericalResult = numericalResult * (0.0005);
+	numericalResult = numericalResult * (0.0005/3);
 
 	return numericalResult;
 }
@@ -193,25 +193,29 @@ void adc2real_current()
 }
 
 ISR(INT0_vect)
-{
-	
-	if (cycle_count == 3) {
-		++currently_sampling;
+{	timer0_stop();
+	cycle_count++;
+	adc_set_channel(currently_sampling);
+	if (cycle_count == 4)
+	{
+		currently_sampling++;
 		adc_set_channel(currently_sampling);
-		cycle_count = 0;
-	} else {
-		++cycle_count;
-		timer0_reset();
+		cycle_count = 1;
 	}
-
-	if (currently_sampling >= 2) {
-		timer0_stop;
+	if(currently_sampling ==2){
 		DISABLE_ZERO_CROSSING;
 		adc_pointers[0] = adc_voltages;
 		adc_pointers[1] = adc_currents;
-		period_ms = 0.02;
+	} else {
+		timer0_reset();
 	}
+	
+
 }
+
+
+
+
 
 /* Initializes voltage zero crossing interrupt */
 void voltage_zc_interrupt_init()
