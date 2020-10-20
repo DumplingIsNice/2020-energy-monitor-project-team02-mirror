@@ -1,5 +1,5 @@
-#ifndef 
-#define 
+#ifndef DISPLAY_H_
+#define DISPLAY_H_
 
 static float energy_track; // Tracks energy consumed from start up. Ignore the first value.
 
@@ -31,4 +31,4 @@ void display_energy(); // This one require a persistant variable. Resets at cert
 
 void position_on(uint8_t position);
 
-void position_off(uint8_t position);
+#endif

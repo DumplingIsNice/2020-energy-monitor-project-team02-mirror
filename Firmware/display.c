@@ -30,7 +30,7 @@ static const uint8_t sevenSegMapping[11] = {
 	0b10000000,  /* . (decimal point) */
 };
 
-static const uint8_t indicationUnit[3] = 
+static const uint8_t indicationUnit[4] = 
 {
 	0b00011100, /* v */
 	0b01110111, /* A */
@@ -112,3 +112,24 @@ void Disp_Send(uint8_t val) {
 	PORTC |= (1 << 5);
 }
 
+/* Turning a particular position on and off */
+/* ds1 = 1; ds2 = 2; ds3 = 3; ds4 = 4 */
+
+void position_on(uint8_t position)
+{
+	disableDisplays;
+	switch(position){
+		case 1:
+			PORTD &= ~displays[position-1];
+			break;
+		case 2:
+			PORTD &= ~displays[position-1];
+			break;
+		case 3:
+			PORTD &= ~displays[position-1];
+			break;
+		case 4:
+			PORTD &= ~displays[position-1];
+			break;
+	}
+}
