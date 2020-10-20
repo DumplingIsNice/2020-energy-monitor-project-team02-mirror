@@ -19,13 +19,13 @@ volatile unsigned currently_sampling = 0;
  * (Note the ZC interrupt will start with the opposit of the current channel)
  */
 int current_adc_channel = ADC_CH_CURRENT;
+/* Number of cycles / periods we have sampled */
+int cycle_count = 0;
 
 /* Raw Voltage and Current Readings (Along with time value of each reading) */
 volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
-volatile unsigned adc_voltages_head; /* index to next free space in array */
-
 volatile unsigned adc_currents[RAW_ARRAY_SIZE];
-volatile unsigned adc_currents_head;  /* index to next free space in array */
+unsigned *adc_pointers[2] = {adc_voltages, adc_currents};
 
 /* Reverse Gained array of values */
 float raw_voltages[RAW_ARRAY_SIZE];
@@ -213,29 +213,18 @@ void adc2real_current()
 
 ISR(INT0_vect)
 {
-	extern volatile unsigned enable_zc;
-	//Use this LED to check if interrupt is called.
-	/*TGL_PORT(PORTB, PORTB5);*/
-
-	/* Zero crossing indicates the start or end of a cycle of sampling */
-	if (!currently_sampling && enable_zc) {
-		currently_sampling = 1;
-		period_ms = adc_voltages_head = adc_currents_head = 0;
-		/* Change the channel we will sample next */ 
-		if (current_adc_channel == ADC_CH_VOLTAGE) {
-			adc_set_channel(ADC_CH_CURRENT);
+	if (currently_sampling == 2) {
+		DISABLE_ZERO_CROSSING;
+		adc_pointers[0] = adc_voltages;
+		adc_pointers[1] = adc_currents;
+	} else {
+		adc_set_channel(currently_sampling);
+		if (cycle_count == 3) {
+			++currently_sampling;
+			cycle_count = 0;
 		} else {
-			adc_set_channel(ADC_CH_VOLTAGE);
+			++cycle_count;
 		}
-		timer0_reset();
-	} else if (currently_sampling && enable_zc) {
-		currently_sampling = 0;
-		enable_zc = 0;
-		timer0_stop();
-		/* Incriment it by one as the final timer interrupt won't occur */
-		++period_ms;
-		/* Force sample the ADC one more time to get 20 samples */
-		SET_PORT(ADCSRA, ADSC);
 	}
 }
 

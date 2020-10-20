@@ -12,9 +12,12 @@
 #define ADC_CH_VOLTAGE 0
 #define ADC_CH_CURRENT 1
 
+#define ENABLE_ZERO_CROSSING (EIMSK |= (1 << INT0))
+#define DISABLE_ZERO_CROSSING (EIMSK &= ~(1 << INT0))
+
 extern int current_adc_channel;
 
-#define CYCLE_SAMPLED 1
+#define CYCLE_SAMPLED 3
 #define RAW_ARRAY_SIZE (20 * CYCLE_SAMPLED)
 /* Assuming we create one new point per sample point, we get (2n - 2) new points */
 #define INTERPOLATED_ARRAY_SIZE (2 * RAW_ARRAY_SIZE - 1)
@@ -29,10 +32,8 @@ extern int current_adc_channel;
 extern volatile unsigned currently_sampling;
 
 extern volatile unsigned adc_voltages[RAW_ARRAY_SIZE];
-extern volatile unsigned adc_voltages_head;
-
 extern volatile unsigned adc_currents[RAW_ARRAY_SIZE];
-extern volatile unsigned adc_currents_head;
+unsigned *adc_pointers[2];
 
 /* Reverse Gained array of values */
 extern float raw_voltages[RAW_ARRAY_SIZE];

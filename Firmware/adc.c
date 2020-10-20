@@ -9,8 +9,6 @@ void adc_set_channel(uint8_t channel)
 {
 	ADMUX &= ~((1 << MUX2) | (1 << MUX1) | (1 << MUX0));
 	ADMUX |= channel;
-
-	current_adc_channel = channel;
 }
 
 /* ADC initialisation
@@ -39,9 +37,7 @@ ISR(ADC_vect)
 {
 	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
 	/*TGL_PORT(PORTB, PORTB5);*/
-	if (current_adc_channel == ADC_CH_VOLTAGE) {
-		adc_voltages[adc_voltages_head++] = ADC;
-	} else {
-		adc_currents[adc_currents_head++] = ADC;
-	}
+	
+	adc_pointers[currently_sampling] = ADC;
+	++adc_pointers[currently_sampling];
 }
