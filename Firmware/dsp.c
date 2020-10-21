@@ -215,7 +215,7 @@ ISR(INT0_vect)
 {
 	extern volatile unsigned enable_zc;
 	//Use this LED to check if interrupt is called.
-	/*TGL_PORT(PORTB, PORTB5);*/
+	TGL_PORT(PORTB, PORTB5);
 
 	/* Zero crossing indicates the start or end of a cycle of sampling */
 	if (!currently_sampling && enable_zc) {
