@@ -11,7 +11,7 @@ volatile uint8_t change_display = 0;
 ISR(TIMER2_COMPA_vect)
 {
 	//Use this LED to check if interrupt is called.
-	//TGL_PORT(PORTB, PORTB5);
+	TGL_PORT(PORTB, PORTB5);
 	
 	/*
 	if (timer2_miliseconds >= 100){ // 1s
@@ -23,7 +23,7 @@ ISR(TIMER2_COMPA_vect)
 		++timer2_miliseconds;
 	}
 	*/
-	TGL_PORT(PORTB, PORTB5);
+	//TGL_PORT(PORTB, PORTB5);
 	if (timer2_miliseconds >= 25){ // 1s
 		
 		change_display = 1;
@@ -40,17 +40,17 @@ void timer2_init()
 
 	#ifdef HARDWARE_BUILD
 		/* Set prescaler of 128 */
-		SET_PORT(TCCR2B, CS22), SET_PORT(TCCR2B, CS20);
+		//SET_PORT(TCCR2B, CS22), SET_PORT(TCCR2B, CS20);
 		/* overflow at count of 124 for 1 ms */
 		OCR2A = 124;
 	#else
-		/* Set prescaler of 64 (10ms)
+		/* Set prescaler of 64 (10ms) */
 		SET_PORT(TCCR2B, CS20);
-		SET_PORT(TCCR2B, CS21); */
+		SET_PORT(TCCR2B, CS21);
 		
 		/* Set prescaler of 256 (40 ms) */
-		SET_PORT(TCCR2B, CS20);
-		SET_PORT(TCCR2B, CS22);
+// 		SET_PORT(TCCR2B, CS20);
+// 		SET_PORT(TCCR2B, CS22);
 
 		/* overflow at count of 248 for 10/40 ms */
 		OCR2A = 248;
