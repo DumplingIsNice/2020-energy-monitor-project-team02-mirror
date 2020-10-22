@@ -38,7 +38,7 @@ void adc_init()
 ISR(ADC_vect)
 {
 	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
-	//TGL_PORT(PORTB, PORTB5);
+	TGL_PORT(PORTB, PORTB5);
 	if (current_adc_channel == ADC_CH_VOLTAGE) {
 		adc_voltages[adc_voltages_head++] = ADC;
 	} else {
