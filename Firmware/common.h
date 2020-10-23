@@ -21,7 +21,6 @@
 #include <stdlib.h> // 
 #include <avr/io.h> //Needed for using the macros for register addresses
 
-
 /* Macros to set/clear/toggle bits in a port */
 #define SET_PORT(port, bit_n) (port |= (1 << bit_n))
 #define CLR_PORT(port, bit_n) (port &= ~(1 << bit_n))

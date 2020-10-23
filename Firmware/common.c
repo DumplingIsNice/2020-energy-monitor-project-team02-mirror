@@ -1,7 +1,8 @@
-#include <stdarg.h>
-#include <stddef.h>
 #include "common.h"
 #include "uart.h"
+
+#include <stdarg.h>
+#include <stddef.h>
 
 /*
  * Round the floating point number n to the number of decimal places specified.
