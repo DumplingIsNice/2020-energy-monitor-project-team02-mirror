@@ -12,9 +12,6 @@
 
 #include <stdint.h>
 
-
-// Functions
-
 void adc_init();
 void adc_set_channel(uint8_t channel);
 
