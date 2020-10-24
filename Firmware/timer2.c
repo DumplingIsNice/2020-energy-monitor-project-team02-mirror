@@ -11,9 +11,9 @@ volatile uint8_t change_display = 0;
 ISR(TIMER2_COMPA_vect)
 {
 	//Use this LED to check if interrupt is called.
-	TGL_PORT(PORTB, PORTB5);
+	//TGL_PORT(PORTB, PORTB5);
 	
-	/*
+	
 	if (timer2_miliseconds >= 100){ // 1s
 		TGL_PORT(PORTB, PORTB5);
 		change_display = 1;
@@ -22,8 +22,8 @@ ISR(TIMER2_COMPA_vect)
 		disp_scan_next();
 		++timer2_miliseconds;
 	}
-	*/
-	//TGL_PORT(PORTB, PORTB5);
+	
+	/*
 	if (timer2_miliseconds >= 25){ // 1s
 		
 		change_display = 1;
@@ -32,6 +32,7 @@ ISR(TIMER2_COMPA_vect)
 		disp_scan_next();
 		++timer2_miliseconds;
 	}
+	*/
 }
 
 void timer2_init()
