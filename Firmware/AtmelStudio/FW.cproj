@@ -129,10 +129,6 @@
       <SubType>compile</SubType>
       <Link>common.c</Link>
     </Compile>
-    <Compile Include="../display.c">
-      <SubType>compile</SubType>
-      <Link>display.c</Link>
-    </Compile>
     <Compile Include="../dsp.c">
       <SubType>compile</SubType>
       <Link>dsp.c</Link>
@@ -180,6 +176,10 @@
     <Compile Include="../timer2.h">
       <SubType>compile</SubType>
       <Link>timer2.h</Link>
+    </Compile>
+    <Compile Include="..\display.c">
+      <SubType>compile</SubType>
+      <Link>display.c</Link>
     </Compile>
     <Compile Include="..\timer0.h">
       <SubType>compile</SubType>
