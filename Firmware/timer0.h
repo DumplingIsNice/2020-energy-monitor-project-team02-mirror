@@ -2,11 +2,10 @@
 * timer0.h
 *
 * Created: 4/10/2020
-* Author: Krithik Lekinwala
+* Author: Krithik Lekinwala, Hao Lin
 *
-* Functions to do with Timers and timer protocols
+* Functions regarding timer0 peripherals and protocols
 */
-
 
 #ifndef TIMER0_H_
 #define TIMER0_H_

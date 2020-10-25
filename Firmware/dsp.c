@@ -1,3 +1,12 @@
+/*
+* dsp.c
+*
+* Created: 11/09/2020
+* Author: Ankush Patel, Rukin Swedlund
+*
+* Functions regarding signal processing and calculations
+*/
+
 #define DSP_C /* for inclusion of "dsp.h" */
 
 #include "common.h"

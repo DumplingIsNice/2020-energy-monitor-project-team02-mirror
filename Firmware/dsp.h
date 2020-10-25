@@ -1,6 +1,11 @@
-/* Remove the gain and shifts added by all the analogue circuitry to get
- * back the original sensor voltage value
- */
+/*
+* dsp.h
+*
+* Created: 11/09/2020
+* Author: Ankush Patel, Rukin Swedlund
+*
+* Functions regarding signal processing and calculations
+*/
 
 #ifndef DSP_H_
 #define DSP_H_
@@ -60,8 +65,5 @@ uint16_t get_period();
 
 /* Initializes voltage zero crossing interrupt */
 void voltage_zc_interrupt_init();
-
-/* Initializes current zero crossing interrupt (Not implemented) */
-// void current_zc_interrupt_init();
 
 #endif 

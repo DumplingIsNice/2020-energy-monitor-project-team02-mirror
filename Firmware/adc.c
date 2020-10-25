@@ -1,3 +1,12 @@
+/*
+* adc.c
+*
+* Created: 25/09/2020
+* Author: Krithik Lekinwala
+*
+* Functions regarding ADC peripherals and protocols
+*/
+
 #include "common.h"
 #include "timer0.h"
 #include "adc.h"
@@ -7,7 +16,11 @@
 
 void adc_set_channel(uint8_t channel)
 {
-	ADMUX &= ~((1 << MUX2) | (1 << MUX1) | (1 << MUX0));
+	/* Ensure channel selection is reset */
+	CLR_PORT(ADMUX, MUX2);
+	CLR_PORT(ADMUX, MUX1);
+	CLR_PORT(ADMUX, MUX0);
+	
 	ADMUX |= channel;
 
 	current_adc_channel = channel;

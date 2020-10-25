@@ -1,10 +1,10 @@
 /*
-*	uart.c
+* uart.c
 *
-*	Created: 21/08/2020 09:47:00 PM
-*	Author: Hao Lin
+* Created: 21/08/2020 09:47:00 PM
+* Author: Ankush Patel, Hao Lin
 *
-*	Functions to do with communicating over the UART protocol
+* Functions to do with communicating over the UART protocol
 */
 
 #include "common.h"

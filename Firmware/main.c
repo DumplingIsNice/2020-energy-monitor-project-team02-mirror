@@ -1,3 +1,4 @@
+/* Energy Monitor Main for ATmega328PB */
 
 /* Local Includes */
 #include "common.h"
@@ -31,7 +32,7 @@ int main()
 	adc_init();
 	timer0_init();
 	timer2_init();
-	Disp_Init();
+	disp_init();
 	voltage_zc_interrupt_init();
 
 	/* Globally Enable Interrupts */

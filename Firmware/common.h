@@ -1,3 +1,12 @@
+/*
+* common.h
+*
+* Created: 16/08/2020
+* Author: Ankush Patel
+*
+* Functions, macros and libraries commonly used across the project
+*/
+
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -20,7 +29,6 @@
 #include <stdint.h> // Needed to use size_t and other various types
 #include <stdlib.h> // 
 #include <avr/io.h> //Needed for using the macros for register addresses
-
 
 /* Macros to set/clear/toggle bits in a port */
 #define SET_PORT(port, bit_n) (port |= (1 << bit_n))

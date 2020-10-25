@@ -1,7 +1,17 @@
-#include <stdarg.h>
-#include <stddef.h>
+/*
+* common.h
+*
+* Created: 16/08/2020
+* Author: Ankush Patel
+*
+* Functions, macros and libraries commonly used across the project
+*/
+
 #include "common.h"
 #include "uart.h"
+
+#include <stdarg.h>
+#include <stddef.h>
 
 /*
  * Round the floating point number n to the number of decimal places specified.

@@ -1,12 +1,20 @@
+/*
+* timer0.c
+*
+* Created: 4/10/2020
+* Author: Krithik Lekinwala, Hao Lin
+*
+* Functions regarding timer0 peripherals and protocols
+*/
+
 #include "common.h"
 #include <avr/interrupt.h>
 
 volatile uint16_t period_ms;
 
-
+/* Counts every 1ms */
 ISR(TIMER0_COMPA_vect) { ++period_ms; }
 
-// Counts every 1ms
 void timer0_init()
 {
 	SET_PORT(TCCR0A, WGM01); /* Setting to CTC mode */
@@ -19,9 +27,9 @@ void timer0_init()
 	SET_PORT(TIMSK0, OCIE0A);
 }
 
+/* Selects clock*/
 void timer0_reset()
 {
-/* Selects clock*/
 
 #ifdef HARDWARE_BUILD
 	/* Set prescaler of 128 */
@@ -39,8 +47,8 @@ void timer0_reset()
 	TCNT0 = period_ms = 0x00;
 }
 
+/* Select no clock */
 void timer0_stop()
 {
-	/* Select no clock */
 	CLR_PORT(TCCR0B, CS02), CLR_PORT(TCCR0B, CS01), CLR_PORT(TCCR0B, CS00);
 }

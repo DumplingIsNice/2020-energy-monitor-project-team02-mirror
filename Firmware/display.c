@@ -1,3 +1,12 @@
+/*
+* display.c
+*
+* Created: 18/10/2020
+* Author: Krithik Lekinwala, Rukin Swedlund, Hao Lin
+*
+* Functions regarding 7 segment display
+*/
+
 #include "common.h"
 #include "display.h"
 #include "dsp.h"
@@ -48,16 +57,34 @@ static const uint8_t indicationUnit[4] =
 	0b01111001, /* E */
 };
 
-void Disp_Send(uint8_t val) {
-	// Construct the bit pattern to turn on the segments needed to
-	// display number stored in val
+/* Display initialisation */
+void disp_init(void) {
+	
+	/* Set all 7 segment display pins as outputs */
+	SET_PORT(DDRD, DDD4);
+	SET_PORT(DDRD, DDD5);
+	SET_PORT(DDRD, DDD6);
+	SET_PORT(DDRD, DDD7);
+	
+	SET_PORT(DDRC, DDC3);
+	SET_PORT(DDRC, DDC4);
+	SET_PORT(DDRC, DDC5);
+	
+	DISABLE_DISPLAYS;
+}
+
+/* 
+ * Construct the bit pattern to turn on the segments needed to
+ * display number stored in val 
+ */
+void disp_send(uint8_t val) {
 	
 	init_shift_reg();
 	
 	uint8_t bit = 0;
 	uint8_t dispSequence = val;
 	
-	// Send the bit pattern to the shift-register
+	/* Send the bit pattern to the shift-register */
 	
 	for (int i = 0; i < 8; i++){
 		
@@ -71,14 +98,14 @@ void Disp_Send(uint8_t val) {
 		toggle_SH_CP();
 	}
 	
-	// Disable all digits
+	/* Disable all digits */
 	DISABLE_DISPLAYS;
 	
-	// Latch the output by toggling SH_ST pin
+	/* Latch the output by toggling SH_ST pin */
 	toggle_SH_ST();
 	
-	// Now, depending on the value of disp_pos, enable the correct digit
-	// (i.e. set Ds1, Ds2, Ds3 and Ds4 appropriately)
+	/* Now, depending on the value of disp_pos, enable the correct digit */
+	/* (i.e. set Ds1, Ds2, Ds3 and Ds4 appropriately) */
 	position_on(disp_pos);
 }
 
@@ -98,25 +125,11 @@ void init_shift_reg(){
 	}
 }
 
-/* Display initialisation */
-void Disp_Init(void) {
-	DDRD |= (1 << DDD4);
-	DDRD |= (1 << DDD5);
-	DDRD |= (1 << DDD6);
-	DDRD |= (1 << DDD7);
-	
-	DDRC |= (1 << DDC3);
-	DDRC |= (1 << DDC4);
-	DDRC |= (1 << DDC5);
-	
-	DISABLE_DISPLAYS;
-}
-
 /* 
 *	Calculates place values for the number input along with decimal places. Makes use of 
 *	UART functions made previously to extract digits of a float value.
 */
-void Disp_Set(float val)
+void disp_set(float val)
 {
 	uint16_t hundreds, tens, ones, tenths, hundredths = 0;
 
@@ -132,7 +145,6 @@ void Disp_Set(float val)
 	
 /* Turning a particular position on and off */
 /* ds1 = 1; ds2 = 2; ds3 = 3; ds4 = 4 */
-
 void position_on(uint8_t position)
 {
 	switch(position){
@@ -180,12 +192,11 @@ int8_t digit_to_sevenseg(int8_t number){
 
 /* Functions for displaying a specific type of value */
 /* Each function have a fixed DP point */
-
 void set_voltage_display()
 {
 	disp_pos = 4;
 	
-	Disp_Set(rms_voltage);
+	disp_set(rms_voltage);
 	
 	for(uint8_t i = 0; i < PLACE_VALUE_SIZE; i++){
 		placeValues[i] = digit_to_sevenseg(placeValues[i]);
@@ -200,7 +211,7 @@ void set_current_display()
 {
 	disp_pos = 4;
 	
-	Disp_Set(pk_current);
+	disp_set(pk_current);
 	
 	/* Need to shift all values left to work with disp_scan_next() */
 	for(uint8_t i = 0; i < PLACE_VALUE_SIZE-1; i++){
@@ -216,7 +227,7 @@ void set_power_display()
 {
 	disp_pos = 4;
 	
-	Disp_Set(power);
+	disp_set(power);
 	
 	/* Need to shift all values left to work with disp_scan_next() */
 	for(uint8_t i = 0; i < PLACE_VALUE_SIZE-1; i++){
@@ -228,22 +239,16 @@ void set_power_display()
 	unit = 2; /* P */
 }
 
+/* Tracks energy consumed from start up. Ignore the first value. */
 void set_energy_display()
 {
-	/* Tracks energy consumed from start up. Ignore the first value. */
-	// static float energy_track = 0;
-	
 	disp_pos = 4;
 	
-	/*
-	if(energy_track >= 9.99){
-		energy_track = 0;
+	if(energy >= 9.99){
+		energy = 0;
 	}
-	*/
 	
-	//Disp_Set(energy_track += energy);
-	
-	Disp_Set(energy);
+	disp_set(energy);
 	
 	/* Need to shift all values left to work with disp_scan_next() */
 	for(uint8_t i = 0; i < PLACE_VALUE_SIZE-1; i++){
@@ -260,16 +265,16 @@ void disp_scan_next()
 {
 	switch(disp_pos){
 		case 1:
-			Disp_Send(placeValues[0]);
+			disp_send(placeValues[0]);
 			break;
 		case 2:
-			Disp_Send(placeValues[1]);
+			disp_send(placeValues[1]);
 			break;
 		case 3:
-			Disp_Send(placeValues[2]);
+			disp_send(placeValues[2]);
 			break;
 		case 4:
-			Disp_Send(indicationUnit[unit]);
+			disp_send(indicationUnit[unit]);
 			break;
 	}
 	
