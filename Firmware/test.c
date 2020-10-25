@@ -1,3 +1,12 @@
+/*
+* test.c
+*
+* Created: 11/09/2020
+* Author: Ankush Patel
+*
+* Functions used to test implementations of peripherals
+*/
+
 #include "common.h"
 #include "uart.h"
 #include "adc.h"

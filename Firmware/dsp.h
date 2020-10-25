@@ -1,3 +1,12 @@
+/*
+* dsp.h
+*
+* Created: 11/09/2020
+* Author: Ankush Patel, Rukin Swedlund
+*
+* Functions regarding signal processing and calculations
+*/
+
 #ifndef DSP_H_
 #define DSP_H_
 

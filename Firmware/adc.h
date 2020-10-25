@@ -4,7 +4,7 @@
 * Created: 25/09/2020
 * Author: Krithik Lekinwala
 *
-* Functions to do with ADC protocols
+* Functions regarding ADC peripherals and protocols
 */
 
 #ifndef _ADC_H

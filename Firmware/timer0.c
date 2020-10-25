@@ -1,3 +1,12 @@
+/*
+* timer0.c
+*
+* Created: 4/10/2020
+* Author: Krithik Lekinwala, Hao Lin
+*
+* Functions regarding timer0 peripherals and protocols
+*/
+
 #include "common.h"
 #include <avr/interrupt.h>
 

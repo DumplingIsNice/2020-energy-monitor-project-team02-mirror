@@ -1,3 +1,12 @@
+/*
+* adc.c
+*
+* Created: 25/09/2020
+* Author: Krithik Lekinwala
+*
+* Functions regarding ADC peripherals and protocols
+*/
+
 #include "common.h"
 #include "timer0.h"
 #include "adc.h"

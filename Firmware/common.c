@@ -1,3 +1,12 @@
+/*
+* common.h
+*
+* Created: 16/08/2020
+* Author: Ankush Patel
+*
+* Functions, macros and libraries commonly used across the project
+*/
+
 #include "common.h"
 #include "uart.h"
 

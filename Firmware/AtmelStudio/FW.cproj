@@ -137,10 +137,6 @@
       <SubType>compile</SubType>
       <Link>test.c</Link>
     </Compile>
-    <Compile Include="../timer0.c">
-      <SubType>compile</SubType>
-      <Link>timer0.c</Link>
-    </Compile>
     <Compile Include="../uart.c">
       <SubType>compile</SubType>
       <Link>uart.c</Link>
@@ -153,29 +149,29 @@
       <SubType>compile</SubType>
       <Link>adc.h</Link>
     </Compile>
-    <Compile Include="../common.h">
+    <Compile Include="..\common.h">
       <SubType>compile</SubType>
       <Link>common.h</Link>
-    </Compile>
-    <Compile Include="../display.h">
-      <SubType>compile</SubType>
-      <Link>display.h</Link>
-    </Compile>
-    <Compile Include="../dsp.h">
-      <SubType>compile</SubType>
-      <Link>dsp.h</Link>
-    </Compile>
-    <Compile Include="../uart.h">
-      <SubType>compile</SubType>
-      <Link>uart.h</Link>
     </Compile>
     <Compile Include="..\display.c">
       <SubType>compile</SubType>
       <Link>display.c</Link>
     </Compile>
+    <Compile Include="..\display.h">
+      <SubType>compile</SubType>
+      <Link>display.h</Link>
+    </Compile>
     <Compile Include="..\dsp.c">
       <SubType>compile</SubType>
       <Link>dsp.c</Link>
+    </Compile>
+    <Compile Include="..\dsp.h">
+      <SubType>compile</SubType>
+      <Link>dsp.h</Link>
+    </Compile>
+    <Compile Include="..\timer0.c">
+      <SubType>compile</SubType>
+      <Link>timer0.c</Link>
     </Compile>
     <Compile Include="..\timer0.h">
       <SubType>compile</SubType>
@@ -184,6 +180,10 @@
     <Compile Include="..\timer2.h">
       <SubType>compile</SubType>
       <Link>timer2.h</Link>
+    </Compile>
+    <Compile Include="..\uart.h">
+      <SubType>compile</SubType>
+      <Link>uart.h</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)//Vs//Compiler.targets" />

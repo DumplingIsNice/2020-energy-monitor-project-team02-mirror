@@ -1,3 +1,12 @@
+/*
+* timer2.c
+*
+* Created: 20/10/2020
+* Author: Hao Lin
+*
+* Functions regarding timer2 peripherals and protocols
+*/
+
 #include "common.h"
 #include "timer2.h"
 #include "display.h"

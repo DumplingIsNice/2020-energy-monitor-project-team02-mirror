@@ -1,3 +1,12 @@
+/*
+* display.h
+*
+* Created: 18/10/2020
+* Author: Krithik Lekinwala, Rukin Swedlund, Hao Lin
+*
+* Functions regarding 7 segment display
+*/
+
 #ifndef DISPLAY_H_
 #define DISPLAY_H_
 

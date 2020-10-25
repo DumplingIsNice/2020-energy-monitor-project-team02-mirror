@@ -1,3 +1,12 @@
+/*
+* display.c
+*
+* Created: 18/10/2020
+* Author: Krithik Lekinwala, Rukin Swedlund, Hao Lin
+*
+* Functions regarding 7 segment display
+*/
+
 #include "common.h"
 #include "display.h"
 #include "dsp.h"
