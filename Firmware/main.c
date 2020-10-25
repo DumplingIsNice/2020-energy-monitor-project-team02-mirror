@@ -50,10 +50,10 @@ int main()
 				calculate_pk_current();
 				calculate_rms_voltage();
 
-				print("%f V(RMS)\r", rms_voltage);
-				print("%f A\r", pk_current);
-				print("%f W\r", power);
-				print("%f J\r", energy);
+				print("%f V(RMS)\r\n", rms_voltage);
+				print("%f A(PK)\r\n", pk_current);
+				print("%f W\r\n", power);
+				print("%f J\r\n", energy);
 
 				sampeled_voltage_current = 0;
 				enable_zc = 1;
