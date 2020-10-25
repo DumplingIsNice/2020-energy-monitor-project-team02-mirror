@@ -23,7 +23,7 @@ def get_all_values(quantity):
 		result.append(record[quantity])
 	return result
 
-# take a string for each of the values and return a record dictionary out of it
+# take a string or float for each of the values and return a record dictionary out of it
 def format(power, rms_voltage, pk_current, energy):
 	return {'power': float(power), 'rms_voltage': float(rms_voltage), 'pk_current': pk_current, 'energy': energy}
 

@@ -1,7 +1,7 @@
 #!./env/bin/python
 # The Above She-Bang ensures we are using the virtualenv
 
-import recrods
+import records
 from flask import Flask, render_template, url_for
 
 # Create our Flask (web app) instance
@@ -24,5 +24,4 @@ def add_records():
 @app.route("/delete/records", methods=['POST'])
 def delete_records():
 	pass
-
 
