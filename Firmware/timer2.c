@@ -63,8 +63,8 @@ void timer2_init()
 		//SET_PORT(TCCR2B, CS20);
 		//SET_PORT(TCCR2B, CS22);
 
-		/* overflow at count of 248 for 10/40 ms */
-		OCR2A = 248;
+		/* overflow at count of 249 for 10/40 ms */
+		OCR2A = 249;
 	#endif /* HARDWARE_BUILD */
 
 		/* Setting interrupt on output compare match A */
