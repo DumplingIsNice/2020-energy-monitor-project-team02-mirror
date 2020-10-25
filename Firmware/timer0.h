@@ -12,8 +12,6 @@
 
 /* TIMER0 */
 
-extern volatile uint16_t period_ms;
-
 void timer0_init();
 void timer0_reset();
 void timer0_stop();
