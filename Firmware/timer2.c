@@ -14,6 +14,7 @@
 
 volatile uint16_t timer2_miliseconds;
 volatile uint8_t change_display = 0;
+volatile uint8_t print_uart = 0;
 
 /* TIMER2 */
 
@@ -27,6 +28,7 @@ ISR(TIMER2_COMPA_vect)
 		//TGL_PORT(PORTB, PORTB5); // Use this LED to check if values are cycled every 1s
 		change_display = 1;
 		timer2_miliseconds = 0;
+		print_uart = 1;
 	} else {
 		disp_scan_next();
 		++timer2_miliseconds;

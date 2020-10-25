@@ -12,6 +12,8 @@
 
 /* TIMER2 */
 
+extern volatile unsigned char print_uart;
+
 /* Initialise Timer2 */
 void timer2_init();
 void timer2_stop();
