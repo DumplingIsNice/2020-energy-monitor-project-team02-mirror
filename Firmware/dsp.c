@@ -22,6 +22,9 @@
 #define CUBE(x) (x * x * x)
 #define SQUARE(x) (x * x)
 
+#define V_RMS_CORRECTION 0.1
+#define POWER_CORRECTION 0.01
+
 volatile unsigned currently_sampling = 0;
 
 /* Inital channel is voltage (we sample voltage first, then current)
@@ -133,7 +136,7 @@ void calculate_power()
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
 		instantanous_power[i] = interpolated_voltages[i] * interpolated_currents[i];
 
-	power = numerical_intergreat(instantanous_power) / period;
+	power = numerical_intergreat(instantanous_power) / period + POWER_CORRECTION;
 }
 
 /* NOTE: This funciton must be called after calculating power !! */
@@ -154,7 +157,7 @@ void calculate_rms_voltage()
 		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
 	}
 
-	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period);
+	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period)+V_RMS_CORRECTION;
 
 }
 
