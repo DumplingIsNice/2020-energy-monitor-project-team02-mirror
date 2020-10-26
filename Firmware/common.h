@@ -38,13 +38,6 @@
 /* Macro to read bit from a pin */
 #define READ_BIT(pin, bit_n) ((pin & (1 << bit_n)) >> bit_n)
 
-/* Debugging Macro to get current line in file:
- * To use, place _SRC_LOC where you want a string of the form
- * "Current-File:Current-Line-Number"
- */
-#define __S1(x) #x
-#define __S2(x) __S1(x)
-#define _SRC_LOC __FILE__ ":" __S2(__LINE__)
 
 /*
  * Round the floating point number n to the number of decimal places specified.
