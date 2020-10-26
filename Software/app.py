@@ -59,6 +59,7 @@ def delete_records():
 # value must be one of the types accepted by records.get_all_values()
 @app.route("/get/json/<string:value>", methods=['POST'])
 def get_json(value):
+	records.refresh()
 	return json.dumps(records.get_all_values(flask.escape(value)))
 
 # Return the Json data for rms_voltage, pk_current, power or energy
