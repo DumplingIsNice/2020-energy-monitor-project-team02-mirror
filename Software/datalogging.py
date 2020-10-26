@@ -5,6 +5,7 @@
 
 import os
 import signal
+import json
 import requests # For talking to the webserver
 import serial # For uart
 
@@ -68,8 +69,7 @@ def run():
 		post_data = {}
 		for i in range(0, len(data)):
 			post_data[i] = data[i]
-		print(post_data);
-#		requests.post(request_url, data)
+		requests.post(request_url, json.dumps(data))
 		print("Data Upload Complete")
 	
 	port.close()
