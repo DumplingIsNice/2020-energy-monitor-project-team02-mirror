@@ -68,7 +68,8 @@ def run():
 		post_data = {}
 		for i in range(0, len(data)):
 			post_data[i] = data[i]
-		requests.post(request_url, data)
+		print(post_data);
+#		requests.post(request_url, data)
 		print("Data Upload Complete")
 	
 	port.close()
