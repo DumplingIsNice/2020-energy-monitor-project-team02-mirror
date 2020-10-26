@@ -45,31 +45,23 @@ def run():
 		power = None
 		energy = None
 
-		try:
-			line = port.readline().strip()
-		except serial.SerialTimeoutException:
-			print("Reading Line From UART Timed Out. Trying Again...")
-			continue
+		while not voltage or not current or not power or not energy:
+			try:
+				line = port.readline().strip()
+			except serial.SerialTimeoutException:
+				print("Reading Line From UART Timed Out. Trying Again...")
+				continue
 
-		print(line);
-		
-	"""
-		if "V(RMS)" in line:
-			voltage = float(line.split(' ')[0])
-		elif "A(PK)" in line:
-			current = float(line.split(' ')[0])
-		elif "W" in line:
-			power = float(line.split(' ')[0])
-		elif "J" in line:
-			energy = float(line.split(' ')[0])
-		else:
-			print("Error found unknown line in UART: " + line)
+			if "V(RMS)" in line:
+				voltage = float(line.split(' ')[0])
+			elif "A(PK)" in line:
+				current = float(line.split(' ')[0])
+			elif "W" in line:
+				power = float(line.split(' ')[0])
+			elif "J" in line:
+				energy = float(line.split(' ')[0])
 
-		if not voltage or not current or not power or not energy:
-			print("Error failed to get voltage, current, power or energy")
-			print("\tPicked Up: V: " + str(voltage) + " I: " + str(current) + "P: " + str(power) + "E: " + str(energy))
-		else:
-			data.append([voltage, current, power, energy])
+		data.append([voltage, current, power, energy])
 
 		print("Finished Collecting Data - Uploading Now ... ")
 
@@ -78,7 +70,7 @@ def run():
 			post_data[i] = data[i]
 		requests.post(request_url, data)
 		print("Data Upload Complete")
-	"""
+	
 	port.close()
 
 if __name__ == "__main__":
