@@ -47,6 +47,9 @@ def run():
 		energy = None
 
 		while not voltage or not current or not power or not energy:
+			if not run_input_loop:
+				break
+
 			try:
 				line = port.readline().strip().decode()
 			except serial.SerialTimeoutException:
@@ -62,7 +65,8 @@ def run():
 			elif "J" in line:
 				energy = float(line.split(' ')[0])
 
-		data.append([voltage, current, power, energy])
+		if voltage and current and power and energy:
+			data.append([voltage, current, power, energy])
 
 		print("Finished Collecting Data - Uploading Now ... ")
 
