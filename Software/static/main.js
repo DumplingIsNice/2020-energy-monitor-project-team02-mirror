@@ -258,8 +258,8 @@ function draw_energy_graph()
 			json_data = JSON.parse(this.response);
 			/* Now draw the chart using chart.js library */
 			if (e_chart != null) {
-				e_cahrt.destroy();
-				e_cahrt = null;
+				e_chart.destroy();
+				e_chart = null;
 			}
 			var e_canvas = document.getElementById('energy_graph');
 			e_chart = new Chart(e_canvas, {
