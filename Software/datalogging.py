@@ -16,7 +16,7 @@ run_input_loop = True
 #	https://ee209t02.herokuapp.com/add/records
 request_url = "http://127.0.0.1:5000/add/records"
 
-def sigint_handle():
+def sigint_handle(signalnum, flag):
 	global run_input_loop
 	run_input_loop = False
 
@@ -68,14 +68,13 @@ def run():
 		if voltage and current and power and energy:
 			data.append([voltage, current, power, energy])
 
-		print("Finished Collecting Data - Uploading Now ... ")
 
-		post_data = {}
-		for i in range(0, len(data)):
-			post_data[i] = data[i]
-		requests.post(request_url, json.dumps(data))
-		print("Data Upload Complete")
-	
+	print("Finished Collecting Data - Uploading Now ... ")
+		
+	print(data)
+	requests.post(request_url, json=data)
+	print("Data Upload Complete")
+
 	port.close()
 
 if __name__ == "__main__":

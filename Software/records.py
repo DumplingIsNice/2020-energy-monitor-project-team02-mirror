@@ -27,6 +27,10 @@ def get_all_values(quantity):
 def format(power, rms_voltage, pk_current, energy):
 	return {'power': float(power), 'rms_voltage': float(rms_voltage), 'pk_current': pk_current, 'energy': energy}
 
+# Takes a formated record 
+def add_record(record):
+	db.store_record(record)
+
 # Delete all records (including stored database!)
 def wipe():
 	db.wipe_records()

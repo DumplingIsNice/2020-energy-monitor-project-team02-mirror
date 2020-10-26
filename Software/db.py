@@ -45,4 +45,5 @@ def load_records():
 	return records;
 
 def wipe_records():
-	os.remove(filepath)
+	file = open(filepath, "w")
+	file.close()
