@@ -60,10 +60,10 @@ def run():
 				voltage = float(line.split(' ')[0])
 			elif "A(PK)" in line:
 				current = float(line.split(' ')[0])
+			elif "Wmin" in line:
+				energy = float(line.split(' ')[0])
 			elif "W" in line:
 				power = float(line.split(' ')[0])
-			elif "J" in line:
-				energy = float(line.split(' ')[0])
 
 		if voltage and current and power and energy:
 			data.append([voltage, current, power, energy])
