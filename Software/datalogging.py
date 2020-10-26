@@ -47,7 +47,7 @@ def run():
 
 		while not voltage or not current or not power or not energy:
 			try:
-				line = port.readline().strip()
+				line = port.readline().strip().decode()
 			except serial.SerialTimeoutException:
 				print("Reading Line From UART Timed Out. Trying Again...")
 				continue
