@@ -14,7 +14,7 @@ run_input_loop = True
 # URL to upload data to
 #	http://127.0.0.1:5000/add/records (for testing)
 #	https://ee209t02.herokuapp.com/add/records
-request_url = "http://127.0.0.1:5000/add/records"
+request_url = "https://ee209t02.herokuapp.com/add/records"
 
 def sigint_handle(signalnum, flag):
 	global run_input_loop
