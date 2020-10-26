@@ -49,11 +49,16 @@ int main()
 				calculate_energy();
 				calculate_pk_current();
 				calculate_rms_voltage();
-
-				print("%f V(RMS)\r\n", rms_voltage);
-				print("%f A(PK)\r\n", pk_current);
-				print("%f W\r\n", power);
-				print("%f J\r\n", energy);
+			
+				/* print once per second */
+				if (print_uart) {	
+					print("%f V(RMS)\r\n", rms_voltage);
+					print("%f A(PK)\r\n", pk_current);
+					print("%f W\r\n", power);
+					print("%f J\r\n", energy);
+					print("\r\n");
+					print_uart = 0;
+				}
 
 				sampeled_voltage_current = 0;
 				enable_zc = 1;

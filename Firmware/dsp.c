@@ -22,6 +22,9 @@
 #define CUBE(x) (x * x * x)
 #define SQUARE(x) (x * x)
 
+#define V_RMS_CORRECTION 0.1
+#define POWER_CORRECTION 0.01
+
 volatile unsigned currently_sampling = 0;
 
 /* Inital channel is voltage (we sample voltage first, then current)
@@ -45,6 +48,8 @@ float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 
 /* Array of (interpolated) V * (interpoloated) I */
 float instantanous_power[INTERPOLATED_ARRAY_SIZE];
+
+static const float period = 0.02;
 
 float power;
 float rms_voltage;
@@ -131,13 +136,13 @@ void calculate_power()
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
 		instantanous_power[i] = interpolated_voltages[i] * interpolated_currents[i];
 
-	power = numerical_intergreat(instantanous_power) / (period_ms * 1e-3);
+	power = numerical_intergreat(instantanous_power) / period + POWER_CORRECTION;
 }
 
 /* NOTE: This funciton must be called after calculating power !! */
 void calculate_energy()
 {
-	energy += power * (period_ms * 1e-3);
+	energy += power * period;
 }
 
 /* NOTE the RMS Voltage calculation should be done last as it overrides the
@@ -152,7 +157,7 @@ void calculate_rms_voltage()
 		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
 	}
 
-	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / (period_ms * 1e-3));
+	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period)+V_RMS_CORRECTION;
 
 }
 
@@ -225,11 +230,11 @@ ISR(INT0_vect)
 	extern volatile unsigned enable_zc;
 	//Use this LED to check if interrupt is called.
 	//TGL_PORT(PORTB, PORTB5);
-
+	
 	/* Zero crossing indicates the start or end of a cycle of sampling */
 	if (!currently_sampling && enable_zc) {
 		currently_sampling = 1;
-		period_ms = adc_voltages_head = adc_currents_head = 0;
+		adc_voltages_head = adc_currents_head = 0;
 		/* Change the channel we will sample next */ 
 		if (current_adc_channel == ADC_CH_VOLTAGE) {
 			adc_set_channel(ADC_CH_CURRENT);
@@ -241,8 +246,6 @@ ISR(INT0_vect)
 		currently_sampling = 0;
 		enable_zc = 0;
 		timer0_stop();
-		/* Incriment it by one as the final timer interrupt won't occur */
-		++period_ms;
 		/* Force sample the ADC one more time to get 20 samples */
 		SET_PORT(ADCSRA, ADSC);
 	}
