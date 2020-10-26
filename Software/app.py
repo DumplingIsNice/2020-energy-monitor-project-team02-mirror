@@ -56,5 +56,5 @@ def get_record_file():
 	file = open(records.db.filepath, "r")
 	content = file.read()
 	file.close()
-	return content;
+	return '<span style="white-space: pre-line">' + content + '</span>';
 
