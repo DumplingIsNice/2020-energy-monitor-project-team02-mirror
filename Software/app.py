@@ -4,6 +4,7 @@
 import records
 import flask
 from flask import Flask, render_template, url_for
+import json
 
 # Create our Flask (web app) instance
 app = Flask(__name__)
@@ -13,7 +14,6 @@ app = Flask(__name__)
 @app.route("/")
 def index():
 	records.refresh()
-	print(records.Records)
 	return render_template('index.html', data=records.Records)
 
 @app.route("/add/record", methods=['POST'])
@@ -34,9 +34,16 @@ def add_records():
 	data = flask.request.get_json()
 	for d in data:
 		add_record(d)
+	records.refresh()
 	return flask.Response(status=200) 
 
 @app.route("/delete/records", methods=['POST'])
 def delete_records():
-	pass
+	records.wipe()
 
+
+# Return the Json data for rms_voltage, pk_current, power or energy
+# value must be one of the types accepted by records.get_all_values()
+@app.route("/get/json/<string:value>", methods=['POST'])
+def get_json(value):
+	return json.dumps(records.get_all_values(flask.escape(value)))

@@ -13,7 +13,7 @@ def refresh():
 	Records = db.load_records()
 
 # Returns a list of all the vlaues of a certain quantity
-#	quantity can be one of:
+#	quantity can be one of (as a string):
 #		- power
 #		- rms_voltage
 #		- pk_current

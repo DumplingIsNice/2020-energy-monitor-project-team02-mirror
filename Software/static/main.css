@@ -15,5 +15,11 @@ header h1 {
 	padding: 0;
 }
 
-header.img {
+header img {
+	width: 25%;
+}
+
+canvas {
+	width: 40%;
+	height: 20%;
 }

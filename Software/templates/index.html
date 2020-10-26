@@ -1,21 +1,31 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<!-- Using JinJa2 Templating -->
+<!-- This is the base template all other html files inherit from -->
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 
-{% block title %} EE09 Team 02 - Smart Energy Interface {% endblock %}
+		<!-- chart.js used as the graphing library -->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+		<script src="../static/main.js"></script>
 
-{% block head %}
+		<title>EE09 Team 02 - Smart Energy Interface</title>
+	</head>
+	<body onload="main()">
+		<header>
+			<h1>ELECTENG209 - Team 02 - Energy Monitor DataLogging Software</h1>
+			<br />
+			<img src="../static/img/uoa-logo-2015-reverse.png" alt="University of Auckland Logo" />
+		</header>
 
-{% endblock %}
+		<canvas id="rms_voltage_graph" width="500px" height="300px"></canvas>
 
+		<canvas id="pk_current_graph"></canvas>
 
-{% block body %}
-<header>
-	<h1>ELECTENG209 - Team 02 - Energy Monitor DataLogging Software</h1>
-	<br />
-	<img src="../static/img/uoa-logo-2015-reverse.png" alt="University of Auckland Logo" />
-</header>
+		<canvas id="power_graph"></canvas>
 
-<canvas>
+		<canvas id="energy_graph"></canvas>
 
-</canvas>
-
-{% endblock %}
+	</body>
+</html>
