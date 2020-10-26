@@ -15,6 +15,6 @@ git_url='https://git.heroku.com/ee209t02.git'
 # Print the command we are running 
 set -x 
 
-git subtree push --prefix Software $git_url master
+git subtree push --prefix Software $git_url master 
 
 
