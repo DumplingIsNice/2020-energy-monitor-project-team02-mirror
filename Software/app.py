@@ -40,6 +40,8 @@ def add_records():
 @app.route("/delete/records", methods=['POST'])
 def delete_records():
 	records.wipe()
+	records.refresh()
+	return flask.Response(status=200)
 
 
 # Return the Json data for rms_voltage, pk_current, power or energy

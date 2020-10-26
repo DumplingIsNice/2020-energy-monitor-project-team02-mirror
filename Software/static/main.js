@@ -305,6 +305,19 @@ function draw_energy_graph()
 	request.send();
 }
 
+function wipe_data()
+{
+	console.log("this")
+	request = new XMLHttpRequest();
+	request.onreadystatechange = function () {
+		if (this.readyState == 4 && this.status == 200) {
+			main();
+		}
+	}
+	request.open('POST', '/delete/records')
+	request.send();
+}
+
 function main()
 {
 	draw_rms_voltage_graph();
