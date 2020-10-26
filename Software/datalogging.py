@@ -71,7 +71,6 @@ def run():
 
 	print("Finished Collecting Data - Uploading Now ... ")
 		
-	print(data)
 	requests.post(request_url, json=data)
 	print("Data Upload Complete")
 

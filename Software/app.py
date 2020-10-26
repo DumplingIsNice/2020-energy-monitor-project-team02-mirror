@@ -2,7 +2,6 @@
 # The Above She-Bang ensures we are using the virtualenv
 
 import records
-from records import Records
 import flask
 from flask import Flask, render_template, url_for
 
@@ -14,7 +13,8 @@ app = Flask(__name__)
 @app.route("/")
 def index():
 	records.refresh()
-	return render_template('index.html', data=Records)
+	print(records.Records)
+	return render_template('index.html', data=records.Records)
 
 @app.route("/add/record", methods=['POST'])
 def add_record(record=None):

@@ -36,13 +36,13 @@ def store_records(records):
 
 # reutrns a list of dictionaries with the keys 'power' 'pk_current' 'rms_voltage' and 'energy'
 def load_records():
-	records = [{}]
+	records = []
 	file = open(filepath, "r")
 	for line in file:
 		tokenised = line.split(' ')
 		records.append({'power': float(tokenised[0]), 'pk_current': float(tokenised[1]), 'rms_voltage': float(tokenised[2]), 'energy': float(tokenised[3])})
 	file.close()
-	return records;
+	return records
 
 def wipe_records():
 	file = open(filepath, "w")

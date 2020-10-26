@@ -10,15 +10,12 @@
 {% block body %}
 <header>
 	<h1>ELECTENG209 - Team 02 - Energy Monitor DataLogging Software</h1>
-	<img src="img/uoa-logo-2015-reverse.png" alt="University of Auckland Logo" />
+	<br />
+	<img src="../static/img/uoa-logo-2015-reverse.png" alt="University of Auckland Logo" />
 </header>
 
-<p> Current Data </p>
+<canvas>
 
-{% for d in data  %}
-
-<p> V(RMS): {{ d['rms_voltage'] }} I(PK): {{ d['pk_current'] }} P: {{ d['power'] }} E: {{ d['energy'] }} </p>
-
-{% endfor %}
+</canvas>
 
 {% endblock %}

@@ -9,6 +9,7 @@ Timestep = 1 # the number of seconds between each record in the list
 Records = db.load_records()
 
 def refresh():
+	global Records
 	Records = db.load_records()
 
 # Returns a list of all the vlaues of a certain quantity
