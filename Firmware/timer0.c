@@ -30,13 +30,13 @@ void timer0_reset()
 {
 
 #ifdef HARDWARE_BUILD
-	/* Set prescaler of 128 */
-	SET_PORT(TCCR0B, CS22), SET_PORT(TCCR0B, CS20);
-	/* overflow at count of 124 for 1 ms */
-	OCR0A = 124;
+	/* Set prescaler of 64 */
+	SET_PORT(TCCR0B, CS01), SET_PORT(TCCR0B, CS00);
+	/* overflow at count of 249 for 1 ms */
+	OCR0A = 249;
 #else
 	/* Set prescaler of 8 */
-	SET_PORT(TCCR0B, CS21);
+	SET_PORT(TCCR0B, CS01);
 	/* overflow at count of 99 for 1 ms */
 	OCR0A = 99;
 #endif /* HARDWARE_BUILD */
