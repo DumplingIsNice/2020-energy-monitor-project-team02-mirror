@@ -1,6 +1,7 @@
 body {
 	margin: 0;
 	padding: 0;
+	background-color: #000000;
 }
 
 header {
@@ -20,6 +21,10 @@ header img {
 }
 
 canvas {
-	width: 40%;
-	height: 20%;
+}
+
+.canvas_container {
+	width: 50%;
+	position: relative;
+	left: 25%;
 }

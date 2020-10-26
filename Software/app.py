@@ -27,7 +27,7 @@ def add_record(record=None):
 		record_fmt = records.format(data[2], data[0], data[1], data[3])
 	
 	records.add_record(record_fmt)
-	return flask.Response(status=200) 
+	return flask.Response(status=200)
 
 @app.route("/add/records", methods=['POST'])
 def add_records():
