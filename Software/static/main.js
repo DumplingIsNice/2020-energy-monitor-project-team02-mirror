@@ -1,7 +1,7 @@
-var v_canvas = null;
-var i_canvas = null;
-var p_canvas = null;
-var e_canvas = null;
+var v_chart = null;
+var i_chart = null;
+var p_chart = null;
+var e_chart = null;
 
 function draw_rms_voltage_graph()
 {
@@ -16,11 +16,11 @@ function draw_rms_voltage_graph()
 			json_data = JSON.parse(this.response);
 			/* Now draw the chart using chart.js library */
 			if (v_canvas != null) {
-				v_canvas.destroy();
-				v_canvas = null;
+				v_chart.destroy();
+				v_chart = null;
 			}
-			v_canvas = document.getElementById('rms_voltage_graph');
-			var chart = new Chart(v_canvas, {
+			var v_canvas = document.getElementById('rms_voltage_graph');
+			v_chart = new Chart(v_canvas, {
 				type: 'line',
 				data: {
 					labels: Array.from(Array(json_data.length).keys()),
@@ -95,12 +95,12 @@ function draw_pk_current_graph()
 		if (this.readyState == 4 && this.status == 200) {
 			json_data = JSON.parse(this.response);
 			/* Now draw the chart using chart.js library */
-			if (i_canvas != null) {
-				i_canvas.destroy();
-				i_canvas = null;
+			if (i_chart != null) {
+				i_chart.destroy();
+				i_chart = null;
 			}
-			i_canvas = document.getElementById('pk_current_graph');
-			var chart = new Chart(i_canvas, {
+			var i_canvas = document.getElementById('pk_current_graph');
+			i_chart = new Chart(i_canvas, {
 				type: 'line',
 				data: {
 					labels: Array.from(Array(json_data.length).keys()),
@@ -176,12 +176,12 @@ function draw_power_graph()
 		if (this.readyState == 4 && this.status == 200) {
 			json_data = JSON.parse(this.response);
 			/* Now draw the chart using chart.js library */
-			if (p_canvas != null) {
-				v_canvas.destroy();
-				v_canvas = null;
+			if (p_chart != null) {
+				p_chart.destroy();
+				p_chart = null;
 			}
-			p_canvas = document.getElementById('power_graph');
-			var chart = new Chart(p_canvas, {
+			var p_canvas = document.getElementById('power_graph');
+			p_chart = new Chart(p_canvas, {
 				type: 'line',
 				data: {
 					labels: Array.from(Array(json_data.length).keys()),
@@ -257,12 +257,12 @@ function draw_energy_graph()
 		if (this.readyState == 4 && this.status == 200) {
 			json_data = JSON.parse(this.response);
 			/* Now draw the chart using chart.js library */
-			if (e_canvas != null) {
-				v_canvas.destroy();
-				v_canvas = null;
+			if (e_chart != null) {
+				e_cahrt.destroy();
+				e_cahrt = null;
 			}
-			e_canvas = document.getElementById('energy_graph');
-			var chart = new Chart(e_canvas, {
+			var e_canvas = document.getElementById('energy_graph');
+			e_chart = new Chart(e_canvas, {
 				type: 'line',
 				data: {
 					labels: Array.from(Array(json_data.length).keys()),
