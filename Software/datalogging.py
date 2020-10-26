@@ -51,6 +51,9 @@ def run():
 			print("Reading Line From UART Timed Out. Trying Again...")
 			continue
 
+		print(line);
+		
+	"""
 		if "V(RMS)" in line:
 			voltage = float(line.split(' ')[0])
 		elif "A(PK)" in line:
@@ -74,9 +77,9 @@ def run():
 		for i in range(0, len(data)):
 			post_data[i] = data[i]
 		requests.post(request_url, data)
-
 		print("Data Upload Complete")
-		port.close()
+	"""
+	port.close()
 
 if __name__ == "__main__":
 	run()
