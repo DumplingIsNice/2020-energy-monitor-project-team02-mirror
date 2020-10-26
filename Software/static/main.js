@@ -307,7 +307,6 @@ function draw_energy_graph()
 
 function wipe_data()
 {
-	console.log("this")
 	request = new XMLHttpRequest();
 	request.onreadystatechange = function () {
 		if (this.readyState == 4 && this.status == 200) {
