@@ -55,7 +55,7 @@ int main()
 					print("%f V(RMS)\r\n", rms_voltage);
 					print("%f A(PK)\r\n", pk_current);
 					print("%f W\r\n", power);
-					print("%f J\r\n", energy);
+					print("%f Wmin\r\n", energy);
 					print("\r\n");
 					print_uart = 0;
 				}
