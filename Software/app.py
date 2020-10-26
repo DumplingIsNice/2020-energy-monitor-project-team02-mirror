@@ -8,7 +8,8 @@ import json
 
 # Create our Flask (web app) instance
 app = Flask(__name__)
-
+# Force reload and no caching
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # Decorator syntax to set / to index.html (Home / Main Page)
 @app.route("/")
