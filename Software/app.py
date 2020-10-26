@@ -19,7 +19,6 @@ def index():
 @app.route("/add/record", methods=['POST'])
 def add_record(record=None):
 	# record (or request) is a list of form RMS Voltage, Pk Current, Power, Energy
-	
 	if record:
 		record_fmt = records.format(record[2], record[0], record[1], record[3])
 	else:
@@ -49,3 +48,13 @@ def delete_records():
 @app.route("/get/json/<string:value>", methods=['POST'])
 def get_json(value):
 	return json.dumps(records.get_all_values(flask.escape(value)))
+
+# Return the Json data for rms_voltage, pk_current, power or energy
+# value must be one of the types accepted by records.get_all_values()
+@app.route("/record.txt", methods=['GET'])
+def get_record_file():
+	file = open(records.db.filepath, "r")
+	content = file.read()
+	file.close()
+	return content;
+
