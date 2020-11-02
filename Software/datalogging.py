@@ -47,9 +47,6 @@ def run():
 		energy = None
 
 		while not voltage or not current or not power or not energy:
-			if not run_input_loop:
-				break
-
 			try:
 				line = port.readline().strip().decode()
 			except serial.SerialTimeoutException:
@@ -64,15 +61,19 @@ def run():
 				energy = float(line.split(' ')[0])
 			elif "W" in line:
 				power = float(line.split(' ')[0])
-
+			
 		if voltage and current and power and energy:
 			data.append([voltage, current, power, energy])
+			print("Apending")
 
 
 	print("Finished Collecting Data - Uploading Now ... ")
-		
-	requests.post(request_url, json=data)
-	print("Data Upload Complete")
+	print(data)	
+	status = requests.post(request_url, json=data)
+	while status != 200:
+		requests.post(request_url, json=data)
+		print("Upload Failed, Trying Again!")
+	print("Data Upload Complete (%d seconds worth of data)" % len(data))
 
 	port.close()
 
