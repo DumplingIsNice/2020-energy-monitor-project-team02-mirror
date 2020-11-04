@@ -6,6 +6,7 @@
 
 - Firmware program to work with ATmega328PB microcontroller.
 - Program written in Atmel Studio 7.0 under Atmega328P simulator.
+- For structure of the program, please refer to the [Flow Charts]()
 
 ### Description of files:
 - **main.c:** The main function, entry point of code.
