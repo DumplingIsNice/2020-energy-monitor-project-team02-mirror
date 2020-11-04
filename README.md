@@ -1,14 +1,17 @@
 <img src="https://github.com/ee209-2020class/ee209-2020class.github.io/blob/master/ExtraInfo/logo.png">
 
-# Welcome to Your EE209 Project Repository
+# Welcome to Team 02 EE209 Project Repository
 
-- Code, simulations and other files relating to your final project implementation should be in this folder
- - You can create folders to organize your work (e.g. PCB, Firmware, Software, LTspice, Proteus, etc.)
-- Unless you are quite familiar with Git, do your individual work in your own folder and manually migrate the final solutions to this folder (i.e. copy-paste relevant parts from your folder to this folder)
+- **Documentation:** Project brief, specifications and miscellaneous reminders.
+- **Firmware:** Program for the ATmega328PB microcontroller.
+- **Flowcharts:** Flowcharts of firmware structure.
+- **Hardware:** Ltspice model.
+- **PCB:** Altium schematic and PCB model.
+- **Presentation:** Presentation slides and documents.
+- **Proteus:** Proteus model of the energy monitor system.
+- **Software:** Python implementation of a web application.
 
+For details regarding each folder, please view the relevant README file.
 
-# Test Push
-* Ankush
-* Krithik
-* Ruskin!
-* Hao
+For more detail regarding the project, please view the [Final Report](./EE209_Report.pdf).
+
