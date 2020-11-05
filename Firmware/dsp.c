@@ -180,13 +180,13 @@ void adc2real_voltage()
 	// Voltage divider inverse gain
 	const uint16_t Rb1 = 3300;
 	const uint16_t Ra1 = 56000;
-	const float dividerGain = 1/ (float) (Rb1 / (float) (Ra1 + Rb1));
+	float dividerGain = 1/ (float) (Rb1 / (float) (Ra1 + Rb1));
 	
 	
 	// Voltage amplifier gain
 	const uint16_t R2 = 4700;
 	const uint16_t R1 = 4700;
-	const float amplifierGain =  1 / (float) (R2 / ((float) R1));
+	float amplifierGain =  1 / (float) (R2 / ((float) R1));
 
 #ifdef  HARDWARE_BUILD
 	/* The XplainedMini does not have resistors/opamps/gains etc. */
@@ -210,13 +210,13 @@ void adc2real_current()
 	
 	// Voltage divider inverse gain
 	const float Rs1 = 0.56;
-	const float dividerGain = 1 / (float) (Rs1);
+	float dividerGain = 1 / (float) (Rs1);
 	
 	
 	// Voltage amplifier gain
 	const uint16_t R2 = 56000;
 	const uint16_t R1 = 22000;
-	const float amplifierGain =  1 / (float) (R2 / ((float) R1));
+	float amplifierGain =  1 / (float) (R2 / ((float) R1));
 	
 #ifdef  HARDWARE_BUILD
 	/* The XplainedMini does not have resistors/opamps/gains etc. */
