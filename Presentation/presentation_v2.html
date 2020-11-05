@@ -239,25 +239,10 @@ name: S2
 
 -->
 
+
+
 ---
 name: S3
-
-<!-- #region 
-
-# Analog Design Considerations: Peak Dectector
-- Peak detected by sampling the voltage when an interrupt is triggered
-  * Interrupt generated using an analogue circuit
-
-
-.center[
-<img src = "img/peakDetectorSchem.png" width="49%" /> &nbsp;
-<img src = "img/peakDetector.png" width="49%" />
-]
-
--->
-
----
-name: S4
 
 # Firmware Design Considerations
 
@@ -267,7 +252,7 @@ name: S4
 
 
 ---
-name: S5
+name: S4
 
 # Firmware Design Considerations
 
@@ -292,7 +277,7 @@ int main()
 
 ---
 
-name: S6
+name: S5
 
 # Firmware Design Considerations
 
@@ -313,7 +298,23 @@ name: S6
 ```
 ]
 
+
 ---
+name: S6
+
+# Digital Signal Processing: Cubic Interpolation
+- Cubic Interopolation and Simpsons Rule used to achieve accurate peak values
+  * Read all voltage ADC values first, then current ADC values to reduce phase difference
+  * Entirely software based, makes a physical peak detector mostly obsolete
+
+
+.center[
+<img src = "img/VoltageWave.png" width="45%" /> &nbsp;
+<img src = "img/CurrentWave.png" width="49%" />
+]
+
+---
+
 name: S7
 
 # PCB Layout
@@ -333,20 +334,23 @@ name: S8
 <img src='img/Trello2.png' width="30%" />
 ]
 
-<!--
-Weekly Meetings: catch up on progress, comparing metamemory and contrasting transactive memory, exploring and delegating tasks, completing course assignments and using newly learnt knowledge to develope the project. 
+---
 
-Firmware: discussed overall structure and identified key parts to implement. Created to do list, detailing each aspect. Members selected tasks and completed independently. Meetings were times used to merge and discuss next steps.
-Hardware: designed together using common knowledge. After validation, the design is optimized by analyzing extreme conditions (max v, i, r). 
+name: S10
 
-Peak detector developed independently. Later in development, introduction of the cubic interpolation method caused physical peak detector to be obsolete.
+# Project Management
 
-Web Application Software: Developed independently by Ankush.
--->
+- Weekly meetings used to collaborate new ideas, task delegation, and using newly learnt knowledge to complete project deliverables 
+
+- Discussed overall structure and identified key parts to implement for Firmware. Self-delegated tasks using Trello for implementations
+
+- Hardware designed together using common knowledge. After validation, the design is optimized by analyzing extreme conditions (max v, i, r)  
+
+- Web Application Software developed independently by Ankush to display power, energy, voltage, and current values on a web server
 
 ---
 
-name: S9
+name: S10
 
 # Project Management
 
