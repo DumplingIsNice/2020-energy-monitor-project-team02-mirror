@@ -188,10 +188,6 @@ void adc2real_voltage()
 	const uint16_t R1 = 4700;
 	float amplifierGain =  1 / (float) (R2 / ((float) R1));
 
-#ifdef  HARDWARE_BUILD
-	/* The XplainedMini does not have resistors/opamps/gains etc. */
-	dividerGain = amplifierGain = 0;
-#endif /* HARDWARE_BUILD */
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 		/* The voltage values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw voltage values
@@ -218,11 +214,6 @@ void adc2real_current()
 	const uint16_t R1 = 22000;
 	float amplifierGain =  1 / (float) (R2 / ((float) R1));
 	
-#ifdef  HARDWARE_BUILD
-	/* The XplainedMini does not have resistors/opamps/gains etc. */
-	dividerGain = amplifierGain = 0;
-#endif /* HARDWARE_BUILD */
-	
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 		/* The voltage values in raw_currents are actually the ADC values
 		 * Overwrite them with the actual raw voltage values
@@ -236,7 +227,7 @@ ISR(INT0_vect)
 {
 	extern volatile unsigned enable_zc;
 	//Use this LED to check if interrupt is called.
-	//TGL_PORT(PORTB, PORTB5);
+	TGL_PORT(PORTB, PORTB5);
 	
 	/* Zero crossing indicates the start or end of a cycle of sampling */
 	if (!currently_sampling && enable_zc) {

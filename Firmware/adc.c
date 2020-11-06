@@ -35,10 +35,13 @@ void adc_init()
 	 * To get the full 10-bit resolution , the ADC clock must be at a maximum of 200 KHz
 	 * Prescaler = f_cpu / 200000
 	 */
-	SET_PORT(ADCSRA, ADEN), SET_PORT(ADCSRA, ADSC), SET_PORT(ADCSRA, ADATE), SET_PORT(ADCSRA, ADIE);
+	SET_PORT(ADCSRA, ADEN), SET_PORT(ADCSRA, ADSC), SET_PORT(ADCSRA, ADATE), SET_PORT(ADCSRA, ADIE), SET_PORT(ADMUX, REFS0);
 #ifdef HARDWARE_BUILD
 	/* For hardware, prescaler must be 128 */
-	SET_PORT(ADCSRA, ADPS2), SET_PORT(ADCSRA, ADPS1), SET_PORT(ADCSRA, ADPS0);
+	// SET_PORT(ADCSRA, ADPS2), SET_PORT(ADCSRA, ADPS1), SET_PORT(ADCSRA, ADPS0);
+	
+	/* For hardware, prescaler must be 64 */
+	SET_PORT(ADCSRA, ADPS2), SET_PORT(ADCSRA, ADPS1), CLR_PORT(ADCSRA, ADPS0);
 #else
 	/* For simulation, prescaler can be 4 */
 	SET_PORT(ADCSRA, ADPS1);
@@ -53,8 +56,10 @@ ISR(ADC_vect)
 	/* Occurs every 1 ms (uncomment LED toggle code below to test) */
 	//TGL_PORT(PORTB, PORTB5);
 	if (current_adc_channel == ADC_CH_VOLTAGE) {
+		//print("%f\r\n", (float)ADC);
 		adc_voltages[adc_voltages_head++] = ADC;
 	} else {
+		//print("%u\r\n", ADC);
 		adc_currents[adc_currents_head++] = ADC;
 	}
 }
