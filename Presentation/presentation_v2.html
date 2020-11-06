@@ -222,7 +222,7 @@ name: template_slide
 ---
 # Introduction
 - Home energy monitor to read voltage, current and power consumption
-- Display information on a local 7-segment display and on a mobile using Bluetooth
+- Display information on a local 7-segment display, on a mobile app using Bluetooth and on a web app using python
 
 .center[<img src = "img/Xmini.jpg" width="30%" />]
 
@@ -248,7 +248,7 @@ name: S3
 
 - Our key focus was to procure <b>modular</b> and <b>efficient</b> code
 
-.center[<img src = "img/DependencyGraph.svg" width="65%" />]
+.center[<img src = "../flowcharts/UART flowchart.png" width="80%" />]
 
 
 ---
@@ -317,7 +317,11 @@ name: S6
 
 name: S7
 
-# PCB Layout
+# PCB Design and Development
+
+- During assembly of the PCB, a problem arisen where a ground route was destroyed. To amend for the destroyed route, a physical wire was connected to the nearest ground node.
+- During assembly of the PCB, the power supply to the uC were found to be ill remembered. To amend for the lack of a supply, a physical wire was connected to the 5V supply with the uC.
+
 .center[
 	<img src="img/netw/PCBLayout3DAnnotated.png" width="50%"> &nbsp; &nbsp; &nbsp; &nbsp; 
   <img src="img/netw/PCBLayout2D.png" width="30%">
