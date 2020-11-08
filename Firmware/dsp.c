@@ -77,6 +77,22 @@ static float numerical_intergreat(float *input)
 	return numericalResult;
 }
 
+/* Using Trapezoidal Rule */
+static float numerical_intergreat_trpiz(float *input)
+{
+	float deltaX = 0.0001;
+	float numericalResult = input[0];
+
+	for(uint8_t i = 1; i < INTERPOLATED_ARRAY_SIZE - 1; ++i){
+		numericalResult += 2 * input[i];
+	}
+
+	numericalResult += input[i];
+	numericalResult = (deltaX / 2) * numericalResult;
+
+	return numericalResult;
+}
+
 /* Cubic interpolate between a two points */
 static float cubic_point(float x, float y0, float y1, float y2, float y3)
 {
