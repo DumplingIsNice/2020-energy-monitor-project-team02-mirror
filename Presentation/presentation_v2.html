@@ -242,13 +242,6 @@ name: template_slide
 .center[** Ltspice Schematic to validate design **]
 
 ---
-
-# Hardware Design
-
-.center[<img src = "./img/Ltspice Schematic.png" width="90%" />]
-.center[** Ltspice Schematic to validate design **]
-
----
 name: S3
 
 # Firmware Design
@@ -303,7 +296,7 @@ name: S6
 <img src = "img/CurrentWaveBefore.png" width="48%" /> &nbsp;
 <img src = "img/CurrentWave.png" width="49%" />
 ]
-.center[ ** sample data before and after interpolation **]
+.center[ ** Sample data before and after interpolation **]
 ---
 
 # PCB Design and Development
@@ -315,7 +308,7 @@ name: S6
 
 ---
 
-# Bench-work: 1 week, 5 days, ~40 hours
+# Bench-work: ~55 hours
 
 Problems encountered during assembly of the PCB:
 - Attempt to extend our OpAmp as a first order filter compromised measurements physically. This alteration was discarded. 
@@ -324,8 +317,6 @@ Problems encountered during assembly of the PCB:
 (In retrospect ths could have destroyed the uC, current limiting and over-voltage protection should have been implemented along with the connection.) 
 - Influence such as the magnetic field from the voltage probe loop severely compromised our judgement.
 - Error of bench results were amended in correction functions. Correction derived from error analysis in excel.
-
-Error of all measurements controlled between **7.5% to 2.1%** (BS value).
 
 ---
 name: S8
@@ -375,6 +366,7 @@ name: S10
 
 - Effective use of Git, rolling back when encountering issues with latest commit
 - Python script reads makefile to generate Atmel Studio Project so we are not limited to Atmel IDE
+- Used different branch merges to test different integration and interpolation methods (didn't destroy main branch while testing)
 
 <pre>
 <code style="text-align: center">
