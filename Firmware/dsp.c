@@ -151,22 +151,38 @@ void calculate_energy()
 void calculate_rms_voltage()
 {
 	unsigned i;
+	float correction = V_RMS_CORRECTION;
 
 	/* WARNING: interpolated_voltages IS NOW SQUARED !!! */
 	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
 		interpolated_voltages[i] = SQUARE(interpolated_voltages[i]);
 	}
+	
+	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period);
+	
+	/* Note correction is non-linear (larger error towards middle) */
+	/*if((12.7 <= rms_voltage) && (rms_voltage <= 15.7)){
+		float percentage = rms_voltage/15.7;	
+		correction = percentage*0.3 + 0.2;
+	}*/
+	
 
-	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period)+V_RMS_CORRECTION;
-
+	if(rms_voltage < 12.7) correction = 0.2;
+	if(rms_voltage < 13.6) correction = 0.4;
+	if(rms_voltage < 14.5) correction = 0.6;
+	if(rms_voltage < 15.4) correction = 0.4;
+	if(rms_voltage > 15.4) correction = 0.2;
+	
+	rms_voltage -= correction; 
 }
 
 void calculate_pk_current()
 {
+	const float correction = 0.2;
 	unsigned i;
 	for (pk_current = i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
 		if (interpolated_currents[i] > pk_current)
-			pk_current = interpolated_currents[i];
+			pk_current = interpolated_currents[i] + correction;
 }
 
 
@@ -174,8 +190,10 @@ void calculate_pk_current()
 void adc2real_voltage()
 {
 	int i;
-
-	const float vOffset = 2.1;
+	float pk_voltage;
+	uint8_t pk_voltage_index = 0;
+	
+	const float vOffset = 2.008;
 	
 	// Voltage divider inverse gain
 	const uint16_t Rb1 = 3300;
@@ -193,7 +211,29 @@ void adc2real_voltage()
 		 * Overwrite them with the actual raw voltage values
 		 */
 		/* raw_voltages[i] = (float) 0.0877427 * raw_voltages[i] - (float) 37.7365; */
-		raw_voltages[i] = ((5 * adc_voltages[i] / 1024.f) - vOffset) * dividerGain * amplifierGain;
+		raw_voltages[i] = ((5 * adc_voltages[i] / 1024.f)); // - vOffset) * dividerGain * amplifierGain;
+	}
+	
+	/* Finds the peak in the raw voltage array */
+	for (pk_voltage = i = 0; i < RAW_ARRAY_SIZE; ++i){
+		if (raw_voltages[i] > pk_voltage){
+			pk_voltage = raw_voltages[i];
+			pk_voltage_index = i;
+		}
+	}
+	
+	/* Accounts for UNKOWN distortions*/
+	for(i = 0; i <= pk_voltage_index; ++i){
+		raw_voltages[i] += 0.1;
+	}
+	
+	/* Apply offset cancel and reverse gain */
+	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
+		/* The voltage values in raw_currents are actually the ADC values
+		 * Overwrite them with the actual raw voltage values
+		 */
+		/* raw_voltages[i] = (float) 0.0877427 * raw_voltages[i] - (float) 37.7365; */
+		raw_voltages[i] = (raw_voltages[i] - vOffset) * dividerGain * amplifierGain;
 	}
 }
 
@@ -202,10 +242,11 @@ void adc2real_current()
 {
 	int i;
 
-	const float vOffset = 2.1;
+	const float vOffset = 2.008;
 	
 	// Voltage divider inverse gain
-	const float Rs1 = 0.56;
+	//const float Rs1 = 0.56;
+	const float Rs1 = 0.5;
 	float dividerGain = 1 / (float) (Rs1);
 	
 	

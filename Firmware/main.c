@@ -43,8 +43,10 @@ int main()
 			if (sampeled_voltage_current) {
 				adc2real_voltage();
 				adc2real_current();
+				/*for (int i = 0; i < RAW_ARRAY_SIZE; ++i) {
+					print("%f \r\n", raw_currents[i]);
+				}*/
 				cubic_interpolate();
-
 				calculate_power();
 				calculate_energy();
 				calculate_pk_current();
