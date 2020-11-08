@@ -58,13 +58,13 @@ static const float period = 0.02;
 float power;
 float rms_voltage;
 float pk_current;
-float energy;
+float energy = 0;
 
 /* Zero Crossing Interrupt */
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
 
-/* Using Simpson's Rule */ /*
+/* Using Simpson's Rule */ 
 static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
@@ -76,13 +76,13 @@ static float numerical_intergreat(float *input)
 
 	numericalResult = numericalResult + input[37] * 4;
 	numericalResult = numericalResult + input[38];
-	numericalResult = numericalResult * (40 / 3);
+	numericalResult = numericalResult * (50e-6 / 3);
 
 	return numericalResult;
-}*/
+}
 
 /* Using Trapezoidal Rule */
-static float numerical_intergreat(float *input)
+static float numerical_intergreat_trp(float *input)
 {
 	uint8_t i = 0;
 	float deltaX = 0.00005;
@@ -212,13 +212,15 @@ void calculate_pk_current()
 #else
 	const float correction = 0;
 #endif /* HARDWARE_BUILD */ 
-	
+/*	
 	unsigned i;
 	for (pk_current = i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
 		if (interpolated_currents[i] > pk_current)
 			pk_current = interpolated_currents[i] + correction;
+*/
+#define TEST_PK_CURRENT
 
-#if TEST_PK_CURRENT
+#ifdef TEST_PK_CURRENT
 	/* Test this */
 	{
 	unsigned i;

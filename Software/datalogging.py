@@ -70,8 +70,9 @@ def run():
 	print("Finished Collecting Data - Uploading Now ... ")
 	print(data)	
 	status = requests.post(request_url, json=data)
-	while status != 200:
-		requests.post(request_url, json=data)
+	while status.status_code != 200:
+		status = requests.post(request_url, json=data)
+		print(status)
 		print("Upload Failed, Trying Again!")
 	print("Data Upload Complete (%d seconds worth of data)" % len(data))
 
