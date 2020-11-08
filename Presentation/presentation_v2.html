@@ -220,71 +220,63 @@ name: template_slide
 .footer[[Hao Lin, Krithik Lekinwala, Ankush Patel and Ruskin Swedlund](https://www.linkedin.com/in/authorname), Department of Electrical, Computer and Software Engineering (2020)]
 
 ---
+
 # Introduction
+
+.left[
 - Home energy monitor to read voltage, current and power consumption
 - Display information on a local 7-segment display, on a mobile app using Bluetooth and on a web app using python
-
-.center[<img src = "img/Xmini.jpg" width="30%" />]
+- Web Application Software developed independently by Ankush to display power, energy, voltage, and current values on a web server: https://ee209t02.herokuapp.com/
+]
+.center[<img src = "img/physicalPCB.png" width="30%" />]
 
 ---
-name: S2
 
-<!-- #region 
+# Hardware Design
 
-# Analog Design Considerations: Signal Amplification
-- $50\%$ range increase for ADC input by optimizing resistors chosen in the differential amplifier
-      - From $1.3\ V \leftrightarrow 2.9\ V$ to $0.9\ V \leftrightarrow 3.3\ V$
+- Developed parts of the analogue system individually
+- Restricted to E12 values
+- After validation, replicated in Altium for PCD development
 
-.center[<img src="img/ADCInput.png" width="65%">]
+.center[<img src = "./img/Ltspice Schematic2.png" width="90%" />]
+.center[** Ltspice Schematic to validate design **]
 
--->
+---
 
+# Hardware Design
 
+.center[<img src = "./img/Ltspice Schematic.png" width="90%" />]
+.center[** Ltspice Schematic to validate design **]
 
 ---
 name: S3
 
-# Firmware Design Considerations
+# Firmware Design
 
+- Developed in Atmel AVR intergrated programming platform
 - Our key focus was to procure <b>modular</b> and <b>efficient</b> code
 
 .center[<img src = "../flowcharts/UART flowchart.png" width="80%" />]
+.center[** One of ou many flow charts of a module to service a uC peripheral **]
 
+---
+
+.center[
+<img src = "../flowcharts/ADC flowchart.png" width="80%" />
+<img src = "../flowcharts/Signal Processing Flowchart.png" width="70%" />
+]
 
 ---
 name: S4
 
-# Firmware Design Considerations
+# Custom print() Function
 
-- Our custom `print()` function, which is built on top of our modular UART functions that automaticlly convert to 3 significant figures before transmitting
-
-.codes[
-```c
-#define rmsvoltage 14.5
-#define peakcurrent 125
-#define power 1.60
-int main()
-{
-	print("rms voltage is: %f", rmsvoltage);
-	print("peak current is: %d", peakcurrent);
-	print("power is: %f", power);
-}
-```
-]
-
-.center[<img src="img/virtualTerminal.png" height="100">]
-
-
----
-
-name: S5
-
-# Firmware Design Considerations
+- Our custom `print()` function, which is built on top of our modular UART functions that converts input arguments to 3 significant figures before transmitting out TX
 
 * Standard library `printf()` is just under a $kB$ in size
 
 * Our custom `print()` function only consumes $244 \ bytes$
-	* Thats over $70\%$ reduction in size
+	* Over $70\%$ reduction in size
 
 * Our custom print function retains all the convenient `printf()` syntax
 
@@ -298,7 +290,6 @@ name: S5
 ```
 ]
 
-
 ---
 name: S6
 
@@ -309,29 +300,53 @@ name: S6
 
 
 .center[
-<img src = "img/VoltageWave.png" width="45%" /> &nbsp;
+<img src = "img/CurrentWaveBefore.png" width="48%" /> &nbsp;
 <img src = "img/CurrentWave.png" width="49%" />
+]
+.center[ ** sample data before and after interpolation **]
+---
+
+# PCB Design and Development
+
+.center[
+	<img src="img/netw/PCBLayout3DAnnotated.png" width="50%"> &nbsp; &nbsp; &nbsp; &nbsp; 
+  <img src="img/physicalPCB2.png" width="40%">
 ]
 
 ---
 
-name: S7
+# Bench-work: 1 week, 5 days, ~40 hours
 
-# PCB Design and Development
+Problems encountered during assembly of the PCB:
+- Attempt to extend our OpAmp as a first order filter compromised measurements physically. This alteration were discarded. 
+- A ground route was destroyed. To amend for the destroyed route, a physical wire was connected to the nearest ground node.
+- The power supply to the uC were discovered to be forgotten. To amend for the lack of a supply, a physical wire was connected to the 5V supply with the uC.
+(In retrospect ths could have destroyed the uC, current limiting and over-voltage protection should have been implemented along with the connection.) 
+- Influence such as the magnetic field from the voltage probe loop severely compromised our judgement.
+- Error of bench results were amended for in correction functions. Correction derived from error analysis in excel.
 
-- During assembly of the PCB, a problem arisen where a ground route was destroyed. To amend for the destroyed route, a physical wire was connected to the nearest ground node.
-- During assembly of the PCB, the power supply to the uC were found to be ill remembered. To amend for the lack of a supply, a physical wire was connected to the 5V supply with the uC.
+Error of all measurements controlled at between **7.5% to 2.1%** (BS value).
 
-.center[
-	<img src="img/netw/PCBLayout3DAnnotated.png" width="50%"> &nbsp; &nbsp; &nbsp; &nbsp; 
-  <img src="img/netw/PCBLayout2D.png" width="30%">
-]
 ---
 name: S8
 
 # Project Management
 
-- Workflow planning and task management using Slack and Trello
+- Weekly meetings used to collaborate new ideas, task delegation, and using newly learnt knowledge to complete project deliverables 
+
+- Hardware designed together using common knowledge. After validation, the design is optimized by analyzing extreme conditions (max v, i, r)  
+
+- Discussed overall structure and identified key parts to implement for Firmware. Self-delegated tasks using Trello for implementations
+
+---
+
+name: S10
+
+# Collaboration Tools
+
+- Orientation and communication through Slack
+- Workflow planning and task management using Trello
+- Documentation in team repository on Github
 
 .center[
 <img src='img/Trello.png' width='55%' /> &nbsp; &nbsp; &nbsp; &nbsp;
@@ -340,23 +355,23 @@ name: S8
 
 ---
 
-name: S10
+.center[
+<img src='img/slack.png' width='90%' /> &nbsp; &nbsp; &nbsp; &nbsp;
+]
+.center[** Integrated git commit notifications **]
 
-# Project Management
+---
 
-- Weekly meetings used to collaborate new ideas, task delegation, and using newly learnt knowledge to complete project deliverables 
-
-- Discussed overall structure and identified key parts to implement for Firmware. Self-delegated tasks using Trello for implementations
-
-- Hardware designed together using common knowledge. After validation, the design is optimized by analyzing extreme conditions (max v, i, r)  
-
-- Web Application Software developed independently by Ankush to display power, energy, voltage, and current values on a web server
+.center[
+<img src='img/slack2.png' width="90%" /> &nbsp; &nbsp; &nbsp; &nbsp;
+]
+.center[** Negotiating and sorting out technical problems **]
 
 ---
 
 name: S10
 
-# Project Management
+# Git Management
 
 - Effective use of Git, rolling back when encountering issues with latest commit
 - Python script reads makefile to generate Atmel Studio Project so we are not limited to Atmel IDE
@@ -381,8 +396,8 @@ count: false
 .logo-title[]
 
 # Acknowledgements
-#### Special thanks to Duleepa and the TA's 
-#### for their valuable feedback.
+#### Special thanks to Duleepa, Andrew, Logan and all TA's 
+#### for their valuable feedback & assistance.
 
     </textarea>
 
