@@ -296,7 +296,7 @@ name: S6
 # Digital Signal Processing: Cubic Interpolation
 - Cubic Interopolation and Simpsons Rule used to achieve accurate peak values
   * Read all voltage ADC values first, then current ADC values to reduce phase difference
-  * Entirely software based, makes a physical peak detector mostly obsolete
+  * Entirely software based, makes a physical peak detector mostly obsolete in this scenario
 
 
 .center[
@@ -318,14 +318,14 @@ name: S6
 # Bench-work: 1 week, 5 days, ~40 hours
 
 Problems encountered during assembly of the PCB:
-- Attempt to extend our OpAmp as a first order filter compromised measurements physically. This alteration were discarded. 
-- A ground route was destroyed. To amend for the destroyed route, a physical wire was connected to the nearest ground node.
-- The power supply to the uC were discovered to be forgotten. To amend for the lack of a supply, a physical wire was connected to the 5V supply with the uC.
+- Attempt to extend our OpAmp as a first order filter compromised measurements physically. This alteration was discarded. 
+- A ground trace was destroyed. A physical wire was connected to the nearest ground node to ammend for this.
+- The power supply to the uC was discovered to be forgotten. To amend for the lack of a supply, a physical wire was connected to the 5V supply with the uC.
 (In retrospect ths could have destroyed the uC, current limiting and over-voltage protection should have been implemented along with the connection.) 
 - Influence such as the magnetic field from the voltage probe loop severely compromised our judgement.
-- Error of bench results were amended for in correction functions. Correction derived from error analysis in excel.
+- Error of bench results were amended in correction functions. Correction derived from error analysis in excel.
 
-Error of all measurements controlled at between **7.5% to 2.1%** (BS value).
+Error of all measurements controlled between **7.5% to 2.1%** (BS value).
 
 ---
 name: S8
