@@ -160,25 +160,35 @@ void calculate_rms_voltage()
 	
 	rms_voltage = sqrt(numerical_intergreat(interpolated_voltages) / period);
 	
-	/* Note correction is non-linear (larger error towards middle) */
+#ifdef HARDWARE_BUILD
+	/* Note error is non-linear (larger error towards middle) */
+	
 	/*if((12.7 <= rms_voltage) && (rms_voltage <= 15.7)){
 		float percentage = rms_voltage/15.7;	
 		correction = percentage*0.3 + 0.2;
 	}*/
 	
-
 	if(rms_voltage < 12.7) correction = 0.2;
 	if(rms_voltage < 13.6) correction = 0.4;
 	if(rms_voltage < 14.5) correction = 0.6;
 	if(rms_voltage < 15.4) correction = 0.4;
 	if(rms_voltage > 15.4) correction = 0.2;
-	
-	rms_voltage -= correction; 
+
+	rms_voltage -= correction;
+		
+	#else
+	rms_voltage += correction; //0.1V
+#endif /* HARDWARE_BUILD */ 
 }
 
 void calculate_pk_current()
 {
+#ifdef HARDWARE_BUILD
 	const float correction = 0.2;
+#else
+	const float correction = 0;
+#endif /* HARDWARE_BUILD */ 
+	
 	unsigned i;
 	for (pk_current = i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
 		if (interpolated_currents[i] > pk_current)
@@ -190,11 +200,8 @@ void calculate_pk_current()
 void adc2real_voltage()
 {
 	int i;
-	float pk_voltage;
-	uint8_t pk_voltage_index = 0;
-	
-	const float vOffset = 2.008;
-	
+	float vOffset = 2.1;
+		
 	// Voltage divider inverse gain
 	const uint16_t Rb1 = 3300;
 	const uint16_t Ra1 = 56000;
@@ -214,6 +221,13 @@ void adc2real_voltage()
 		raw_voltages[i] = ((5 * adc_voltages[i] / 1024.f)); // - vOffset) * dividerGain * amplifierGain;
 	}
 	
+#ifdef HARDWARE_BUILD
+
+	float pk_voltage;
+	uint8_t pk_voltage_index = 0;
+
+	vOffset = 2.008;
+	
 	/* Finds the peak in the raw voltage array */
 	for (pk_voltage = i = 0; i < RAW_ARRAY_SIZE; ++i){
 		if (raw_voltages[i] > pk_voltage){
@@ -226,7 +240,9 @@ void adc2real_voltage()
 	for(i = 0; i <= pk_voltage_index; ++i){
 		raw_voltages[i] += 0.1;
 	}
-	
+		
+#endif /* HARDWARE_BUILD */	
+
 	/* Apply offset cancel and reverse gain */
 	for (i = 0; i < RAW_ARRAY_SIZE; ++i) {
 		/* The voltage values in raw_currents are actually the ADC values
@@ -241,14 +257,19 @@ void adc2real_voltage()
 void adc2real_current()
 {
 	int i;
-
-	const float vOffset = 2.008;
+	float vOffset = 2.1;
 	
 	// Voltage divider inverse gain
-	//const float Rs1 = 0.56;
-	const float Rs1 = 0.5;
-	float dividerGain = 1 / (float) (Rs1);
 	
+#ifdef HARDWARE_BUILD
+	const float Rs1 = 0.5;
+	
+	vOffset = 2.008;
+#else
+	const float Rs1 = 0.56;
+#endif
+
+	float dividerGain = 1 / (float) (Rs1);
 	
 	// Voltage amplifier gain
 	const uint16_t R2 = 56000;

@@ -15,6 +15,7 @@
 volatile uint16_t timer2_miliseconds;
 volatile uint8_t change_display = 0;
 volatile uint8_t print_uart = 0;
+volatile uint16_t refresh_counter = 0;
 
 /* TIMER2 */
 
@@ -24,7 +25,7 @@ ISR(TIMER2_COMPA_vect)
 	//TGL_PORT(PORTB, PORTB5);
 
 	/* 10ms Refresh */
-	if (timer2_miliseconds >= 3000){ // 1s
+	if (timer2_miliseconds >= refresh_counter){ // 1s
 		//TGL_PORT(PORTB, PORTB5); // Use this LED to check if values are cycled every 1s
 		change_display = 1;
 		timer2_miliseconds = 0;
@@ -56,6 +57,8 @@ void timer2_init()
 		SET_PORT(TCCR2B, CS22), SET_PORT(TCCR2B, CS21), CLR_PORT(TCCR2B, CS20);
 		/* overflow at count of 124 for 1 ms */
 		OCR2A = 24;
+		
+		refresh_counter = 3000; // ??s, least it looks ok.
 	#else
 		/* Set prescaler of 32 (10ms) */
 		SET_PORT(TCCR2B, CS20);
@@ -67,6 +70,8 @@ void timer2_init()
 
 		/* overflow at count of 249 for 10/40 ms */
 		OCR2A = 249;
+		
+		refresh_counter = 100; // 1s Display change
 	#endif /* HARDWARE_BUILD */
 
 		/* Setting interrupt on output compare match A */

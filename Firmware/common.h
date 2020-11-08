@@ -12,7 +12,7 @@
 
 /* Macros for important values. */
 
-#define HARDWARE_BUILD 
+//#define HARDWARE_BUILD 
 
 /* Defining system clock frequency
  * Note that we use a different clock frequency when building for 
