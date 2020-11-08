@@ -53,9 +53,9 @@ void timer2_init()
 		SET_PORT(TCCR2A, WGM21); /* Setting to CTC mode */
 
 	#ifdef HARDWARE_BUILD
-		/* Set prescaler of 128 */
+		/* Set prescaler of 64 */
 		SET_PORT(TCCR2B, CS22), SET_PORT(TCCR2B, CS21), CLR_PORT(TCCR2B, CS20);
-		/* overflow at count of 124 for 1 ms */
+		/* overflow at count of 24 for 100 us */
 		OCR2A = 24;
 		
 		refresh_counter = 3000; // ??s, least it looks ok.
