@@ -259,29 +259,6 @@ name: S3
 <img src = "../flowcharts/Signal Processing Flowchart.png" width="70%" />
 ]
 
----
-name: S4
-
-# Custom print() Function
-
-- Our custom `print()` function, which is built on top of our modular UART functions that converts input arguments to 3 significant figures before transmitting out TX
-
-* Standard library `printf()` is just under a $kB$ in size
-
-* Our custom `print()` function only consumes $244 \ bytes$
-	* Over $70\%$ reduction in size
-
-* Our custom print function retains all the convenient `printf()` syntax
-
-.code[
-```
-[Firmware/]$ nm --print-size -t d FW.ELF | grep -w 'print\|printf\|vfprintf'
-00003694 00000244 T print // 244 bytes 
-00005880 00000040 T printf
-00005920 00000934 T vfprintf // 974 bytes, 75% reduction
-[Firmware/]$ 
-```
-]
 
 ---
 name: S6
@@ -365,7 +342,7 @@ name: S10
 # Git Management
 
 - Effective use of Git, rolling back when encountering issues with latest commit
-- Python script reads makefile to generate Atmel Studio Project so we are not limited to Atmel IDE
+- Python script reads makefile to generate Atmel files which lets us configure how we want the project to be built without being constrained to the Atmel IDE
 - Used different branch merges to test different integration and interpolation methods (didn't destroy main branch while testing)
 
 <pre>
@@ -377,7 +354,6 @@ name: S10
 +--------------+        +---------------+          +---------------+
 </code>
 </pre>
-.
 <img src='img/graph.svg' width='100%' />
 .center[** Git Commit Graph **]
 ---
