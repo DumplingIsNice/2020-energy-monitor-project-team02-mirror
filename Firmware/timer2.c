@@ -24,7 +24,7 @@ ISR(TIMER2_COMPA_vect)
 	//TGL_PORT(PORTB, PORTB5);
 
 	/* 10ms Refresh */
-	if (timer2_miliseconds >= 100){ // 1s
+	if (timer2_miliseconds >= 3000){ // 1s
 		//TGL_PORT(PORTB, PORTB5); // Use this LED to check if values are cycled every 1s
 		change_display = 1;
 		timer2_miliseconds = 0;
@@ -53,9 +53,9 @@ void timer2_init()
 
 	#ifdef HARDWARE_BUILD
 		/* Set prescaler of 128 */
-		SET_PORT(TCCR2B, CS22), SET_PORT(TCCR2B, CS21), SET_PORT(TCCR2B, CS20);
+		SET_PORT(TCCR2B, CS22), SET_PORT(TCCR2B, CS21), CLR_PORT(TCCR2B, CS20);
 		/* overflow at count of 124 for 1 ms */
-		OCR2A = 155;
+		OCR2A = 24;
 	#else
 		/* Set prescaler of 32 (10ms) */
 		SET_PORT(TCCR2B, CS20);
