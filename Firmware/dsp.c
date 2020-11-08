@@ -214,6 +214,23 @@ void calculate_pk_current()
 	for (pk_current = i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i)
 		if (interpolated_currents[i] > pk_current)
 			pk_current = interpolated_currents[i] + correction;
+
+#if TEST_PK_CURRENT
+	/* Test this */
+	{
+	unsigned i;
+	float rms_current;
+
+	/* calculate rms current */
+	/* WARNING: interpolated_currents IS NOW SQUARED !!! */
+	for (i = 0; i < INTERPOLATED_ARRAY_SIZE; ++i) {
+		interpolated_currents[i] = SQUARE(interpolated_currents[i]);
+	}
+	rms_current = sqrt(numerical_intergreat(interpolated_currents) / period);
+	/* calculate peak current by doing rms * sqrt(2) */
+	pk_current = rms_current * sqrt(2);
+	}
+#endif /* TEST_PK_CURRENT */
 }
 
 
