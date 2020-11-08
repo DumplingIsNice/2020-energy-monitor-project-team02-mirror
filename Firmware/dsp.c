@@ -22,8 +22,8 @@
 #define CUBE(x) (x * x * x)
 #define SQUARE(x) (x * x)
 
-#define V_RMS_CORRECTION 0.1
-#define POWER_CORRECTION 0.01
+#define V_RMS_CORRECTION 0 //0.1
+#define POWER_CORRECTION 0 //0.01
 
 volatile unsigned currently_sampling = 0;
 
@@ -64,7 +64,7 @@ float energy;
 /* Currently sampling one cycle of the waveform at a time */
 static volatile int16_t elapsed_cycle_time = 0;
 
-/* Using Simpson's Rule */
+/* Using Simpson's Rule */ /*
 static float numerical_intergreat(float *input)
 {
 	float numericalResult = input[0];
@@ -76,16 +76,16 @@ static float numerical_intergreat(float *input)
 
 	numericalResult = numericalResult + input[37] * 4;
 	numericalResult = numericalResult + input[38];
-	numericalResult = numericalResult * (0.0005 / 3);
+	numericalResult = numericalResult * (40 / 3);
 
 	return numericalResult;
-}
+}*/
 
 /* Using Trapezoidal Rule */
-static float numerical_intergreat_trpiz(float *input)
+static float numerical_intergreat(float *input)
 {
 	uint8_t i = 0;
-	float deltaX = 0.0001;
+	float deltaX = 0.00005;
 	float numericalResult = input[0];
 
 	for(i = 1; i < INTERPOLATED_ARRAY_SIZE - 1; ++i){
@@ -188,15 +188,18 @@ void calculate_rms_voltage()
 		float percentage = rms_voltage/15.7;	
 		correction = percentage*0.3 + 0.2;
 	}*/
-/*
+	/*
 	if(rms_voltage < 12.7) correction = 0.2;
 	if(rms_voltage < 13.6) correction = 0.4;
 	if(rms_voltage < 14.5) correction = 0.6;
 	if(rms_voltage < 15.4) correction = 0.4;
 	if(rms_voltage > 15.4) correction = 0.2;
+	*/
+	
+	//correction = (-0.164*((rms_voltage - 12.7)*(rms_voltage - 15.4))) + 0.2;
 
-	rms_voltage -= correction;
-*/
+	//rms_voltage -= correction;
+
 	#else
 	rms_voltage += correction; //0.1V
 #endif /* HARDWARE_BUILD */ 
@@ -205,7 +208,7 @@ void calculate_rms_voltage()
 void calculate_pk_current()
 {
 #ifdef HARDWARE_BUILD
-	const float correction = 0.2;
+	const float correction = 0; //0.2;
 #else
 	const float correction = 0;
 #endif /* HARDWARE_BUILD */ 
