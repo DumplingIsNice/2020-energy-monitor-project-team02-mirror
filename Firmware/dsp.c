@@ -49,7 +49,11 @@ float interpolated_currents[INTERPOLATED_ARRAY_SIZE];
 /* Array of (interpolated) V * (interpoloated) I */
 float instantanous_power[INTERPOLATED_ARRAY_SIZE];
 
+#ifdef HARDWARE_BUILD
+static const float period = 0.002;
+#else
 static const float period = 0.02;
+#endif /* HARDWARE_BUILD */
 
 float power;
 float rms_voltage;
@@ -80,10 +84,11 @@ static float numerical_intergreat(float *input)
 /* Using Trapezoidal Rule */
 static float numerical_intergreat_trpiz(float *input)
 {
+	uint8_t i = 0;
 	float deltaX = 0.0001;
 	float numericalResult = input[0];
 
-	for(uint8_t i = 1; i < INTERPOLATED_ARRAY_SIZE - 1; ++i){
+	for(i = 1; i < INTERPOLATED_ARRAY_SIZE - 1; ++i){
 		numericalResult += 2 * input[i];
 	}
 
@@ -183,7 +188,7 @@ void calculate_rms_voltage()
 		float percentage = rms_voltage/15.7;	
 		correction = percentage*0.3 + 0.2;
 	}*/
-	
+/*
 	if(rms_voltage < 12.7) correction = 0.2;
 	if(rms_voltage < 13.6) correction = 0.4;
 	if(rms_voltage < 14.5) correction = 0.6;
@@ -191,7 +196,7 @@ void calculate_rms_voltage()
 	if(rms_voltage > 15.4) correction = 0.2;
 
 	rms_voltage -= correction;
-		
+*/
 	#else
 	rms_voltage += correction; //0.1V
 #endif /* HARDWARE_BUILD */ 
